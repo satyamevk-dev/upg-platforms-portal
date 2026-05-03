@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AuthRole {
+  super_admin
+  trainer
+  trainee
+}
+
+enum TraineePlanProgressStatus {
+  not_started
+  in_progress
+  paused
+  completed
+}
+
+/** Master list of training clients (e.g. Avaya, Tawrid). Linked from `User.mappedMasterClientId` and `TrainingPlan.clientMasterId`. */
+model ClientMaster {
+  id            String         @id @default(cuid())
+  name          String         @unique
+  users         User[]
+  trainingPlans TrainingPlan[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  name          String?
+  passwordHash  String?
+  role          AuthRole       @default(trainee)
+  /** Optional link to `ClientMaster` (e.g. Avaya, Tawrid). Not used for the platform owner account. */
+  mappedMasterClientId String?
+  mappedMasterClient   ClientMaster? @relation(fields: [mappedMasterClientId], references: [id], onDelete: SetNull)
+  /** Training plans this trainee user is explicitly assigned to (optional on each plan). */
+  trainingPlansAsTrainee TrainingPlan[] @relation("TrainingPlanTrainee")
+  traineePlanProgresses TraineePlanProgress[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model TrainingPlan {
+  id               String       @id @default(cuid())
+  title            String
+  description      String?
+  clientMasterId   String
+  clientMaster     ClientMaster @relation(fields: [clientMasterId], references: [id], onDelete: Restrict)
+  /** When set, this plan is intended for that trainee; trainees only see assigned plans or plans with no assignee. */
+  traineeUserId    String?
+  traineeUser      User?        @relation("TrainingPlanTrainee", fields: [traineeUserId], references: [id], onDelete: SetNull)
+  isDraft          Boolean      @default(false)
+  exercises        Exercise[]
+  traineeProgressRecords TraineePlanProgress[]
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+}
+
+/** Per-trainee sequential progress through an assigned training plan (module order enforced). */
+model TraineePlanProgress {
+  id                    String                   @id @default(cuid())
+  userId                String
+  user                  User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trainingPlanId        String
+  trainingPlan          TrainingPlan             @relation(fields: [trainingPlanId], references: [id], onDelete: Cascade)
+  status                TraineePlanProgressStatus @default(not_started)
+  /** Highest `Exercise.order` completed for this plan. -1 = none completed yet. */
+  highestCompletedOrder Int                      @default(-1)
+  /** Quiz completion keys plus optional `__trainee_study__:`+key markers (see `lib/trainee-study-keys.ts`). */
+  completedEntryIds     String[]                @default([])
+  createdAt             DateTime                 @default(now())
+  updatedAt             DateTime                 @updatedAt
+
+  @@unique([userId, trainingPlanId])
+}
+
+model Exercise {
+  id             String       @id @default(cuid())
+  name           String
+  details        String?
+  order          Int
+  trainingPlanId String
+  trainingPlan   TrainingPlan @relation(fields: [trainingPlanId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}

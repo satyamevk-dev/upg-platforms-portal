@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f4f2ef;
+  --foreground: #1e293b;
+  --brand-teal: #00a89e;
+  --brand-teal-hover: #008f86;
+  --brand-purple: #5b4b96;
+  --brand-purple-muted: #7c6bae;
+  --brand-wood: #c9a87c;
+  --card-border: #d8d0c4;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-brand-teal: var(--brand-teal);
+  --color-brand-teal-hover: var(--brand-teal-hover);
+  --color-brand-purple: var(--brand-purple);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  width: 100%;
+  max-width: 100%;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  width: 100%;
+  max-width: 100%;
+}
