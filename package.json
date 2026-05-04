@@ -2,6 +2,9 @@
   "name": "htd-linux-networking-app",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=20 <23"
+  },
   "scripts": {
     "dev": "WATCHPACK_POLLING=true next dev --webpack --hostname 127.0.0.1",
     "build": "prisma generate && next build",
@@ -13,7 +16,10 @@
     "db:push": "prisma db push",
     "db:seed": "prisma db seed",
     "db:up": "docker compose up -d",
-    "db:down": "docker compose down"
+    "db:down": "docker compose down",
+    "package:deploy": "bash scripts/package-deployment.sh",
+    "docker:deploy": "docker compose -f deploy/docker-compose.yml --env-file deploy/stack.env up -d --build",
+    "docker:down": "docker compose -f deploy/docker-compose.yml --env-file deploy/stack.env down"
   },
   "prisma": {
     "seed": "node prisma/seed.mjs"

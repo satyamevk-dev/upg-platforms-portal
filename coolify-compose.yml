@@ -1,0 +1,55 @@
+# Coolify: Docker Compose stack (Postgres + migrations + Next.js).
+#
+# In Coolify: New Resource → Docker Compose → Compose file: coolify-compose.yml (repo root).
+# Assign a domain to service "web" and set the container port to 3000 in the UI.
+#
+# See deploy/COOLIFY.md for VPS setup, env vars, and DNS.
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-htd}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in Coolify}
+      POSTGRES_DB: ${POSTGRES_DB:-htd_training}
+    volumes:
+      - htd_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  migrate:
+    exclude_from_hc: true
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.migrate
+    environment:
+      DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL in Coolify (must match postgres credentials)}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:?Set NEXTAUTH_URL to your public https URL (see deploy/COOLIFY.md)}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:?Set NEXTAUTH_SECRET in Coolify}
+      NODE_ENV: production
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    expose:
+      - "3000"
+    restart: unless-stopped
+
+volumes:
+  htd_pgdata:

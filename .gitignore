@@ -19,6 +19,10 @@
 
 # production
 /build
+/dist
+
+# Local Docker stack secrets (generated / copied from env.example)
+deploy/stack.env
 
 # misc
 .DS_Store

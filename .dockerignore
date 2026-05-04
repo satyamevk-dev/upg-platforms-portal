@@ -10,3 +10,5 @@ README.md
 .env.development
 .env.test
 .env.production
+dist
+*.code-workspace

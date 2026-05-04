@@ -1,0 +1,29 @@
+HTD Linux Networking App — container deployment
+================================================
+
+Prerequisites: Docker Engine 24+ and Docker Compose v2.
+
+1. Extract the included source archive (if you received a bundle tarball):
+     mkdir -p /opt/htd && cd /opt/htd
+     tar -xzf source.tar.gz
+
+2. From the application root (directory that contains `Dockerfile` and `package.json`):
+     cp deploy/env.example .env
+     Edit `.env`: set POSTGRES_PASSWORD, DATABASE_URL (password must match), NEXTAUTH_SECRET,
+     and NEXTAUTH_URL to the public URL users will use.
+
+3. Start PostgreSQL, run Prisma migrations, and start the app:
+     docker compose -f deploy/docker-compose.yml --env-file .env up -d --build
+
+4. Open NEXTAUTH_URL in a browser (default http://localhost:3000 if APP_PORT is 3000).
+
+5. Seed data (optional), after the stack is up:
+     docker compose -f deploy/docker-compose.yml --env-file .env run --rm migrate node prisma/seed.mjs
+   Set SUPER_ADMIN_PASSWORD (and optional SUPER_ADMIN_EMAIL / SUPER_ADMIN_NAME) in `.env` if you use the seed script defaults.
+
+For a pre-built image only: load with `docker load -i htd-linux-networking-app-image.tar` if provided,
+then run with a compose file that uses `image:` instead of `build:` for the `app` service.
+
+Coolify (self-hosted PaaS on a VPS): see deploy/COOLIFY.md and use coolify-compose.yml (repo root) as the Compose file path in Coolify.
+
+Managed public hosting (Render, Railway, Vercel, etc.): see deploy/PUBLIC_HOSTING.md.

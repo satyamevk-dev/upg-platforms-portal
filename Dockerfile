@@ -3,6 +3,7 @@ FROM node:20-alpine AS base
 FROM base AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
+COPY prisma ./prisma
 RUN npm ci
 
 FROM base AS builder
@@ -16,6 +17,8 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV HOSTNAME=0.0.0.0
 ENV PORT=3000
+
+RUN apk add --no-cache openssl libc6-compat
 
 RUN addgroup -S nodejs && adduser -S nextjs -G nodejs
 
