@@ -15,69 +15,69 @@ This module aligns with the training library topic **Avaya AOC overview & archit
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: AOC’s place in the collaboration estate
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- Map where **AOC** sits relative to identity (directory/IdP), endpoints, messaging and calling services, and integrations so you know what this administration plane governs versus what it only displays.
+- Learn vocabulary you will reuse in every other module: **tenant** boundaries, **administrative roles**, **service dependencies**, and where **policy** is enforced in the path vs. delegated to another system.
+- Prerequisites: lab or non-production AOC access, the admin/architecture guide for your **deployment model**, and a one-page sketch of your org’s real integration points (IdP, CRM, observability).
 
-## Lesson 2: Core workflows
+## Lesson 2: Architecture and deployment surfaces
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- Trace a **happy path** for a standard user action (sign-in, join space, place test call) across client, authentication, AOC-managed configuration, and directory or integrations as described in Avaya documentation for your stack.
+- Contrast **customer-operated** and **vendor-hosted** assumptions: who owns OS patching, certificates, network paths, and backup/DR for configuration and policy data.
+- Checkpoints: you can list production **AOC base URLs**, identify your primary **cluster or region** name, and name one upstream **IdP** and one downstream **integration** your organization actually uses.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: Licensing, capacity, and change risk
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Typical pitfalls: **capacity** surprises (concurrent admins, API volume, attachment or log growth), **license** or **entitlement** drift after upgrades or feature toggles, and internal wiki pages that no longer match the shipped UI.
+- Constraints: contractual caps, mandatory **change approval**, **maintenance windows**, and regulatory expectations that limit who may hold super-administrator rights.
+- Rollback mindset: export or snapshot critical **policies** before change; know how to revert a **feature flag** or policy revision per release notes; avoid “big bang” when a **pilot tenant** or cohort is available.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Security model and operational sign-off
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** for this module when **tenant admin** assignments are reviewed, **break-glass** accounts and their MFA expectations are documented, and least-privilege **role** design is agreed with security.
+- Document **AOC URLs**, environment names (prod/stage/lab), integration **service principals** or technical accounts, and escalation paths for identity vs. platform vs. network.
+- Handoff: a short “day-2 ownership” note—who owns **patching**, who owns **backup verification**, who is **on-call** for AOC incidents, and where runbooks live.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **Map the estate first:** dependencies, tenants, and integration blast radius belong on paper (or a diagram) before large architecture, licensing, or cutover bets.
+- **Size growth honestly:** align entitlements and feature mix with measured or forecast usage so capacity surprises do not arrive as outages or audit findings.
+- **Harden the admin plane:** least-privilege roles, documented break-glass, and clear day-2 ownership beat a culture of shared super-user accounts.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. In an Avaya-focused enterprise stack, **Avaya AOC** is best described as:  
+   A) A replacement for every edge network router  
+   B) A platform for administering and governing Avaya collaboration capabilities and related policies  
+   C) A generic NAS appliance for voicemail audio files only  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. Before major changes to AOC-connected services, a sound architectural step is to:  
+   A) Skip reading release notes if the UI looks familiar  
+   B) Map core services, integrations, and upstream/downstream dependencies plus likely blast radius  
+   C) Apply changes at peak traffic to shorten maintenance windows  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. **Tenant isolation** and administrative **roles** primarily exist to:  
+   A) Remove the need for any authentication  
+   B) Enforce least privilege and separation of duties across teams and scopes  
+   C) Guarantee identical permissions for every login  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. When planning growth, **licensing and capacity** awareness helps you:  
+   A) Align entitlements and feature mix with measured or forecast usage before large procurements  
+   B) Disable monitoring to reduce database size  
+   C) Assign every user a super-admin role for simplicity  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. **Deployment models** (for example cloud vs. customer-operated) most strongly influence:  
+   A) Who operates infrastructure, patching boundaries, and connectivity assumptions  
+   B) The color of desk phone faceplates only  
+   C) Whether TLS is ever used  
 
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B**
+1. **B** · 2. **B** · 3. **B** · 4. **A** · 5. **A**

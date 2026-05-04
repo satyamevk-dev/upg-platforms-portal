@@ -37,6 +37,18 @@ Read and set POSIX permissions, understand ownership and `umask`, and use `sudo`
 - **`su -`** starts a login shell as target user—use sparingly; prefer `sudo -i` with policy.
 - Grant **minimal** sudo rules (specific commands, not blanket NOPASSWD ALL).
 
+## Lesson 5: Lab—`namei -l`, default ACL awareness, sticky bit
+
+- Walk a suspicious path with **`namei -l /path/to/file`**—see where ownership or permissions break expected traversal.
+- On systems using **ACLs**, skim **`getfacl`** output when `ls -l` shows `+`—simple `chmod` may not tell the whole story.
+- Explain **sticky bit** on `/tmp`-style directories—why world-writable + sticky is common and what it prevents.
+
+## Lesson 6: Anti-patterns with permissions
+
+- **`chmod -R 777 /srv/app`** after “permission denied”—masks root cause and invites tampering.
+- **`NOPASSWD: ALL`** for convenience—breaks accountability and blast-radius goals.
+- **World-readable private keys** in home dirs—SSH clients may warn; attackers never ignore them.
+
 ---
 
 ## Key takeaways
@@ -73,8 +85,23 @@ Read and set POSIX permissions, understand ownership and `umask`, and use `sudo`
    B) Owner to `alice` and group to `dev`  
    C) Only the owner  
 
+6. On directories like `/tmp`, the **sticky bit** (`t` in `ls -ld`) mainly helps:  
+   A) Encrypt all files automatically  
+   B) Prevent users from deleting or renaming others’ files without appropriate ownership  
+   C) Disable `sudo`  
+
+7. When `ls -l` shows a **`+` after the mode**, you should often inspect:  
+   A) POSIX ACLs with `getfacl`  
+   B) Only kernel modules  
+   C) Only GPU firmware  
+
+8. Granting **`NOPASSWD: ALL`** in sudoers for a human user is generally:  
+   A) A least-privilege best practice  
+   B) A high-risk convenience that removes password gates for full root  
+   C) Required by SELinux  
+
 ---
 
 ## Answer key
 
-1. **B** · 2. **A** · 3. **C** · 4. **B** · 5. **B**
+1. **B** · 2. **A** · 3. **C** · 4. **B** · 5. **B** · 6. **B** · 7. **A** · 8. **B**

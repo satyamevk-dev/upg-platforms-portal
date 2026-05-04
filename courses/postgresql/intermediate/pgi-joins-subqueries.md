@@ -15,66 +15,66 @@ This module aligns with the training library topic **JOINs & subqueries**. Work 
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: INNER vs. OUTER joins—intent and row multiplication
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- **`INNER JOIN`** keeps only matches; **`LEFT OUTER`** preserves left rows even without a right match (NULL-filled right columns); **`FULL OUTER`** exposes non-matches on both sides—pick based on required reporting semantics, not habit.
+- Every **one-to-many** join multiplies rows; aggregate **after** joins or use `DISTINCT ON`/subqueries deliberately to avoid silent double counting.
+- Prerequisites: solid **foreign key** mental model and sample `orders`/`line_items` data.
 
-## Lesson 2: Core workflows
+## Lesson 2: JOIN conditions vs. filter predicates
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: put **join keys** in `ON` for outer joins so optional matches behave correctly; move purely **filter** predicates that do not affect join shape to `WHERE` when semantically appropriate (know the NULL behavior difference for outer joins).
+- Use **`USING (col)`** shorthand only when column names truly align; prefer explicit `ON` for clarity in complex graphs.
+- Checkpoints: row counts before/after each join hop in exploratory `SELECT` match expectations; `EXPLAIN` shows join order you can read at a high level.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: Correlated subqueries, EXISTS, and IN intuition
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Pitfalls: **correlated** subqueries executed per outer row without index support; `NOT IN (subquery)` vs. `NULL` surprises—prefer **`NOT EXISTS`** for anti-join patterns.
+- `EXISTS` stops at first match—often clearer and planner-friendly versus counting subqueries when you only need a boolean.
+- Rollback: when a join query explodes runtime, capture **cardinality estimates** (`EXPLAIN ANALYZE`) before rewriting to CTEs or `LATERAL`.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Readable join graphs and review handoff
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when multi-join queries use **consistent** table aliases and comments mapping to ERD edges; reviewers can trace keys in minutes.
+- Document **nullable** foreign keys that change join choice (`LEFT` vs `INNER`).
+- Handoff: point to **aggregates & windows** module for grouping after joins.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **Outer join shape belongs in `ON`**—moving predicates incorrectly can accidentally turn outer joins into inner joins or filter out NULL legs you needed.
+- **Row multiplication is a tax**—always know your cardinalities before `SUM` across joins.
+- **`NOT EXISTS` beats `NOT IN`** for anti-joins when NULLs can appear in the candidate set.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. A **`LEFT OUTER JOIN b ...`** result always includes:  
+   A) Only rows that matched in both tables  
+   B) All rows from the left table, with NULLs in right-side columns when no match exists  
+   C) Only unmatched rows from both sides  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. Row **duplication** after joins most often comes from:  
+   A) Using `ORDER BY`  
+   B) Joining across one-to-many relationships without aggregating or deduplicating intentionally  
+   C) Comments in SQL  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. For anti-join patterns (“rows with **no** related child”), **`NOT EXISTS`** is often preferred over **`NOT IN (subquery)`** because:  
+   A) It is always slower  
+   B) `NOT IN` can yield UNKNOWN/NULL-driven surprises when the subquery contains NULLs  
+   C) `NOT IN` cannot use indexes  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. **`EXISTS (SELECT 1 ...)`** typically:  
+   A) Must count all matching rows fully  
+   B) Stops after finding the first matching row once the planner can implement semijoin semantics  
+   C) Requires `GROUP BY`  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. Putting outer-join **shape** predicates in the wrong clause can:  
+   A) Never change results  
+   B) Accidentally filter away preserved NULL rows or change join semantics vs. intent  
+   C) Disable constraints  
 
 ---
 

@@ -15,66 +15,66 @@ This module aligns with the training library topic **Indexing & EXPLAIN basics**
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: B-tree indexes and when they help
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- **B-tree** is the default index type for equality and range predicates on scalar types; know when **GIN**, **GiST**, or **BRIN** are better (full text, geo, very large append-only fact tables)—but default OLTP paths start with B-tree.
+- Indexes speed **read** filters and some joins at the cost of **write** amplification and **storage**; measure hot queries before indexing every column “just in case.”
+- Prerequisites: ability to read simple **`EXPLAIN`** output; `pg_stat_statements` or logs listing top queries.
 
-## Lesson 2: Core workflows
+## Lesson 2: Composite index column order
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: order columns by **selectivity** and **query shape**—leading prefix must match leftmost predicates (`WHERE a = ? AND b > ?` wants `(a,b)` not `(b,a)` unless separate queries justify different indexes).
+- Use **`INCLUDE`** columns for covering indexes when you want payload columns without polluting sortable key order.
+- Checkpoints: `EXPLAIN` shows **Index Scan** or **Bitmap Index Scan** instead of sequential scan on realistic data volumes after `ANALYZE`.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: EXPLAIN vs. EXPLAIN ANALYZE and stale statistics
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Pitfalls: trusting **`EXPLAIN`** costs on empty dev tables; ignoring **buffer** hits vs. reads; missing **`ANALYZE`** after bulk load causing bad row estimates.
+- `EXPLAIN (ANALYZE, BUFFERS)` is heavier—run off-hours on production-like snapshots when safe.
+- Rollback: **drop index concurrently** if an index hurt more than helped; document decision in migration notes.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Index design handoff
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when each new index has **rationale comment** in migration (query id or ticket link) and **write impact** acknowledged.
+- Document **autovacuum**/`ANALYZE` expectations after large data changes affecting plans.
+- Handoff: point to **query tuning** advanced module for cost-model depth.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **Index column order is not alphabetical**—it is query-shape driven; wrong order creates expensive ornaments.
+- **`EXPLAIN` lies on empty data**—test plans on realistic cardinality or use production-sampled stats.
+- **Every index is a contract to maintain** on every insert/update/delete—pay the write tax consciously.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. A **B-tree** index is generally best for:  
+   A) Only full-text search on arbitrary language documents  
+   B) Equality and range predicates on common scalar types in OLTP workloads  
+   C) Storing JSON documents without structure  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. For `WHERE status = 'open' AND created_at > $1`, a composite index often starts with:  
+   A) `created_at` only regardless of `status`  
+   B) Columns matching equality predicates first (`status`) then range columns (`created_at`) when that matches the workload  
+   C) Random column order  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. **`EXPLAIN ANALYZE`** differs from **`EXPLAIN`** mainly because it:  
+   A) Never executes the query  
+   B) Executes the query and reports actual timings and row counts (use with care on mutating or heavy statements)  
+   C) Only lists table names  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. **Stale statistics** after a large bulk load can cause:  
+   A) Perfect plans always  
+   B) Poor row estimates and suboptimal plans until `ANALYZE` refreshes stats  
+   C) Automatic index deletion  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. **`CREATE INDEX CONCURRENTLY`** is preferred in production because:  
+   A) It never touches the table  
+   B) It avoids long blocking writes compared to a standard index build on busy tables (with tradeoffs documented in manual)  
+   C) It disables indexes  
 
 ---
 

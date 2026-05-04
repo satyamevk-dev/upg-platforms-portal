@@ -15,66 +15,66 @@ This module aligns with the training library topic **Views, roles & object privi
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: Views for abstraction and simpler grants
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- **`CREATE VIEW`** packages a vetted `SELECT`—reporting tools and junior services can query the view while owners evolve underlying tables with controlled migrations.
+- Know **`security invoker` vs. `security definer`** (PostgreSQL 15+ explicit defaults)—`SECURITY DEFINER` views are powerful and risky; document who may create them.
+- Prerequisites: understanding of underlying **GRANT** targets (base tables vs. views) and search_path implications.
 
-## Lesson 2: Core workflows
+## Lesson 2: Roles, membership, and least privilege
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: model **login roles** for humans vs. **`NOLOGIN`** group roles holding privileges; `GRANT SELECT` on views to app roles while base tables stay private.
+- Use **`ALTER DEFAULT PRIVILEGES`** in schemas so new objects inherit sane grants from day one.
+- Checkpoints: `\dp` in `psql` shows effective ACLs; CI checks that migrations include privilege updates when adding tables.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: GRANT/REVOKE, sequences, and RLS awareness
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Pitfalls: granting **`ALL`** “temporarily”; forgetting **`USAGE`/`SELECT`** on sequences backing serial columns; enabling **RLS** without policies and locking everyone out.
+- **Row Level Security** policies belong to defense-in-depth—coordinate with app auth context (`SET ROLE` / JWT claims) before toggling `FORCE ROW LEVEL SECURITY`.
+- Rollback: keep **`REVOKE`** scripts symmetric with grants in migrations; test as non-superuser role in staging.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Security review handoff
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when data owners sign **matrix**: role → allowed operations → objects; views documented with owner and definer semantics.
+- Document **`search_path`** for `SECURITY DEFINER` functions/views to avoid hijack via object shadowing.
+- Handoff: point to **replication & HA** advanced module if reporting replicas need read-only grants.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **Views are a privilege firewall** when base tables are locked down—cheap abstraction, high leverage.
+- **Group roles** keep grants manageable; avoid duplicating the same `GRANT` list across fifty service accounts.
+- **RLS is sharp**—policy testing is mandatory before `FORCE` in production.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. Granting **`SELECT` on a view** while withholding **`SELECT` on base tables** can work because:  
+   A) Views always bypass permissions  
+   B) The view owner’s rights (and security barrier/invoker/definer rules) mediate access to underlying objects  
+   C) PostgreSQL ignores views  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. A **`NOLOGIN`** role is commonly used to:  
+   A) Connect from psql interactively  
+   B) Group privileges that login roles inherit via `GRANT role TO user`  
+   C) Replace passwords  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. **`ALTER DEFAULT PRIVILEGES`** helps teams:  
+   A) Skip all future `GRANT` statements  
+   B) Apply consistent privileges to objects created by specific roles in a schema  
+   C) Disable auditing  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. **Row Level Security (RLS)** without policies typically:  
+   A) Allows all rows for non-owners  
+   B) Can deny all access for affected roles until policies exist—test carefully  
+   C) Automatically infers policies from foreign keys  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. Revoking privileges should be:  
+   A) Done only in production first  
+   B) Scripted, reviewed, and tested as non-superuser in lower environments before production rollout  
+   C) Avoided forever  
 
 ---
 

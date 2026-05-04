@@ -37,6 +37,18 @@ Design resilient block paths with **multipath**, attach **SAN** LUNs predictably
 - **pNFS** splits data/metadata paths—awareness for throughput at scale.
 - Tune **rsize**/**wsize**, **nfsvers**, server **threads**, and network MTU/jumbo carefully with measurement.
 
+## Lesson 5: Lab—`multipath -ll`, `iscsiadm -m session`, NFS `nfsstat`
+
+- **`multipath -ll`** on a SAN host—confirm **active**/**enabled** path groups and **prio** health.
+- **`iscsiadm -m session -P 3`**—session details for debugging login/auth issues (read-only).
+- **`nfsstat -cn`** during a load test—client op breakdown vs. server-side **`nfsstat`** where available.
+
+## Lesson 6: Anti-patterns in enterprise storage
+
+- **Single-path “redundant” arrays**—false confidence; no automatic failover.
+- **Kerberos NFS** with **clock skew** ignored—mystery “access denied” spirals.
+- **LUKS without tested DR unlock**—data availability incident during key loss.
+
 ---
 
 ## Key takeaways
@@ -73,8 +85,23 @@ Design resilient block paths with **multipath**, attach **SAN** LUNs predictably
    B) It replaces TCP entirely  
    C) It disables encryption always  
 
+6. **`multipath -ll`** is primarily used to:  
+   A) Inspect multipath device state, path groups, and failover health  
+   B) Compile eBPF programs  
+   C) Manage Wi-Fi SSIDs  
+
+7. A common operational mistake with **iSCSI** storage is:  
+   A) Assuming discovery/login steps were completed when LUNs are not actually presented  
+   B) Always disabling CHAP without reading policy  
+   C) Using `/dev/sda` labels forever without stable naming  
+
+8. **NBDE (clevis/tang)** introduces operational requirements around:  
+   A) Network availability and key escrow for automatic decryption workflows  
+   B) GPU passthrough only  
+   C) Only BIOS splash screens  
+
 ---
 
 ## Answer key
 
-1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A**
+1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A** · 6. **A** · 7. **A** · 8. **A**

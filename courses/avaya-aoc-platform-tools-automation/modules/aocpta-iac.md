@@ -15,69 +15,69 @@ This module aligns with the training library topic **Infrastructure as code & co
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: Declarative model for AOC-related dependencies
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- Express **DNS, certificates, load balancers, databases**, and integration endpoints that AOC relies on as **declarative** resources in Terraform, Pulumi, Ansible, or your standard—avoid snowflake click-ops for anything that must match between regions.
+- Tag resources with **owner**, **cost center**, and **environment** so drift reports and blast-radius analysis stay honest.
+- Prerequisites: remote **state** with locking, policy-as-code (**OPA** or cloud guardrails), and a diagram of which objects are **shared** vs. **per-tenant** automation.
 
-## Lesson 2: Core workflows
+## Lesson 2: Plan, apply, and drift detection
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: `plan` in CI on every merge → human or policy approval for `apply` → post-apply **smoke** (health URL, synthetic login) recorded in the pipeline log.
+- Schedule **drift detection** jobs that compare live cloud or VM state to desired spec; route deltas to the same backlog as product bugs when they affect AOC availability.
+- Checkpoints: plan output shows **only** intended diffs; state file version increments correlate with change ticket IDs.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: Secrets, rotation hooks, and GitOps promotion
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Pitfalls: secrets in **plain state** without remote backend encryption; **manual** hotfixes outside IaC that disappear next apply; promoting the same branch pointer to prod and stage accidentally.
+- Constraints: regulated **key custody** (HSM, KMS); **air-gap** where `terraform apply` runs only from bastion; vendor **timeouts** on long-running resource creates.
+- Rollback: keep previous **state snapshot** and tagged module version; document `terraform state rm` or vendor-specific **import** recovery only with senior review.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: GitOps handoff and ownership
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when **main** branch rules require two reviews for prod paths, **Argo CD** or equivalent shows healthy sync, and **rollback** PR template exists.
+- Document which repo paths map to **which** AOC environment and who may click **Sync** vs. who may merge only.
+- Handoff: add **on-call** link and **SLO** dashboard for infrastructure underpinning AOC automation.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **Plan before apply** in CI is your contract with auditors and future you—treat `apply` surprises as process bugs, not inevitabilities.
+- **Drift** ignored long enough becomes “mystery outage”; schedule detection like any other production job.
+- **Secrets belong in KMS-backed state or external data sources**, not in cleartext modules committed for convenience.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. **Drift detection** in IaC contexts primarily means:  
+   A) Ignoring manual console changes forever  
+   B) Comparing live infrastructure state to declared desired state and surfacing differences  
+   C) Deleting state files weekly  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. Remote **state** with locking is important because:  
+   A) It prevents concurrent applies corrupting the same state file  
+   B) It removes the need for backups  
+   C) It disables encryption  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. **GitOps-style promotion** typically moves changes:  
+   A) Only via direct SSH edits on production servers  
+   B) Through version-controlled manifests merged forward dev → stage → prod with policy gates  
+   C) By emailing JSON to operators  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. **Secrets managers** integrate with IaC best when:  
+   A) Long-lived passwords are hard-coded in modules  
+   B) Short-lived credentials are generated at apply time or referenced by ID without storing plaintext in Git  
+   C) Secrets are stored only in local `terraform.tfvars` committed to main  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. After an unexpected `apply`, the first recovery thought should be:  
+   A) Delete the entire cloud account  
+   B) Use documented rollback: previous module or chart version, state restore, or targeted reverse resources per runbook  
+   C) Re-run apply repeatedly until it succeeds  
 
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B**
+1. **B** · 2. **A** · 3. **B** · 4. **B** · 5. **B**

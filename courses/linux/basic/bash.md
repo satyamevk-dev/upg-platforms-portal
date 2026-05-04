@@ -38,6 +38,18 @@ Write small, maintainable Bash scripts: structure, variables, tests, control flo
 - **`cron`** — table-driven schedules; mind **`PATH`**, timezone, and logging stderr.
 - **systemd timers** — integrated logging, dependencies, and calendar expressions—prefer on systemd-only distros for new work.
 
+## Lesson 5: Lab—`shellcheck`, `set -euo pipefail`, and traps
+
+- Run **`shellcheck script.sh`** on a legacy script—fix one class of issues (quoting, shebang, unreachable code).
+- Add **`trap 'echo failed at $LINENO' ERR`** temporarily while debugging—remove or narrow before merge.
+- Document what **`set -e`** does *not* catch (some contexts in pipelines/subshells)—avoid blind faith.
+
+## Lesson 6: Anti-patterns in shell automation
+
+- **Parsing `ls` output**—use globs, `find -print0` + `read -r -d ''`, or JSON tools when data is structured.
+- **Unquoted `$@` misuse** vs **`"$@"`**—subtle breakage when arguments contain spaces.
+- **Silent `curl | bash`** in production—supply-chain and audit nightmare.
+
 ---
 
 ## Key takeaways
@@ -74,8 +86,23 @@ Write small, maintainable Bash scripts: structure, variables, tests, control flo
    B) Integration with journald and dependency-aware scheduling  
    C) Guaranteed sub-second precision always  
 
+6. **`set -u`** (nounset) causes an error when:  
+   A) A variable is referenced before assignment  
+   B) A function returns zero  
+   C) `grep` finds no lines  
+
+7. **ShellCheck** is primarily a:  
+   A) Static analyzer/linter for shell scripts  
+   B) Container registry scanner  
+   C) Kernel crash dump tool  
+
+8. On Debian/Ubuntu, **`/bin/sh`** is often **dash** (or another POSIX shell), meaning scripts with a **`#!/bin/sh`** shebang should:  
+   A) Assume Bash-only extensions like `[[ ]]` freely  
+   B) Stick to POSIX constructs unless you change the shebang to Bash explicitly  
+   C) Always use `source` on `.bashrc` in cron  
+
 ---
 
 ## Answer key
 
-1. **B** · 2. **A** · 3. **B** · 4. **A** · 5. **B**
+1. **B** · 2. **A** · 3. **B** · 4. **A** · 5. **B** · 6. **A** · 7. **A** · 8. **B**

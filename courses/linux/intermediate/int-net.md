@@ -38,6 +38,18 @@ Configure hosts with NetworkManager or legacy files, secure traffic with firewal
 - **Wireshark** GUI for deep protocol analysis—export pcaps for vendors.
 - **`systemd-resolved`** stub resolvers vs. direct **`/etc/resolv.conf`**; **`getent hosts`** vs. **`dig`** isolates layers.
 
+## Lesson 5: Lab—`nft list ruleset`, `nmcli con reload`, conntrack awareness
+
+- On a lab node, **`nft list ruleset | less`**—map **table inet filter** chains to your firewalld zone (read-only).
+- Change a static route in **`nmcli`** and **`nmcli con up`**—confirm **`ip route`** before claiming success.
+- When “**port closed**” reports differ by source IP, inspect **`ip rule`** and **policy routing** tables.
+
+## Lesson 6: Anti-patterns in host networking
+
+- **`iptables -F`** on shared hosts without understanding **default DROP**—self-inflicted outage.
+- **Capturing customer traffic** with **tcpdump** without legal/privacy review.
+- **Disabling NetworkManager** without a tested static netplan/ifcfg replacement.
+
 ---
 
 ## Key takeaways
@@ -74,8 +86,23 @@ Configure hosts with NetworkManager or legacy files, secure traffic with firewal
    B) Only physical RAM size  
    C) Only GPU drivers  
 
+6. **`nft list ruleset`** is primarily used to:  
+   A) Inspect the active nftables configuration (read-only troubleshooting)  
+   B) Resize LVM thin pools only  
+   C) Rotate TLS keys automatically  
+
+7. Flushing firewall rules (`iptables -F` / equivalent) without a known-safe default policy can:  
+   A) Lock you out or expose services unintentionally  
+   B) Always improve throughput  
+   C) Fix SELinux labels  
+
+8. **`tcpdump` in production** should be paired with:  
+   A) Narrow BPF filters, privacy review, and retention policies  
+   B) Always capturing full payloads indefinitely  
+   C) Running on every host 24/7 without filters  
+
 ---
 
 ## Answer key
 
-1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A**
+1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A** · 6. **A** · 7. **A** · 8. **A**

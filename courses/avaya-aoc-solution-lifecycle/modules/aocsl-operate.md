@@ -15,66 +15,66 @@ This module aligns with the training library topic **Operate & optimize**. Work 
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: SRE-style monitoring, SLOs, and incident response
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- Define **SLOs** for admin availability, authentication success, and core user journeys (sign-in, message, call setup); wire **burn-rate** alerts to on-call with **runbook** links.
+- Practice **incident response**: roles (commander, comms, scribe), **severity** mapping to vendor support, and **customer** status page policy.
+- Prerequisites: **observability** stack from design, **synthetic** checks from Build, and **error budget** policy agreed with product owners.
 
-## Lesson 2: Core workflows
+## Lesson 2: Capacity reviews, patching, and lifecycle upgrades
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: quarterly **capacity** review using usage trends and vendor guidance; **patch** calendar aligned with CAB; **upgrade** dry-run in stage with automated **smoke** suite.
+- Track **technical debt** backlog: deferred hardening, outdated clients in the field, integration **version** drift.
+- Checkpoints: post-patch **dashboard** green for soak period; **rollback** tag ready; license **reconciliation** after growth spikes.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: Continuous improvement and vendor engagement
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Pitfalls: **QBR** slides with no metrics; **TAM** engagement only during fires; **feature requests** scattered in email instead of a single **backlog** ranked with business value.
+- Run monthly **ops review**: top incidents, action items, and **toil** automation candidates tied to AOC admin pain.
+- Constraints: contract **renewal** windows; **budget** for premium support tiers when error budget burns repeatedly.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Quarterly business review and value realization
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when **QBR** deck ties AOC adoption metrics to original **success criteria** from Discover: cost avoided, tickets reduced, MTTR improved—honest about misses.
+- Document **value** hypotheses validated or invalidated; feed learnings into **next** roadmap (features, training, integrations).
+- Handoff: **Retire** module gets list of legacy systems still consuming budget; **operate** backlog prioritized for next quarter.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **SLOs and error budgets** turn “always up” slogans into negotiable trade-offs between reliability and feature velocity.
+- **Capacity and patching** are recurring programs, not one-time project tasks—calendar them like finance closes.
+- **Vendor QBRs with metrics** beat relationship lunches—they justify renewals and escalate systemic defects with data.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. **SLOs** in the operate phase primarily help teams:  
+   A) Remove all monitoring  
+   B) Set customer-facing reliability targets and alert on burn rate against error budgets  
+   C) Avoid documenting incidents  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. **Capacity reviews** should use:  
+   A) Only gut feel  
+   B) Usage trends, license utilization, vendor guidance, and growth forecasts  
+   C) Headcount only  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. A healthy **patching** cadence for AOC platforms typically includes:  
+   A) Random unscheduled changes  
+   B) CAB-aligned windows, staged rollout, smoke tests, and documented rollback  
+   C) Skipping test environments  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. **Incident response** is more effective when:  
+   A) Everyone joins the bridge with no roles  
+   B) Roles like incident commander, communications, and scribe are defined and practiced  
+   C) Postmortems are forbidden  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. **QBRs** (quarterly business reviews) with the vendor should emphasize:  
+   A) Only anecdotes  
+   B) Adoption metrics, open defects, support trends, and value vs. original program goals  
+   C) Deleting historical data  
 
 ---
 

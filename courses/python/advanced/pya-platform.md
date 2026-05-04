@@ -15,69 +15,96 @@ This module aligns with the training library topic **Packaging, deployment & obs
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: Slim containers and multi-stage builds
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- Use **distroless** or **slim** bases after compiling wheels in builder stage; run as **non-root**; pin digest **`FROM python:3.12-slim@sha256:...`** for reproducibility.
+- Copy **only** needed artifacts into runtime layer; avoid shipping compilers and `.git` history into prod images.
+- Prerequisites: Docker or OCI runtime; CI publishing to registry with vulnerability scan (Trivy/Grype).
 
-## Lesson 2: Core workflows
+## Lesson 2: WSGI / ASGI servers and graceful shutdown
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: **`gunicorn`+`uvicorn.workers`** or pure **uvicorn** behind load balancer; configure **`timeout`**, **`keep-alive`**, **`graceful_timeout`** to drain in-flight requests on SIGTERM during deploys.
+- Health checks hit **`/ready`** vs **`/live`** semantics separately from root route.
+- Checkpoints: rolling deploy shows zero 502 spike in metrics during pod rotation.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: Structured logging, metrics, tracing hooks
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Emit **JSON logs** with **`request_id`**, **`trace_id`** fields; expose **Prometheus** metrics for RPS, latency histograms, saturation; initialize **OpenTelemetry** exporters when org standard mandates.
+- Correlate **worker PID** restarts with OOM events via container logs.
+- Pitfalls: logging **PII**; huge log volume from DEBUG in prod; missing **correlation** across async boundaries.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Blue/green or canary rollouts
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when deployment doc describes **traffic shift** percentage, automatic **rollback** on error rate SLO burn, and **feature flags** interaction with container versions.
+- Document **migrations** ordering with app startup (expand/contract) to avoid schema/app mismatch during canary.
+- Handoff: post-incident review updates **runbook** with last verified deploy date.
+
+## Lesson 5: Lab—readiness vs liveness and a minimal metrics hook
+
+- Sketch **two HTTP endpoints**: `/live` (process up) and `/ready` (DB ping OK)—document which your orchestrator should use for traffic and why.
+- Add a **counter** (Prometheus client or printf-style log metric) for `http_requests_total{route,status}` in a toy ASGI app—curl it and verify labels.
+- Write a **5-line rollout checklist**: image digest, migration flag, feature flag default, rollback command, who owns the pager.
+
+## Lesson 6: Anti-patterns in deploy and observability
+
+- **Liveness-only probes** when the app depends on a down database—endless crash loops instead of shedding load.
+- **Logging secrets** “temporarily” for debugging—log pipelines retain data; use redaction middleware.
+- **Dashboards without owners**—on-call cannot interpret alerts; tie dashboards to services and teams.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **Container slimming is security and cold-start speed**—fewer packages mean fewer CVEs.
+- **Graceful shutdown is a feature**—SIGTERM handling separates pros from demo apps.
+- **Observability is not three dashboards**—it is correlated logs, metrics, and traces with ownership.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. **Multi-stage Docker builds** mainly help by:  
+   A) Always running as root  
+   B) Separating build-time tools from the final runtime image to reduce size and attack surface  
+   C) Disabling virtual environments  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. On SIGTERM, a well-behaved ASGI/WSGI stack should generally:  
+   A) Drop active connections immediately always  
+   B) Stop accepting new work and drain in-flight requests up to configured graceful timeouts  
+   C) Ignore the signal  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. **Structured logging** (JSON fields) helps operations because:  
+   A) It removes timestamps  
+   B) Machines can parse and query fields like `request_id` and `trace_id` reliably  
+   C) It forbids text messages  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. A **readiness** probe should reflect:  
+   A) Only process is alive  
+   B) The app can safely receive traffic (dependencies ready, migrations done, etc.)  
+   C) Only CPU temperature  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. **Canary deployments** reduce risk by:  
+   A) Deploying to all users instantly  
+   B) Routing a small slice of traffic to the new version while monitoring key metrics before full promotion  
+   C) Skipping monitoring  
+
+6. **Pinning `FROM python:...@sha256:...`** in Dockerfiles mainly improves:  
+   A) Image build speed always  
+   B) Reproducible base image bytes across builds and registries (barring mutable tags)  
+   C) Python syntax compatibility  
+
+7. **Prometheus histograms** for latency are useful because:  
+   A) They replace logs entirely  
+   B) They support SLO-style quantile estimation and alerting on tail latency  
+   C) They only store the last request  
+
+8. Running the container **as non-root** helps security because:  
+   A) It disables all networking  
+   B) Exploits that escape the app gain limited UID capabilities inside the container  
+   C) It guarantees no CVEs in dependencies  
 
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B**
+1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B** · 6. **B** · 7. **B** · 8. **B**

@@ -15,69 +15,96 @@ This module aligns with the training library topic **Async IO at scale**. Work t
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: Tasks, `gather`, cancellation, and `shield`
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- **`asyncio.create_task`** schedules concurrent work; **`await asyncio.gather`** composes parallelism—know **`return_exceptions`** behavior when one failure should not cancel siblings policy-wise.
+- **`asyncio.shield`** protects inner awaits from **cancellation** propagation in specific patterns—document why rare uses are justified.
+- Prerequisites: intro asyncio; understanding that **CancelledError** is BaseException subclass—handle carefully, do not swallow blindly.
 
-## Lesson 2: Core workflows
+## Lesson 2: Streams, protocols, and backpressure
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: use **`StreamReader`/`StreamWriter`** or framework equivalents with **read limits** to avoid memory bombs; propagate **flow control** (`drain`) in echo servers.
+- Implement **timeouts** on every external wait (`asyncio.wait_for`) with product-specific retry policy.
+- Checkpoints: load test shows stable memory under slow clients; no unbounded queue growth without monitoring.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: Integrating blocking code with executors
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Pitfalls: calling **`requests.get`** inside async tasks without thread offload; mixing **`run_until_complete`** in running loops; forgetting to **close** transports on shutdown.
+- Use **`asyncio.to_thread`** (3.9+) or **`loop.run_in_executor`** for blocking libraries until native async clients exist.
+- Rollback: if cancellation storms appear, add **structured concurrency** patterns (`TaskGroup` in 3.11+).
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Testing async and flaky timing
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when **`pytest-asyncio`** (or framework) configured with **mode** documented; tests avoid real sleeps via **`asyncio.sleep(0)`** manipulation or clock fakes where possible.
+- Document **graceful shutdown** integration tests hitting open sockets.
+- Handoff: **platform** module for ASGI deployment concerns.
+
+## Lesson 5: Lab—`TaskGroup` and structured concurrency
+
+- Rewrite a script that spawns several **`create_task`** calls with manual exception handling to use **`asyncio.TaskGroup`** (3.11+)—observe first-failure cancellation behavior.
+- Build a tiny TCP echo with **`StreamReader`/`StreamWriter`**—add **`readuntil` limit** and **`wait_for`** on client handler to cap abuse.
+- Add **`asyncio.to_thread`** around a blocking `time.sleep(2)` call—verify the loop still schedules other coroutines concurrently.
+
+## Lesson 6: Anti-patterns at async scale
+
+- **`gather` without `return_exceptions` policy**—surprise partial results when one task fails and others are cancelled.
+- **Unbounded `Queue`** feeding workers—no visibility until memory blows; pair with metrics and maxsize.
+- **Swallowing `CancelledError`** in random `except Exception`**—breaks shutdown and structured cancellation.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **Cancellation is part of the API contract**—async cleanup must be `finally` safe like sync `try/finally`.
+- **Backpressure is honesty**—unbounded queues hide overload until OOM kills you.
+- **Blocking calls in async loops are bugs**—offload or replace the library.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. **`asyncio.CancelledError`** should generally be:  
+   A) Silently swallowed everywhere  
+   B) Allowed to propagate or handled carefully at task boundaries with cleanup in `finally`  
+   C) Ignored because it is a `ValueError`  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. **`asyncio.shield`** is used to:  
+   A) Speed up CPU code  
+   B) Protect an awaitable from cancellation in specific propagation scenarios (still not a security boundary)  
+   C) Replace `gather` always  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. **`await writer.drain()`** in streams helps with:  
+   A) Flushing write buffers and respecting flow control / backpressure  
+   B) Closing SSL always  
+   C) Reading data  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. Calling **blocking** HTTP clients directly inside hot async tasks without offload typically:  
+   A) Scales perfectly  
+   B) Blocks the event loop, harming concurrency  
+   C) Automatically becomes async  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. **`asyncio.wait_for(coro, timeout)`** wraps a coroutine to:  
+   A) Remove timeouts  
+   B) Cancel the waited task if it exceeds the timeout (subject to cancellation semantics)  
+   C) Always return `None`  
+
+6. **`asyncio.TaskGroup`** (3.11+) primarily encourages:  
+   A) Ignoring task failures  
+   B) Structured concurrency: child tasks scoped to a block with defined error propagation  
+   C) Replacing the event loop  
+
+7. **`asyncio.to_thread`** is appropriate for:  
+   A) CPU-bound pure Python hot loops  
+   B) Running blocking callables in a thread pool without blocking the event loop  
+   C) Replacing `await` syntax  
+
+8. An **`asyncio.Queue`** with **unbounded** maxsize in a producer/consumer service risks:  
+   A) Faster consumers always  
+   B) Memory growth if producers outpace consumers—prefer bounded queues and backpressure  
+   C) Automatic load shedding  
 
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B**
+1. **B** · 2. **B** · 3. **A** · 4. **B** · 5. **B** · 6. **B** · 7. **B** · 8. **B**

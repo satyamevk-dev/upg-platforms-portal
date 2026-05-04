@@ -40,6 +40,18 @@ Create, copy, move, remove, and link files and directories safely; use `find` fo
 - **`find /var -type f -name 'messages*'`** — files only under `/var`.
 - Add **`-maxdepth`** to limit traversal on large trees.
 
+## Lesson 5: Lab—`rsync -n`, `install`, and dry runs
+
+- Practice **`rsync -avn src/ dest/`** (dry run) before real copies—confirm trailing slash semantics (`src/` vs `src`).
+- Use **`install -D -m 0644 file path`** in scripts for atomic-ish file placement with explicit mode.
+- Pair **`find ... -print`** (or `-ls`) before any **`-delete`** experiment—verify matches on a busy tree.
+
+## Lesson 6: Anti-patterns with files and links
+
+- **`chmod -R 777`** “to fix permissions”—creates audit failures and risky world-writable trees.
+- **Dangling symlinks** in deployment—services start but read empty/wrong configs silently.
+- **`mv` across filesystems** expecting instant inode-preserving rename—falls back to copy+delete; plan disk space.
+
 ---
 
 ## Key takeaways
@@ -76,8 +88,23 @@ Create, copy, move, remove, and link files and directories safely; use `find` fo
    B) The same inode  
    C) Only file names, not data  
 
+6. **`ln file1 file2` without `-s`** creates:  
+   A) A symbolic link  
+   B) A hard link (same inode, new directory entry)  
+   C) A compressed archive  
+
+7. Before **`find ... -delete`**, a disciplined first step is often:  
+   A) Run the same predicate with `-print` or `-ls` and verify matches  
+   B) Add `-delete` first to save time  
+   C) `chmod 777` the mount point  
+
+8. **`cp -a`** is especially valued for directory trees because it:  
+   A) Skips metadata for speed  
+   B) Recursively copies while preserving metadata (GNU archive mode)  
+   C) Encrypts data in flight always  
+
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B**
+1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B** · 6. **B** · 7. **A** · 8. **B**

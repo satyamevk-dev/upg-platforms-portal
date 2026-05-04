@@ -39,6 +39,18 @@ Connect programs using standard streams: redirect I/O and build pipelines for po
 - **`tee file`** writes stdin to **both** file and stdout—useful with sudo: `sudo tee /etc/...`.
 - **`tee -a`** appends—mirrors `>>` behavior while still passing data down the pipe.
 
+## Lesson 5: Lab—`pipefail`, here-documents, and process substitution
+
+- Enable **`set -o pipefail`** in a test script where the **middle** pipeline stage can fail—observe exit status vs default Bash.
+- Write a tiny **here-doc** that feeds **`wc -l`**—then switch to **here-string** `<<<` for one-line input.
+- Try **`<(sort file)`** as an argument to **`diff`**—feel file-descriptor-like inputs without temp files.
+
+## Lesson 6: Anti-patterns with redirection
+
+- **Cron jobs** that redirect only stdout—**stderr lost** or mailed randomly; always capture both intentionally.
+- **`2>/dev/null`** to “fix” errors—hides real failures; prefer targeted suppression with logging.
+- **Huge uncompressed pipelines** when **early `grep`/`awk`** could shrink data—wastes CPU and I/O budgets.
+
 ---
 
 ## Key takeaways
@@ -75,8 +87,23 @@ Connect programs using standard streams: redirect I/O and build pipelines for po
    B) Write to a file and still pass data through the pipe  
    C) Encrypt streams  
 
+6. In Bash, **`set -o pipefail`** makes a pipeline’s exit status:  
+   A) Always zero  
+   B) Reflect the right-most non-zero failure in the pipeline (when any command fails)  
+   C) Random  
+
+7. By default in a shell pipeline, **stderr** of the first command:  
+   A) Is merged into stdout automatically  
+   B) Still goes to the terminal unless separately redirected  
+   C) Is always discarded  
+
+8. Discarding all errors with **`2>/dev/null`** everywhere is risky because:  
+   A) It can hide actionable failures and lengthen outages  
+   B) It always improves security  
+   C) It is required by systemd  
+
 ---
 
 ## Answer key
 
-1. **C** · 2. **B** · 3. **B** · 4. **B** · 5. **B**
+1. **C** · 2. **B** · 3. **B** · 4. **B** · 5. **B** · 6. **B** · 7. **B** · 8. **A**

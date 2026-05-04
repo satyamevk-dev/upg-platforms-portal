@@ -15,69 +15,69 @@ This module aligns with the training library topic **Transactions & isolation**.
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: ACID, BEGIN, COMMIT, ROLLBACK
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- **Atomicity**: all statements in a transaction succeed or none persist; **Consistency**: constraints hold after commit; **Isolation**: concurrent transactions do not read each other’s partial effects against their guarantees; **Durability**: committed writes survive crashes (WAL).
+- Practice explicit **`BEGIN` … `COMMIT`/`ROLLBACK`** in scripts; know your driver’s **autocommit** default—ORMs may wrap shorter units than you think.
+- Prerequisites: DML comfort; two `psql` sessions to reproduce blocking and isolation demos safely in a scratch DB.
 
-## Lesson 2: Core workflows
+## Lesson 2: Read committed vs. repeatable read in PostgreSQL
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: default **`READ COMMITTED`** sees newly committed rows on each statement boundary—great for most OLTP; use **`REPEATABLE READ`** or **`SERIALIZABLE`** when reports or financial transfers need stable snapshots.
+- Understand **non-repeatable read** and **phantom** risks at a conceptual level; observe them with concurrent updates in lab.
+- Checkpoints: same `SELECT` twice in `REPEATABLE READ` shows stable snapshot; serialization failures (`40001`) handled with retry in app when using `SERIALIZABLE`.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: Savepoints, long transactions, and lock pain
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Pitfalls: holding transactions open across **user think time**; forgetting **`ROLLBACK TO SAVEPOINT`** error handling patterns; mixing DDL (often implicit commit) mid-transaction unexpectedly.
+- **`LOCK TABLE`** or heavy `UPDATE` without index support can block peers—pair concurrency lessons with indexing basics.
+- Rollback: applications implement **idempotent** retries for serialization failures; cap transaction duration with timeouts where supported.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Isolation documentation handoff
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when services document **default isolation** per endpoint, retry policy for `40001`, and forbidden patterns (long interactive transactions).
+- Link ORM **session** configuration to actual SQL emitted in logs during tests.
+- Handoff: point to **locking & concurrency** advanced module for deadlock and hot-row drills.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **Isolation level is a product choice**, not only a database default—document what each API relies on.
+- **Short transactions** are fast transactions; long ones are lock magnets.
+- **Serialization failures are normal** at `SERIALIZABLE`—plan retries instead of blaming Postgres.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. **`ROLLBACK`** ends a transaction by:  
+   A) Persisting all changes made since `BEGIN`  
+   B) Discarding uncommitted changes from the current transaction  
+   C) Deleting the database  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. PostgreSQL’s default transaction isolation for new transactions is typically:  
+   A) `SERIALIZABLE`  
+   B) `READ COMMITTED`  
+   C) `READ UNCOMMITTED`  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. A **phantom read** (conceptually) involves:  
+   A) Reading the same row twice with identical results always  
+   B) Another transaction inserting or deleting rows that match your query predicate between your reads  
+   C) Only checksum errors  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. **`SAVEPOINT`** allows:  
+   A) Marking a point so `ROLLBACK TO SAVEPOINT` can undo work after that point while keeping the outer transaction open  
+   B) Skipping all constraints  
+   C) Automatic infinite retries  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. Using **`SERIALIZABLE`** isolation may require applications to:  
+   A) Never handle errors  
+   B) Retry transactions that fail with serialization failures (`SQLSTATE 40001`) when business logic allows  
+   C) Disable indexes  
 
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B**
+1. **B** · 2. **B** · 3. **B** · 4. **A** · 5. **B**

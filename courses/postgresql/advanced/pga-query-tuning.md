@@ -15,69 +15,69 @@ This module aligns with the training library topic **Query tuning & planner dept
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: Seq scan vs. index scan vs. bitmap index scan
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- Read **`EXPLAIN (ANALYZE, BUFFERS)`** plans: **Seq Scan** reads the whole heap; **Index Scan** walks the B-tree then fetches heap tuples; **Bitmap Index Scan** collects TID ranges then visits heap in batches—good for moderate selectivity.
+- **Cost** numbers are arbitrary units—compare alternatives in the same plan, not across servers blindly.
+- Prerequisites: statistics healthy (`ANALYZE`), `pg_stat_statements` for finding top offenders, and a safe clone of production-ish data.
 
-## Lesson 2: Core workflows
+## Lesson 2: When indexes hurt and write amplification
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: measure **write** throughput and **index size** before adding covering indexes to hot tables; watch **bloat** and **autovacuum** lag after index-heavy migrations.
+- Understand **partial indexes** to shrink write/read tax when predicates are stable (`WHERE status = 'active'`).
+- Checkpoints: `INSERT`/`UPDATE` benchmarks within acceptable regression envelope; duplicate indexes removed.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: Extended statistics, hints, parallel query, work_mem
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Pitfalls: **`SET enable_seqscan = off`** as a permanent “fix”; cranking **`work_mem`** globally until the OS swaps; parallel workers saturating CPU while latency spikes.
+- Use **`CREATE STATISTICS`** for correlated columns the planner underestimates; treat **`pg_hint_plan`**-style hints as last resort with owner and expiry date.
+- Rollback: revert hint session settings; drop harmful indexes concurrently after validation.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Tuning case handoff
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when each merged tuning PR links **before/after** plan snippets, wall time, and resource metrics; **SLO** impact noted.
+- Document **maintenance_work_mem** vs. **work_mem** usage contexts separately from query tuning knobs.
+- Handoff: feed recurring patterns into **lint rules** or **ORM** guidelines so the same bug is not tuned weekly.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **Plans tell stories about cardinality**—fix stats and query shape before fighting the cost model with hints.
+- **Indexes are not free**—each one taxes every write and vacuum cycle touching that table.
+- **`work_mem` is a memory lever**, not a magic faster button—raise per session or subplan, not blindly globally.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. A **bitmap index scan** often appears when:  
+   A) The planner never uses indexes  
+   B) Combining moderate selectivity index predicates into TID batches before heap fetches can be cheaper than naive index probes  
+   C) Only sequential scans are allowed  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. **Extended statistics** (`CREATE STATISTICS`) help when:  
+   A) Columns are completely independent always  
+   B) Correlated columns cause bad row estimates that confuse the planner  
+   C) You want to disable `ANALYZE`  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. Raising **`work_mem`** too high globally can:  
+   A) Always improve every query with no risk  
+   B) Increase memory pressure and risk spills or OS swapping when many queries sort/hash concurrently  
+   C) Disable parallel query  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. **`EXPLAIN` costs** are best used to:  
+   A) Compare alternative plans on the same server snapshot, not as absolute real-world milliseconds  
+   B) Replace `EXPLAIN ANALYZE` always  
+   C) Prove queries need no indexes  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. **Planner hints** (where available) should be treated as:  
+   A) The first tool for every slow query  
+   B) Last-resort debt with owners, justification, and retirement criteria when underlying stats or schema are fixed  
+   C) Unsupported by PostgreSQL entirely  
 
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B**
+1. **B** · 2. **B** · 3. **B** · 4. **A** · 5. **B**

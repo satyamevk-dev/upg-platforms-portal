@@ -15,69 +15,69 @@ This module aligns with the training library topic **Scripting & orchestration**
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: Picking the runtime—shell, Python, or PowerShell
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- Choose **shell** for glue around CLIs and quick ops; **Python** for structured data, retries, and tests around vendor SDKs; **PowerShell** when Windows jump hosts or Active Directory–adjacent tasks dominate your estate.
+- Standardize **style**: `set -o pipefail` (bash), `StrictMode` (PowerShell), or typed Python entrypoints so failures do not masquerade as success.
+- Prerequisites: pinned **interpreter** version in `pyproject` or container, **lint** and **format** in CI, and a shared **logging** format that includes tenant and correlation IDs.
 
-## Lesson 2: Core workflows
+## Lesson 2: Parameterized, multi-tenant safe runs
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: script accepts `--tenant`, `--environment`, and `--dry-run` → loads secrets from **vault** or env injection → performs read-only validation → applies change only with explicit `--apply` flag.
+- Wrap vendor calls in a **single module** per API surface so retries, logging, and metrics stay consistent across scripts.
+- Checkpoints: dry-run diff matches reviewer expectation; same script works for **two** lab tenants without copy-paste edits to URLs.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: Credential injection, logging, and failure visibility
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Pitfalls: `echo $TOKEN`; **tracebacks** leaking headers; `curl -v` in shared CI logs; ignoring **partial** failure when looping users.
+- Constraints: secrets never in **argv** visible to `ps`; Windows **Credential Manager** vs. Linux **keyring** differences; corporate **read-only** filesystems on runners.
+- Rollback: scripts support `--undo` or emit **reverse** API calls only when vendor supports safe deletes; otherwise emit human checklist.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Packaging scripts for the team
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when `README` lists inputs, outputs, exit codes, and **example** invocations; CI runs **shellcheck**, **ruff**, or **PSScriptAnalyzer** as applicable.
+- Document **required** env vars in `.env.example` without values; link runbook for common exit `3` vs `4` meanings you define.
+- Handoff: publish scripts as versioned **package** or container so “works on my laptop” disappears from incidents vocabulary.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **One thin wrapper module** around each vendor API beats ten copy-pasted `curl` blocks that diverge on retry semantics.
+- **`--dry-run` plus explicit `--apply`** turns dangerous automation into reviewable, auditable operations.
+- **Logs are not a secrets store**—redact tokens and payloads by default; structured logs speed AOC incident correlation.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. Passing secrets to a script is least risky when:  
+   A) Hard-coding them at the top of the file for speed  
+   B) Injecting from a vault or CI secret store at runtime without printing them to stdout  
+   C) Passing them as visible command-line arguments for simplicity  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. A **`--dry-run`** mode is valuable because it:  
+   A) Deletes faster in production  
+   B) Shows intended API calls or config diffs without committing side effects  
+   C) Disables authentication to simplify testing  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. For multi-tenant automation, **parameterizing** tenant and environment IDs prevents:  
+   A) Accidental runs against the wrong tenant when URLs differ only subtly  
+   B) All logging  
+   C) Version control  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. Centralizing vendor HTTP calls in a **shared module** mainly helps:  
+   A) Guarantee every script uses the same retries, timeouts, and observability hooks  
+   B) Remove the need for code review  
+   C) Avoid ever updating dependencies  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. When logging API errors, you should:  
+   A) Log full Authorization headers for debugging  
+   B) Log correlation IDs, HTTP status, and redacted bodies per policy  
+   C) Disable logging to save disk  
 
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B**
+1. **B** · 2. **B** · 3. **A** · 4. **A** · 5. **B**

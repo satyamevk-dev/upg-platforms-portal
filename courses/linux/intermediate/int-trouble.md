@@ -38,6 +38,18 @@ Triage systematically, bundle evidence for vendors with **sosreport**/similar to
 - **Diffs:** `rpm -V`, `etckeeper`, Git for `/etc` where adopted.
 - **Rollback:** how to revert feature flags, packages, and LB weights—tested before need.
 
+## Lesson 5: Lab—`sosreport --batch`, redaction checklist, `rpm -V`
+
+- Generate **`sosreport --batch`** in lab—open archive structure once so production uploads are less scary.
+- Write a **3-line redaction checklist** (passwords, TLS keys, customer hostnames) before any external share.
+- Run **`rpm -Vv` on a few critical packages**—interpret **S.5....T** style flags from docs.
+
+## Lesson 6: Anti-patterns in incidents
+
+- **Uploading sosreport externally** without scrubbing secrets—credential leak incident #2.
+- **“Fixed it” with no timeline**—repeatability and compliance both fail.
+- **Skipping rollback rehearsal** until 3 a.m.—when stress is highest.
+
 ---
 
 ## Key takeaways
@@ -74,8 +86,23 @@ Triage systematically, bundle evidence for vendors with **sosreport**/similar to
    B) Only emoji reactions  
    C) Unverifiable anecdotes only  
 
+6. Before uploading **`sosreport`** outside your org, you should typically:  
+   A) Review/redact sensitive content per policy—bundles can include secrets  
+   B) Upload immediately because archives are always sanitized  
+   C) Delete `/etc` to shrink size  
+
+7. **`rpm -V`** compares installed files to the RPM database and can flag:  
+   A) Size, checksum, timestamp, mode changes—useful integrity hints  
+   B) Only GPU firmware versions  
+   C) Only Wi-Fi SSIDs  
+
+8. **`rd.break`** during initramfs should be treated as:  
+   A) A low-level, high-risk intervention reserved for controlled maintenance  
+   B) A daily health check  
+   C) A replacement for `tcpdump`  
+
 ---
 
 ## Answer key
 
-1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A**
+1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A** · 6. **A** · 7. **A** · 8. **A**

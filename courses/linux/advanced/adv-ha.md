@@ -37,6 +37,18 @@ Build **shared-nothing** clusters with **quorum** and **fencing**, operate **Pac
 - **Sync** replication minimizes **RPO** at latency cost; **async** relaxes RPO for distance/cost.
 - **RTO** is time-to-restore service—practice **failover** drills; **runbooks** beat heroics.
 
+## Lesson 5: Lab—`pcs status`, `crm_mon`, fencing agent dry run
+
+- **`pcs status`** / **`crm_mon -1r`** in lab—interpret **Started** vs **Failed** vs **unmanaged** resources.
+- Walk through **STONITH** device config in a disposable cluster—**never** test real PDUs against prod racks without CAB.
+- Tune **monitor** interval vs. **migration-threshold** on one resource—observe flapping behavior in logs.
+
+## Lesson 6: Anti-patterns in HA clusters
+
+- **Two-node clusters without qdevice/tie-breaker**—split-brain magnet.
+- **Disabling fencing** “temporarily” for months—data corruption roulette.
+- **TCP-only health checks** for databases that can accept connections while broken—false green.
+
 ---
 
 ## Key takeaways
@@ -73,8 +85,23 @@ Build **shared-nothing** clusters with **quorum** and **fencing**, operate **Pac
    B) Ignores latency completely  
    C) Disables networking  
 
+6. A **two-node** cluster without a tie-breaker (e.g., **qdevice**) is especially sensitive to:  
+   A) Split-brain when cluster communication partitions  
+   B) IPv4 ARP only on Wi-Fi clients  
+   C) ext4 journal modes only  
+
+7. **STONITH/fencing** exists primarily to:  
+   A) Ensure a failed node cannot corrupt shared resources while others assume it is dead  
+   B) Replace backups  
+   C) Increase MTU automatically  
+
+8. **RTO** (recovery time objective) differs from **RPO** mainly because RTO focuses on:  
+   A) How long restoring service can take—not how much data may be lost  
+   B) How many disks spin at 7200 RPM  
+   C) Kerberos ticket lifetimes only  
+
 ---
 
 ## Answer key
 
-1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A**
+1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A** · 6. **A** · 7. **A** · 8. **A**

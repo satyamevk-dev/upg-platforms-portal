@@ -15,69 +15,69 @@ This module aligns with the training library topic **Directory, users & groups**
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: Directory objects and identity flow
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- Relate **AOC directory** screens to your authoritative **IdP** (for example Azure AD or Okta): which attributes are mastered in the IdP, which are display-only in AOC, and whether sync is **scheduled** or near-real-time per Avaya integration guidance.
+- Terms to internalize: **person** vs. **user account**, **group** vs. **role-like** group, **provisioning template**, **disabled** vs. **deleted**, and **external** identities used for partners or guests.
+- Prerequisites: a read-only IdP security group, two lab users (one federated, one local if supported), and a written **attribute mapping** table for at least one downstream service.
 
-## Lesson 2: Core workflows
+## Lesson 2: User lifecycle and group modeling
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: create or sync a user from a **template** → assign **groups** that model job function → wait through the documented **sync latency** → verify the user sees expected **licenses**, **spaces**, or calling features in a client.
+- Practice **modify** vs. **disable** for leavers; confirm your org’s rule for **resource ownership** transfer (spaces, call queues, delegated mailboxes) before any delete.
+- Checkpoints: nested group expansion matches IdP expectations in AOC or sync logs; a second admin can independently verify the same membership without manual cache hacks.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: Sync conflicts, passwords, and MFA
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Pitfalls: edit wars between **console** edits and **IdP** updates; duplicate **UPN or email** keys; mass **lockouts** after aggressive password policy tightening; MFA gaps on **emergency** accounts.
+- Constraints: **ImmutableId** (or equivalent anchor attributes) and other directory linking keys are difficult to repoint safely once bound, **legal hold** accounts that must not be deleted, and guest lifecycles that differ from employees.
+- Rollback: revert a mistaken **attribute map** or sync rule from saved config; prefer **disable** over hard-delete until retention and ownership checks pass.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Verification before production directory change
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when a **pilot cohort** shows correct licenses and memberships **after** the documented sync window, with no unexpected **privilege elevation** in messaging or admin roles.
+- Document **sync schedule**, connector **service account** names, **attribute map** version, and who may grant **tenant admin** or equivalent high roles.
+- Handoff: add a help-desk triage snippet distinguishing “**directory or sync**” vs. “**client or network**” for sign-in failures, with the first three checks for each path.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **Treat the IdP as authoritative** for identity attributes unless you have a written, reviewed exception—console edits that fight sync create hard-to-close tickets.
+- **Disable before delete** preserves audit chains, ownership, and rollback options; hard-delete is a last step after legal and app-owner sign-off.
+- **Pilot and wait:** directory and sync changes need a cohort plus the full documented latency window before you trust org-wide behavior.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. For an employee exit, **disabling** an account before hard deletion is often preferred because:  
+   A) It preserves object ownership, audit references, and reversibility while removing access  
+   B) It automatically deletes every mailbox with no backup  
+   C) It grants the account to the employee’s manager with the same password  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. **Nested groups** are commonly used to:  
+   A) Model role-like access via membership chains, often mirrored from an IdP  
+   B) Remove the need for any group at all  
+   C) Guarantee every user belongs to exactly one global “EveryoneAdmin” group  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. When **directory sync** disagrees with manual edits, a typical governance rule is:  
+   A) Always overwrite the IdP from the console without review  
+   B) Treat the IdP as the source of truth for identity attributes unless documented exceptions apply  
+   C) Ignore timestamps and merge attributes at random  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. **MFA for privileged administrators** is best described as:  
+   A) Optional only when using public Wi-Fi  
+   B) Strongly recommended or required by policy because admin sessions are high impact  
+   C) A replacement for unique per-user accounts  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. Rolling out a **stricter password policy** safely usually includes:  
+   A) Communicating the change, staging enforcement, and validating lockout thresholds to avoid mass outages  
+   B) Setting minimum length to one character for usability  
+   C) Reusing the last fifty passwords to reduce help-desk load  
 
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B**
+1. **A** · 2. **A** · 3. **B** · 4. **B** · 5. **A**

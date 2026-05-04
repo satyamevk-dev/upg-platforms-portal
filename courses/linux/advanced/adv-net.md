@@ -37,6 +37,18 @@ Operate Linux as a **router** with policy routing and **VRF-lite**, build **VXLA
 - **AF_XDP** maps frames to userspace with **zero-copy** paths—complexity trade-off.
 - **DPDK** polls NICs in userspace—cores dedicated; operational model differs from kernel stack.
 
+## Lesson 5: Lab—`ip -d link`, `bridge fdb`, `tc -s qdisc`
+
+- **`ip -d link show type vxlan`**—inspect **id**, **local**, **dstport**, **ttl**, **df** flags on a lab tunnel.
+- **`bridge fdb show br0`**—see **MAC→vxlan** mapping when learning multicast/EVPN-style setups (conceptual).
+- **`tc -s qdisc show dev eth0`**—read **drops** and **overlimits** on **fq_codel**/cake before tuning knobs blindly.
+
+## Lesson 6: Anti-patterns in advanced networking
+
+- **VXLAN without MTU headroom**—mysterious TCP hangs and “it works on small payloads.”
+- **Policy routing rules** without comments/owner—next admin deletes wrong **`ip rule`**.
+- **tc shaping** without bufferbloat literacy—drops everywhere, app timeouts.
+
 ---
 
 ## Key takeaways
@@ -73,8 +85,23 @@ Operate Linux as a **router** with policy routing and **VRF-lite**, build **VXLA
    B) Automatic kernel upgrades  
    C) Mandatory use of Appletalk  
 
+6. **VXLAN overlays** commonly require extra attention to:  
+   A) MTU/IP overhead to avoid black-holed large TCP segments  
+   B) inode counts on `/tmp` only  
+   C) LUKS key rotation schedules only  
+
+7. **`tc -s qdisc`** is useful because it can show:  
+   A) Queueing statistics like drops/overlimits for shaping diagnosis  
+   B) Only ARP table entries  
+   C) Only ZFS ARC size  
+
+8. **Policy routing** (`ip rule`) without documentation/ownership often leads to:  
+   A) Confusing asymmetric routing and accidental deletion during maintenance  
+   B) Faster DNS always  
+   C) Automatic HA quorum  
+
 ---
 
 ## Answer key
 
-1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A**
+1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A** · 6. **A** · 7. **A** · 8. **A**

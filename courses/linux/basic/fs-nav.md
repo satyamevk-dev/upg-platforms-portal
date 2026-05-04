@@ -38,6 +38,18 @@ Navigate the Linux directory tree confidently: paths, the working directory, lis
 - **`/etc`** — system configuration. **`/var`** — variable data (logs, spool). **`/home`** — user homes. **`/usr`** — read-only user programs and libraries. **`/tmp`** — temporary (often cleaned on reboot). **`/opt`** — add-on software packages.
 - **`/bin`**, **`/sbin`**, **`/usr/bin`**, **`/usr/sbin`** — essential vs. general commands (modern distros may merge via symlinks).
 
+## Lesson 5: Lab—`findmnt`, `realpath`, and tab completion
+
+- Run **`findmnt /`** and **`findmnt /var/log`**—see source device, options, and propagation; correlate with **`lsblk -f`**.
+- Practice **`cd` to a symlinked path** then **`pwd -P`** vs **`pwd`**—know what scripts see when they resolve paths.
+- Use **`realpath`** / **`readlink -f`** in automation when you must anchor deletes or backups to an absolute tree.
+
+## Lesson 6: Anti-patterns in navigation
+
+- **`cd` in scripts without `set -e` and fixed cwd**—relative paths like `../configs` touch the wrong tree under cron/systemd.
+- **`rm`/`mv` on globs** without **`ls` preview** or **`nullglob`** awareness—surprise matches when a directory is empty or misspelled.
+- Assuming **`/tmp` persistence** across reboots or containers—treat as volatile scratch.
+
 ---
 
 ## Key takeaways
@@ -74,8 +86,23 @@ Navigate the Linux directory tree confidently: paths, the working directory, lis
    B) `/var`  
    C) `/boot`  
 
+6. **`pwd -P`** is most useful when your cwd is reached via:  
+   A) Symlinks—you want the physical path without symlink components  
+   B) NFS only—never for local disks  
+   C) GPU drivers exclusively  
+
+7. Heavy use of **relative paths** (`../..`) in automation without pinning cwd can:  
+   A) Always be safe because Linux resolves magically  
+   B) Act on the wrong files if the job’s starting directory differs from what you assumed  
+   C) Improve RAID performance  
+
+8. **`/proc`** is best described as:  
+   A) A normal writable config directory like `/etc`  
+   B) A virtual filesystem exposing kernel and process state  
+   C) User home directories  
+
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **A** · 4. **B** · 5. **B**
+1. **B** · 2. **B** · 3. **A** · 4. **B** · 5. **B** · 6. **A** · 7. **B** · 8. **B**

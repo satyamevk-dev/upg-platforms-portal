@@ -15,66 +15,66 @@ This module aligns with the training library topic **Aggregates, GROUP BY & wind
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: GROUP BY, HAVING, and aggregate semantics
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- **`GROUP BY`** defines one output row per distinct group; aggregates (`count`, `sum`, `avg`) summarize within each group—every selected non-aggregated column must appear in `GROUP BY` (or be functionally dependent in PG’s relaxed rule—still be explicit for readers).
+- **`HAVING`** filters **groups** after aggregation; **`WHERE`** filters **rows** before—mixing them wrong changes totals silently.
+- Prerequisites: joins module comfort; sample sales data with duplicates to expose mistakes.
 
-## Lesson 2: Core workflows
+## Lesson 2: Window functions—PARTITION BY and frames
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: `sum(amount) OVER (PARTITION BY customer_id ORDER BY order_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)` for running totals; use `rank()` vs. `row_number()` consciously for ties.
+- Default **frame** for `ORDER BY` in aggregates-within-windows differs from defaults without `ORDER BY`—read docs once, bookmark cheat sheet.
+- Checkpoints: window results match a brute-force subquery for a few hand-checked customers.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: Duplicate rows and accidental fan-out
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Pitfalls: joining before `GROUP BY` causing **fan-out**; using `DISTINCT` to hide modeling bugs; mixing window and aggregate without subquery where SQL disallows.
+- `FILTER (WHERE ...)` clause on aggregates clarifies conditional metrics vs. `CASE` inside `sum`.
+- Rollback: when dashboard numbers disagree with finance, rebuild query from **base counts** upward with CTEs.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Review checklist for analytics SQL
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when peer review answers: “What is a row?” and “Can a join multiply rows?” for every saved report query.
+- Document **timezone** for `date_trunc` and window ordering on timestamptz columns.
+- Handoff: point to **indexing & EXPLAIN** module before promoting heavy dashboards to production.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **`WHERE` vs. `HAVING`** is the guardrail between row logic and group logic—mixing them up ships wrong KPIs.
+- **Windows** express running and ranking patterns without self-join explosion—learn frames once, reuse everywhere.
+- **`DISTINCT` is not a substitute** for correct joins or keys—find the fan-out source instead.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. **`HAVING`** filters:  
+   A) Rows before any grouping  
+   B) Groups after aggregates are computed  
+   C) Only indexes  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. In standard SQL shape, non-aggregated columns in the **`SELECT`** list with **`GROUP BY`** should:  
+   A) Never appear in `GROUP BY`  
+   B) Appear in `GROUP BY` or be functionally dependent on the grouped keys (PostgreSQL allows functional dependency—still be explicit for clarity)  
+   C) Always be wrapped in `MAX` without thought  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. A **window function** like `row_number() OVER (PARTITION BY department ORDER BY hire_date)` assigns:  
+   A) The same number to every row  
+   B) Per-department ordered row numbers without collapsing rows to groups  
+   C) Only global ordering ignoring partitions  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. **`FILTER (WHERE condition)`** on an aggregate is useful to:  
+   A) Replace `WHERE` entirely  
+   B) Compute conditional aggregates (for example `count(*) FILTER (WHERE status = 'paid')`) in one pass  
+   C) Delete rows  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. Accidental **duplicate rows** before aggregation often come from:  
+   A) Using `ORDER BY`  
+   B) Joins that multiply rows (one-to-many) without adjusting the grain before `GROUP BY`  
+   C) Using `LIMIT`  
 
 ---
 

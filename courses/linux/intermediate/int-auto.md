@@ -37,6 +37,18 @@ Use **Ansible** for idempotent configuration, seed systems with **cloud-init** a
 - **Git** is source of truth; **pipeline** runs tests (**ansible-lint**, molecule) then promotes to prod controllers.
 - **GitOps** controllers (concept) reconcile desired state—map to your org’s Kubernetes vs. VM workflows.
 
+## Lesson 5: Lab—`ansible-playbook --check`, `--diff`, inventory plugins
+
+- Run **`ansible-playbook --check`** against a staging group—note which modules support check mode honestly.
+- Add **`--diff`** on a template task—see rendered line changes before promotion.
+- Point inventory at a **static YAML** and then a **dynamic plugin** mock—understand refresh cadence.
+
+## Lesson 6: Anti-patterns in automation
+
+- **`command: curl | bash`** in playbooks—non-idempotent supply-chain hazard.
+- **Storing secrets in group_vars committed to Git**—use vault/secret manager patterns.
+- **Unbounded `forks`** on fragile network devices—DOS your own estate.
+
 ---
 
 ## Key takeaways
@@ -73,8 +85,23 @@ Use **Ansible** for idempotent configuration, seed systems with **cloud-init** a
    B) GPU overclocking  
    C) Email server greylisting  
 
+6. **`ansible-playbook --check`** (check mode) is limited because:  
+   A) Not all modules can predict changes accurately—some always report changed or skip  
+   B) It always applies changes faster  
+   C) It disables SSH  
+
+7. A **handler** in Ansible is a poor fit for:  
+   A) Tasks that must run after every play regardless of notifications  
+   B) Restarting a service only when its config template changes  
+   C) Running once after notifications coalesce  
+
+8. Storing **plaintext production secrets** in a Git-tracked inventory repo is:  
+   A) A common secure default  
+   B) Unsafe—use vault/secret manager patterns and tight ACLs  
+   C) Required by Ansible  
+
 ---
 
 ## Answer key
 
-1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A**
+1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A** · 6. **A** · 7. **A** · 8. **B**

@@ -39,6 +39,18 @@ Run **KVM**/**QEMU**/**libvirt** with **NUMA** and **hugepages**, choose **SR-IO
 - **VFIO** binds devices to **vfio-pci**—IOMMU groups must be atomic; **ACS** quirks exist.
 - **UEFI** guests need **OVMF** variables **NVRAM** handling for **Secure Boot** workflows.
 
+## Lesson 5: Lab—`virsh dominfo`, migration URI, hugepage pool sizing
+
+- **`virsh dominfo guest`**—note **CPU(s)**, **CPU time**, **Autostart**, **Security** driver in use.
+- Practice **offline migration** in lab—watch **shared storage** prerequisite errors on purpose.
+- Compute **hugepages** needed for RAM—`/proc/meminfo` **HugePages_Free** vs guest XML **memoryBacking**.
+
+## Lesson 6: Anti-patterns in virtualization
+
+- **host-passthrough CPU** on pools that require **live migration**—feature mismatch failures.
+- **SR-IOV VF assigned to multiple guests**—data path corruption and impossible diagnostics.
+- **OVS rules** without monitoring—VXLAN loops and STP surprises.
+
 ---
 
 ## Key takeaways
@@ -75,8 +87,23 @@ Run **KVM**/**QEMU**/**libvirt** with **NUMA** and **hugepages**, choose **SR-IO
    B) Only Btrfs subvolumes  
    C) Only cron tables  
 
+6. **`virsh dominfo`** is most useful for summarizing:  
+   A) A guest’s CPU count, memory, state, autostart, and related metadata  
+   B) Kernel module parameters only  
+   C) Only GPU VRAM clocks  
+
+7. Using **`host-passthrough`** CPU models broadly can complicate **live migration** because:  
+   A) Feature sets may differ between hosts in a pool, breaking compatibility checks  
+   B) It always disables networking  
+   C) It forces virtio-only disks  
+
+8. **Hugepages** backing guest RAM require operational attention to:  
+   A) Preallocated pool sizing and monitoring—otherwise guest start fails or host OOMs  
+   B) Only `/etc/motd` contents  
+   C) SNMP community strings  
+
 ---
 
 ## Answer key
 
-1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A**
+1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A** · 6. **A** · 7. **A** · 8. **A**

@@ -15,66 +15,66 @@ This module aligns with the training library topic **Self-service & internal pla
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: Service catalog patterns for AOC requests
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- Model recurring asks—**sandbox tenant**, **webhook registration**, **cert renewal**, **integration enablement**—as **catalog items** with standardized inputs, default risk tier, and estimated fulfillment time instead of free-text tickets only.
+- Each item should declare **dependencies** (for example IdP group membership) and **verification** steps the requester can self-check before submit.
+- Prerequisites: CMDB or **service** ownership data, RBAC mapping between catalog roles and AOC admin scopes, and a non-prod template tenant for safe automation trials.
 
-## Lesson 2: Core workflows
+## Lesson 2: Approvals and least-privilege execution roles
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: requester opens item → **manager** or **application owner** approves per policy → **pipeline** identity with **narrow** API scopes executes change → audit record links ticket, approver, and correlation ID.
+- Separate **requester**, **approver**, and **executor** principals so no single account can both approve and apply high-risk changes alone where policy forbids it.
+- Checkpoints: failed automation still writes structured **failure** reason; approvers see **diff** or plan output, not opaque “success” booleans only.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: ChatOps and ticketing as automation triggers
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Pitfalls: chat commands without **authn** mapping to real users; **idempotency** gaps when someone spams “/provision” three times; **PII** pasted into channels triggering bots.
+- Constraints: rate limits on **Slack** or **Teams** webhooks; change freeze windows; SOX-style **segregation** rules blocking self-merge of prod changes.
+- Rollback: `/undo` or reopen ticket triggers compensating automation only when vendor APIs support safe reversal—otherwise attach human runbook.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Adoption, toil metrics, and continuous improvement
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when catalog shows **adoption** (requests per week), **median time to fulfill**, and **reopen rate** after automation; teams set quarterly **toil reduction** targets with leadership visibility.
+- Survey power users for **top three** friction items; feed them into backlog ahead of new shiny integrations.
+- Handoff: publish **FAQ** for “when not to use automation” (novel architecture, regulatory exception) to prevent shadow ops outside the platform.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **Catalog + pipeline + audit** turns one-off hero scripts into a governable internal product for AOC operations.
+- **Split request, approve, and execute identities** so convenience never collapses separation of duties your auditors expect.
+- **Measure adoption and reopened tickets**—if automation does not reduce toil or errors, iterate on UX and guardrails, not blame requesters.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. A **service catalog** item for AOC automation should typically include:  
+   A) Only a blank text box with no defaults  
+   B) Standard inputs, risk tier, dependencies, and verification steps the requester can validate  
+   C) Direct production admin credentials for convenience  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. Separating **approver** and **executor** roles mainly supports:  
+   A) Faster unapproved changes  
+   B) Segregation of duties and safer high-risk changes executed by narrow automation identities  
+   C) Removing audit logs  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. **ChatOps** triggers are safest when:  
+   A) Anyone in any public channel can run destructive commands  
+   B) Commands map to authenticated users, idempotent actions, and the same policy gates as the web catalog  
+   C) They bypass ticketing entirely for all production work  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. Measuring **toil reduction** after launching self-service should look at:  
+   A) Only the number of lines of code written  
+   B) Median fulfillment time, reopen rate, and manual escalations compared to baseline  
+   C) Disabling all metrics to save cost  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. Execution identities for automation should:  
+   A) Always use a shared tenant super-admin password  
+   B) Use least-privilege service principals or roles scoped to the catalog item’s actions  
+   C) Rotate randomly without documentation  
 
 ---
 

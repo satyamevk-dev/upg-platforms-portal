@@ -15,66 +15,66 @@ This module aligns with the training library topic **Design & architect**. Work 
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: Reference architecture and environment tiers
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- Produce a **reference architecture** diagram: **dev**, **test**, **stage**, and **prod** for AOC and dependencies (IdP, SBC, observability, ITSM); show **traffic** and **admin** paths, not only server icons.
+- Define **promotion** rules: which changes flow automatically vs. which require CAB; align **naming** and **tagging** standards for resources and tenants.
+- Prerequisites: approved **network** segments, **certificate** authority strategy, and discovery outputs listing non-negotiable compliance boundaries.
 
-## Lesson 2: Core workflows
+## Lesson 2: Identity, networking, and security boundaries
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: document **trust zones**—where admin APIs terminate, where **break-glass** lives, how **MFA** applies, and which **integrations** may cross the DMZ.
+- Specify **least-privilege** admin roles mapped to real job functions; include **separation of duties** for high-risk actions (for example tenant destroy vs. day-2 config).
+- Checkpoints: security **sign-off** on **data flows**; penetration test scope agreed if required; **firewall** ruleset draft attached to the design package.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: Data residency, retention, and integration contracts
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Pitfalls: **residency** chosen late forcing redesign; **retention** mismatched to legal hold reality; **integration** payloads carrying PII without DLP review.
+- Constraints: **regulatory** region locks, **vendor** multi-tenant vs. dedicated options, and **API rate** assumptions baked into wrong tier sizing.
+- Rollback at design means revising **contracts** (SLA, DPA) before build spends money—cheaper than renegotiating mid-deploy.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Design package handoff to plan and build
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when **architecture decision records (ADRs)** exist for major forks (cloud vs. on-prem extension, IdP choice, observability stack), with alternatives rejected and rationale.
+- Document **integration contracts**: event schemas, auth modes, **SLO** targets, and **backward compatibility** expectations for partner systems.
+- Handoff: **review board** (security, network, apps) minutes stored; **bill of materials** for licenses and infra attached to cost workbook in Plan module.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **Draw boundaries before you buy hardware**—identity, network, and admin blast radius belong on paper with signatures, not in post-incident PDFs.
+- **Compliance and residency are design inputs**, not footnotes; retrofitting them after build is expensive and politically toxic.
+- **Versioned integration contracts** (events, APIs, SLAs) keep AOC, partners, and your automation team aligned through upgrades.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. **Environment tiers** (dev/test/stage/prod) primarily exist to:  
+   A) Increase license cost without benefit  
+   B) Reduce risk by testing changes and promotions before customer-impacting production  
+   C) Eliminate the need for documentation  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. In design, **security boundaries** should clarify:  
+   A) Only logo placement  
+   B) Trust zones, MFA expectations, admin API exposure, and separation of duties for high-risk actions  
+   C) Only desktop wallpaper policy  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. **Data residency** decisions are best made:  
+   A) After production go-live when users complain  
+   B) During design, aligned with regulatory, contractual, and vendor deployment options  
+   C) Randomly per team preference  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. **Integration contracts** in the design phase should capture:  
+   A) Only internal nicknames for services  
+   B) Auth modes, payload sensitivity, rate expectations, versioning, and ownership on both sides  
+   C) No SLAs or error handling expectations  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. **ADRs** (architecture decision records) are valuable because they:  
+   A) Replace all testing  
+   B) Capture major decisions, rejected alternatives, and rationale for future auditors and new engineers  
+   C) Must never be updated  
 
 ---
 

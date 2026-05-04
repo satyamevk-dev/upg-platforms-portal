@@ -38,6 +38,18 @@ Master **journald** ergonomics, classic **rsyslog**/**logrotate** patterns, **au
 - **ltrace** library calls—useful for dynamically linked mystery failures.
 - **perf top** samples stacks—find hot functions without full **bpf** toolchain.
 
+## Lesson 5: Lab—`journalctl` JSON export, `logrotate -d`, `ausearch`
+
+- **`journalctl -o json-pretty -n 20`**—see structured fields your SIEM might parse.
+- **`logrotate -d /etc/logrotate.conf`**—dry-run to catch permission or missing directory issues.
+- **`ausearch -ts recent -m USER_LOGIN`**—practice narrowing **audit** noise in a lab.
+
+## Lesson 6: Anti-patterns in logging and audit
+
+- **`copytruncate`** on high-volume logs without app reopen support—silent loss or duplication.
+- **Unbounded journal** on small `/var`—node death by log volume.
+- **Over-broad audit rules**—fills disks and hides real attacks in noise.
+
 ---
 
 ## Key takeaways
@@ -74,8 +86,23 @@ Master **journald** ergonomics, classic **rsyslog**/**logrotate** patterns, **au
    B) Only USB devices  
    C) Only cron tables  
 
+6. **`logrotate -d`** is useful because it:  
+   A) Performs a dry-run parse of logrotate configuration without applying rotations  
+   B) Deletes all logs immediately  
+   C) Replaces rsyslog with journald  
+
+7. **`copytruncate`** in logrotate can be problematic when:  
+   A) The application does not reopen log files after truncation—data can be lost or duplicated  
+   B) It always guarantees atomic rotation  
+   C) It only affects binary kernel logs  
+
+8. Extremely broad **auditd** syscall rules often:  
+   A) Generate overwhelming volume that hides real incidents and fills disks  
+   B) Disable SELinux  
+   C) Replace `tcpdump`  
+
 ---
 
 ## Answer key
 
-1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A**
+1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A** · 6. **A** · 7. **A** · 8. **A**

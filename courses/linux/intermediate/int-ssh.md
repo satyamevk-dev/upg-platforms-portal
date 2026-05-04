@@ -37,6 +37,18 @@ Harden **sshd**, manage keys and agents safely, design bastion patterns, and und
 - **PAM** modules chain for **auth**, **account**, **password**, **session**—order matters.
 - **sshd** uses PAM when **`UsePAM yes`**; **sudo** consults PAM and **sudoers**—debug with **`pam_tty_audit`** only under change control.
 
+## Lesson 5: Lab—`sshd -T`, host keys, and `Match` dry runs
+
+- Run **`sshd -T`** as root to dump effective settings—compare to on-disk **`sshd_config`** and drop-ins.
+- Rotate **host keys** in a lab: backup `/etc/ssh/ssh_host_*`, regenerate, update **known_hosts** story for clients.
+- Add a **`Match Address`** stanza in staging only—verify **cipher** list and **PubkeyAuthentication** with **`ssh -vvv`**.
+
+## Lesson 6: Anti-patterns in SSH operations
+
+- **`ForwardAgent yes` to untrusted jump boxes**—agent theft across the chain.
+- **Password auth left on** for automation accounts—keys + MFA at edge instead.
+- **Editing live `sshd_config` without `sshd -t`**—syntax error locks you out on restart.
+
 ---
 
 ## Key takeaways
@@ -73,8 +85,23 @@ Harden **sshd**, manage keys and agents safely, design bastion patterns, and und
    B) Draws graphics to the framebuffer only  
    C) Mounts SMB shares automatically always  
 
+6. **`sshd -T`** is useful because it:  
+   A) Dumps the effective configuration sshd would use after merging files and defaults  
+   B) Deletes host keys  
+   C) Only lists GPU PCI IDs  
+
+7. **`ForwardAgent`** to an **untrusted** intermediate host is risky mainly because:  
+   A) It can expose your agent’s keys to compromise on that hop  
+   B) It always disables logging  
+   C) It is required for `scp`  
+
+8. Before reloading **sshd**, you should typically:  
+   A) Run `sshd -t` (syntax test) and keep a second authenticated session open  
+   B) Delete `/etc/passwd` for speed  
+   C) Disable PAM globally  
+
 ---
 
 ## Answer key
 
-1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A**
+1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A** · 6. **A** · 7. **A** · 8. **A**

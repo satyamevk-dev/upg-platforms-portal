@@ -15,69 +15,69 @@ This module aligns with the training library topic **Querying with SELECT**. Wor
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: SELECT, FROM, and WHERE logic
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- Build queries as **pipelines**: `FROM` establishes row sources, `WHERE` filters **before** aggregation, `SELECT` projects columns and expressions—knowing order prevents “why is my HAVING wrong?” confusion later.
+- Combine predicates with **AND/OR** and parentheses; use **`IN`**, **`BETWEEN`**, and **`LIKE`** intentionally (`LIKE` can’t use plain B-tree indexes unless patterns are prefix-friendly).
+- Prerequisites: sample `orders`/`customers` style tables or use `generate_series` to practice without sensitive data.
 
-## Lesson 2: Core workflows
+## Lesson 2: ORDER BY, LIMIT, OFFSET, DISTINCT
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: stable reports use **`ORDER BY`** with deterministic tie-breakers (add `id`); **pagination** uses `LIMIT`/`OFFSET` for small sets but remember **OFFSET** cost on huge pages—keyset pagination comes later in tuning topics.
+- **`DISTINCT`** removes duplicate projection rows—pair with care when joining one-to-many tables or you will hide problems you should fix in joins instead.
+- Checkpoints: `EXPLAIN` (intro only) shows sort nodes; `LIMIT` without `ORDER BY` returns an **arbitrary** slice—never rely on it for “latest row” semantics.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: Readable SQL and safe exploration habits
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Pitfalls: formatting SQL as one unreadable line; **implicit** cross-joins from forgotten `ON`; running unbounded `SELECT *` on production giants.
+- Use **`--` and `/* */` comments** to document intent for reviewers; keep **predicates sargable** (avoid wrapping indexed columns in functions in `WHERE` when alternatives exist).
+- Rollback mindset: always add **`WHERE`** to exploratory `UPDATE`/`DELETE` drafts—even in transactions, mistakes are cheaper when the predicate is correct.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Query review handoff
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when saved **report queries** live in repo with parameter comments and owners; ad-hoc analyst queries still follow naming conventions.
+- Document **timezone** assumptions in comments when using `now()` vs. `timestamptz` literals.
+- Handoff: point learners to **DML** module next for mutating data safely.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **`WHERE` filters rows; `HAVING` filters groups**—mixing them up is a classic SQL bug; internalize the clause order.
+- **`ORDER BY` + `LIMIT`** is the idiomatic “top N per key” starting point before window functions.
+- **Readable SQL is operational SQL**—future you is also on-call you.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. **`WHERE`** applies to:  
+   A) Only aggregate functions after `GROUP BY`  
+   B) Row-level filtering before grouping  
+   C) Only `ORDER BY` expressions  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. To return rows 21–40 after sorting (page size 20), a common pattern is:  
+   A) `ORDER BY ... LIMIT 20 OFFSET 20` (understanding OFFSET scan cost at scale)  
+   B) `LIMIT 20 OFFSET 40` for the same slice  
+   C) `LIMIT` without `ORDER BY` when you need deterministic paging  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. **`SELECT DISTINCT`** removes:  
+   A) All rows  
+   B) Duplicate rows in the projected result set  
+   C) Indexes from the table  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. Using **`IN (list)`** is appropriate when:  
+   A) You compare a column to a finite set of scalar values  
+   B) You always want a cross join  
+   C) You must never use indexes  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. **`ORDER BY` without `LIMIT`** on a large table in psql for exploration:  
+   A) Is always free  
+   B) May sort the entire result before display—add `LIMIT` during exploratory queries on big data  
+   C) Disables sorting  
 
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B**
+1. **B** · 2. **A** · 3. **B** · 4. **A** · 5. **B**

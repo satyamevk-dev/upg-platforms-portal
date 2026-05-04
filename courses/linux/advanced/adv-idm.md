@@ -36,6 +36,18 @@ Troubleshoot **SSSD** against **AD**/**IPA**, reason about **Kerberos** tickets 
 - **polkit** rules gate **DBus** actions—desktop services and some installers; peer-review **.rules** files.
 - **RBAC** maps job functions to least privilege—recertify quarterly.
 
+## Lesson 5: Lab—`sssctl`, `kinit -k`, `pam-auth-update` (Debian) awareness
+
+- **`sssctl domain-status ad.example.com`**—offline vs online; **`sss_cache -E`** only in lab with care.
+- **`kinit -k -t /path/to/http.keytab HTTP/host@REALM`**—service principal smoke test from app node.
+- Walk **PAM** stack for **`sudo -i`** vs **`su -`** on one host—note **pam_sss** vs **pam_unix** order.
+
+## Lesson 6: Anti-patterns in enterprise identity
+
+- **Disabling SSSD caching** globally for “freshness”—AD/LDAP storms on every lookup.
+- **644 keytabs**—service impersonation gift to local users.
+- **sudoers `%group ALL=(ALL) NOPASSWD:ALL`**—recertification nightmare.
+
 ---
 
 ## Key takeaways
@@ -72,8 +84,23 @@ Troubleshoot **SSSD** against **AD**/**IPA**, reason about **Kerberos** tickets 
    B) `NOPASSWD: ALL` for every user  
    C) World-readable private keys  
 
+6. **`sssctl domain-status`** is primarily used to:  
+   A) Inspect SSSD domain online/offline status and related health hints  
+   B) Resize ext3 only  
+   C) Replace `nftables`  
+
+7. A **Kerberos keytab** file should typically be protected with permissions like:  
+   A) World-readable `0644` for convenience  
+   B) Restrictive owner-only (commonly `0400` root-owned) to protect long-lived keys  
+   C) `0777` so all users can rotate keys  
+
+8. Broad **`NOPASSWD`** sudo grants are risky because they:  
+   A) Remove interactive re-authentication gates for privilege escalation  
+   B) Always improve auditability  
+   C) Are required for `sssd`  
+
 ---
 
 ## Answer key
 
-1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A**
+1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A** · 6. **A** · 7. **B** · 8. **A**

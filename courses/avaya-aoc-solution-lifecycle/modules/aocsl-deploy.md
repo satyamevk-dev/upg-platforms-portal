@@ -15,69 +15,69 @@ This module aligns with the training library topic **Deploy & migrate**. Work th
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: Cutover strategy—big bang vs. phased
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- Compare **big-bang** (single weekend switch) vs. **phased** (site, business unit, or workload waves); document **decision** with trade-offs: coordination cost vs. prolonged dual-run complexity.
+- For each wave, define **entry** and **exit** criteria: traffic percentage, **rollback** trigger metrics, and **customer-visible** comms timing.
+- Prerequisites: **build** sign-off complete, **DR** tested at least once on non-prod, and **legal** approval for any data migration touching regulated records.
 
-## Lesson 2: Core workflows
+## Lesson 2: Migration runbooks—data, users, traffic
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: **runbook** sections for **freeze** window, **DNS** or **SBC** cutover, **user** batch enablement, **integration** cutover order, and **verification** commands with expected outputs.
+- Assign **runbook owner** per section; use **read-check** aloud in war room for high-risk steps; keep **timer** visible for rollback deadline.
+- Checkpoints: **pre-flight** checklist signed; **post-cut** smoke within N minutes; **ticket** volume and **error** dashboards watched continuously.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: Hypercare, war room, and rollback execution
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Pitfalls: **war room** with no **incident commander**; **rollback** never rehearsed; **integrations** failing silently while voice looks green.
+- Staff **hypercare** with vendor TAM, app owners, network, and identity on bridge; rotate scribe and **customer** liaison roles.
+- Constraints: **maintenance** window hard stop; **regulatory** blackout dates; **union** rules on after-hours work in some locales.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Go-live checklist and operational handoff
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when **go-live checklist** is fully checked with timestamps, owners, and **known issues** list published to support; **SLO** dashboards live; **on-call** rotation updated.
+- Document **final** config version IDs, **DNS TTL** values changed, and **support** escalation matrix including vendor **sev** definitions used during cutover.
+- Handoff: first **business day** review scheduled; **Operate** module owns backlog of optimization items deferred during deploy freeze.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **Phased vs. big bang** is a risk finance decision—document it so nobody “remembers” a different strategy under pressure.
+- **Runbooks with owners and read-backs** beat heroic improvisation when DNS and SBC timers are ticking.
+- **Hypercare without a commander** is a chat room, not an incident organization—appoint roles before the bridge opens.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. A **phased** cutover compared to **big bang** usually trades:  
+   A) No difference  
+   B) Longer dual-run complexity for potentially lower blast radius per wave  
+   C) Elimination of all testing  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. A **migration runbook** should explicitly include:  
+   A) Only the lunch order  
+   B) Order of operations for data, identities, integrations, traffic, verification, and rollback triggers  
+   C) Marketing slogans only  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. **Hypercare** after go-live means:  
+   A) Immediately sending the team on vacation  
+   B) Augmented staffing and rapid escalation paths while adoption and integrations stabilize  
+   C) Disabling monitoring to reduce noise  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. **Rollback** during deploy is credible only when:  
+   A) It was rehearsed with documented steps, owners, and time limits  
+   B) It is invented during the bridge without practice  
+   C) It is never considered  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. A **go-live checklist** handoff to operations should capture:  
+   A) Only feelings about the project  
+   B) Final config versions, DNS or traffic changes, known issues, on-call updates, and dashboard links  
+   C) Deletion of all logs  
 
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B**
+1. **B** · 2. **B** · 3. **B** · 4. **A** · 5. **B**

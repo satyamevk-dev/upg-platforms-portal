@@ -15,66 +15,66 @@ This module aligns with the training library topic **DDL: tables, types & constr
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: CREATE TABLE and PostgreSQL data types
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- Choose **types** deliberately: `text` vs. `varchar(n)`, `integer` vs. `bigint`, `timestamptz` vs. `timestamp` (prefer **timestamptz** for real-world wall times), and when `numeric(p,s)` beats floating point for money.
+- Understand **NULL**: unknown value, not zero or empty string; pair with **NOT NULL** and **DEFAULT** when the domain forbids missing data.
+- Prerequisites: scratch database, migration tool or plain SQL files in repo, and agreement on **naming conventions** (snake_case vs. camelCase quoted identifiers—pick one and stay consistent).
 
-## Lesson 2: Core workflows
+## Lesson 2: Constraints that protect every client
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: add **PRIMARY KEY** or **UNIQUE**, **NOT NULL** on required columns, **CHECK** for cross-column rules (for example `end_date >= start_date`), and **FOREIGN KEY** when another module covers relationships in depth.
+- Use **DEFERRABLE** only when you understand transaction boundaries—default immediate constraints catch bugs earlier.
+- Checkpoints: `\d table` in `psql` lists constraints; inserting violating rows fails fast with clear error messages.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: ALTER TABLE and operational reality
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Pitfalls: **expensive** rewrites when changing certain types or adding volatile defaults on huge tables; **exclusive** locks blocking writes during some operations.
+- Prefer **additive** migrations first (`ADD COLUMN` nullable, backfill, then tighten) on large production tables to avoid long locks.
+- Rollback: keep **down migration** or revert SQL reviewed with the same care as `UP`; test on a copy of production statistics if possible.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: DDL review and handoff
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when DDL lives in versioned migrations with **review checklist** (types, nullability, defaults, indexes deferred to indexing module if appropriate).
+- Document **search_path** assumptions and any **extension** prerequisites (`CREATE EXTENSION` order).
+- Handoff: link to style guide and example migration PR that the team treats as canonical.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **Types and constraints are API contracts**—applications, reports, and ETL all inherit them.
+- **NULL and DEFAULT** semantics prevent silent corruption; encode business rules where they cannot be bypassed.
+- **Online DDL** discipline (add-then-backfill-then-enforce) keeps large-table changes boring instead of outage-shaped.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. In PostgreSQL, **`timestamptz`** is generally preferred over **`timestamp` without time zone** when storing real-world event times because:  
+   A) It uses less disk space always  
+   B) It stores an absolute instant and respects session time zone for display  
+   C) It disables indexes  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. A **`CHECK`** constraint is used to:  
+   A) Automatically create foreign keys  
+   B) Enforce boolean or range rules on row data beyond simple type validity  
+   C) Replace the need for any application validation  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. **`NULL`** in SQL means approximately:  
+   A) Zero  
+   B) Unknown or missing value—test with `IS NULL`, not `= NULL`  
+   C) Empty string always  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. Adding a **new column** to a very large table safely often starts with:  
+   A) `NOT NULL` without default on day one always  
+   B) Nullable column or a constant default that does not rewrite the whole heap, then backfill, then tighten constraints in phases  
+   C) Dropping the table  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. **`PRIMARY KEY`** on a table:  
+   A) Allows duplicate key values  
+   B) Uniquely identifies rows and implies a unique index in PostgreSQL  
+   C) Forbids any other indexes  
 
 ---
 

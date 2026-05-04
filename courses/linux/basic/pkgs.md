@@ -39,6 +39,18 @@ Install and query packages on Debian- and RHEL-family systems, understand reposi
 - **glibc**, **OpenSSL**, or widely linked libraries may require service restarts or full reboot for all processes to pick up changes.
 - Use **`needs-restarting`** (RHEL) or vendor guidance; schedule maintenance windows.
 
+## Lesson 5: Lab—`apt-cache policy`, version pinning, `rpm -V`
+
+- Inspect candidate upgrades with **`apt-cache policy pkg`** or **`dnf repoquery --info`**—note candidate vs installed.
+- Practice **`rpm -V pkg`** on a trivial file you edit—see how integrity flags appear (documentation for audits).
+- List **held** packages (`apt-mark hold` / dnf versionlock)—understand why each hold exists and its expiry ticket.
+
+## Lesson 6: Anti-patterns in packaging
+
+- **`--force-yes` / disabling GPG checks** “just once”—becomes permanent debt and incident bait.
+- **Mixing random PPAs/copr** on production nodes—dependency hell and unsupported matrix.
+- **Blind `dist-upgrade` on prod** without staging—reboot and library surprises.
+
 ---
 
 ## Key takeaways
@@ -75,8 +87,23 @@ Install and query packages on Debian- and RHEL-family systems, understand reposi
    B) Network listeners  
    C) User accounts  
 
+6. **`apt-mark hold`** (Debian family) is commonly used to:  
+   A) Prevent automatic upgrades of a specific package until deliberately released  
+   B) Encrypt `/var`  
+   C) Disable systemd  
+
+7. Disabling **package signature verification** broadly is dangerous because:  
+   A) It removes integrity/authenticity checks against tampered mirrors  
+   B) It always speeds up installs with no downside  
+   C) It is required for all kernels  
+
+8. **`needs-restarting`** (RHEL ecosystem tooling) helps operators identify:  
+   A) Processes still running with old libraries after updates  
+   B) Zombie PIDs only  
+   C) Wi-Fi channels only  
+
 ---
 
 ## Answer key
 
-1. **A** · 2. **A** · 3. **B** · 4. **B** · 5. **A**
+1. **A** · 2. **A** · 3. **B** · 4. **B** · 5. **A** · 6. **A** · 7. **A** · 8. **A**

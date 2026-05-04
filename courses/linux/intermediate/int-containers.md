@@ -36,6 +36,18 @@ Ground container behavior in **namespaces** and **cgroups**, operate **Podman**/
 - **systemd-nspawn** lightweight systemd-integrated machines—great for pet system chroots.
 - **Compose** files standardize multi-service dev stacks; **Kubernetes** when scheduling dominates.
 
+## Lesson 5: Lab—`podman inspect`, `skopeo`, seccomp default profile
+
+- **`podman inspect`** an image—note **User**, **Cmd**, **Healthcheck**; compare to runtime **`podman inspect`** on container.
+- **`skopeo inspect docker://registry/repo:tag`** without pull—review **digest** and **labels** in CI.
+- Dump **default seccomp** path from engine docs—diff your **custom JSON** against it in Git.
+
+## Lesson 6: Anti-patterns in container ops
+
+- **`--privileged`** as default for app containers—negates most hardening.
+- **Root in image + same UID on host volumes**—UID mapping surprises and data leaks.
+- **Pinning `:latest` in prod**—unreproducible incidents.
+
 ---
 
 ## Key takeaways
@@ -72,8 +84,23 @@ Ground container behavior in **namespaces** and **cgroups**, operate **Podman**/
    B) A type of disk label only  
    C) SSH key types only  
 
+6. **`podman inspect`** (or Docker equivalent) is most useful for verifying:  
+   A) Effective runtime configuration like user, caps, mounts, and command  
+   B) Kernel compile flags only  
+   C) BIOS passwords  
+
+7. Running containers with **`--privileged`** routinely is poor practice because it:  
+   A) Greatly weakens isolation by granting broad host-like capabilities  
+   B) Always improves performance  
+   C) Is required for read-only rootfs  
+
+8. Using the floating tag **`latest`** for production deploy artifacts tends to:  
+   A) Reduce reproducibility and complicate rollbacks  
+   B) Guarantee immutable digests  
+   C) Disable cgroups  
+
 ---
 
 ## Answer key
 
-1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A**
+1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A** · 6. **A** · 7. **A** · 8. **A**

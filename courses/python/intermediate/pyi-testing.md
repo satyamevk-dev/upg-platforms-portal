@@ -15,69 +15,96 @@ This module aligns with the training library topic **Testing & quality**. Work t
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: `pytest` discovery, tests as functions, and assertions
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- **`pytest`** collects `test_*.py` files and `test_*` functions; plain **`assert`** with rich introspection beats `self.assert*` boilerplate for most new code.
+- Organize tests **mirror package** (`tests/unit/test_foo.py`) vs. colocated—pick one per repo and document it.
+- Prerequisites: functions and stdlib modules; CI runner access locally via `act` or remote draft PRs.
 
-## Lesson 2: Core workflows
+## Lesson 2: Fixtures, parametrization, and markers
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: **`@pytest.fixture`** sets up DB or temp dirs with **`yield`** teardown; **`@pytest.mark.parametrize`** exercises edge matrices without copy-paste tests.
+- Use **markers** (`@pytest.mark.slow`) to split default CI vs. nightly suites; register markers in **`pytest.ini`** to avoid typos silently passing.
+- Checkpoints: `pytest -q` green locally matches CI; flaky tests quarantined with issue links, not ignored silently.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: Mocking boundaries with `unittest.mock`
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Mock **I/O boundaries** (HTTP, S3, clock) not every private function—over-mocking couples tests to implementation.
+- Prefer **`pytest-mock` `mocker` fixture** or context managers `patch.object`; assert **`call_count`** and arguments on critical side effects.
+- Pitfalls: patching wrong import path (`where symbol is looked up`); forgetting **`autospec=True`** leading to false greens.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Linters, formatters, and CI handoff
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when **`ruff check` + `ruff format` (or black)** run in CI on every PR; same versions pinned as dev deps.
+- Document **coverage** policy if used—line coverage is a weak metric alone; pair with mutation testing only when justified.
+- Handoff: **concurrency** module next—tests will need markers/timeouts for async and threads.
+
+## Lesson 5: Lab—`pytest` plugins, tmp paths, and coverage discipline
+
+- Enable **`pytest-cov`** on a toy package; inspect HTML report—identify **false confidence** lines (branches never asserted).
+- Use **`tmp_path` fixture** instead of manual `/tmp` strings; assert files deleted when tests pass and fail.
+- Register a **custom marker** `@pytest.mark.contract` and configure **`pytest_collection_modifyitems`** to skip contract tests by default in dev runs.
+
+## Lesson 6: Anti-patterns in test suites
+
+- **Order-dependent tests** that pass only when run in isolation—use random order plugin (`pytest-randomly`) periodically.
+- **Mocking time** incorrectly—prefer **`freezegun`** or monkeypatch `datetime` consistently; avoid flaky sleeps.
+- Giant **`conftest.py`** globals—split fixtures by domain package to keep discovery fast and intent clear.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **Tests are executable specifications**—if they are hard to write, the API probably needs redesign.
+- **Fixtures encode setup truth once**—copy-paste setup is where flaky tests breed.
+- **Lint/format in CI** removes style debates from human review time.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. **`pytest` parametrization** is mainly used to:  
+   A) Skip all tests  
+   B) Run the same test logic with multiple input sets without duplicating functions  
+   C) Replace assertions  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. **`@pytest.fixture`** functions typically provide:  
+   A) Only global variables  
+   B) Setup/teardown resources injected into tests as arguments  
+   C) Production configuration only  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. When patching, you should patch:  
+   A) Always the definition site  
+   B) The name as used in the module under test (where it is looked up), which may differ from definition site  
+   C) Random modules  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. **`assert` in pytest tests** is preferred over many `unittest` `assert*` methods because:  
+   A) Assertions are removed in optimized bytecode always  
+   B) pytest rewrites asserts to provide detailed failure introspection  
+   C) pytest forbids `assert`  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. Registering custom **`pytest` markers** in **`pytest.ini`** helps:  
+   A) Speed up Python interpreter startup  
+   B) Fail fast on unknown marker names instead of silently ignoring typos  
+   C) Disable plugins  
+
+6. The **`tmp_path` fixture** provides:  
+   A) A permanent `/tmp` directory shared by all tests  
+   B) A `pathlib.Path` to a per-test temporary directory cleaned up by pytest  
+   C) A database connection  
+
+7. **`pytest.raises(ExpectedError)`** context manager asserts that:  
+   A) No exception occurs  
+   B) A block raises a specific exception type (and can inspect it via `as exc`)  
+   C) Tests are skipped  
+
+8. **`autospec=True` on `patch`** helps mocks:  
+   A) Run faster always  
+   B) Match the real object's signature, catching typos in mocked method names  
+   C) Disable assertions  
 
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B**
+1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B** · 6. **B** · 7. **B** · 8. **B**

@@ -39,6 +39,18 @@ Move beyond casual `df`/`ls` usage: identify block devices reliably, choose file
 - **Swap:** dedicated partition vs. file—hibernation and performance implications differ.
 - **Full disk:** distinguish inode exhaustion vs. block exhaustion (`df -i` vs. `df -h`); find large consumers with **`du`**.
 
+## Lesson 5: Lab—`findmnt --verify`, `xfs_info`, thin pool metadata
+
+- Run **`findmnt --verify`** after **fstab** edits—catch syntax/options issues before reboot.
+- On **XFS**, **`xfs_info`** mountpoint—note **log** and **realtime** sections; correlate with workload.
+- If using **LVM thin**, watch **metadata** usage—not only data LV percent.
+
+## Lesson 6: Anti-patterns in storage ops
+
+- **Growing LV without growing filesystem**—`df` still shows full; support tickets repeat.
+- **`mkfs` on the wrong device**—always double-check **`lsblk`** and **by-id** paths.
+- **Shrinking XFS** casually—often unsupported dangerous path; migrate instead.
+
 ---
 
 ## Key takeaways
@@ -75,8 +87,23 @@ Move beyond casual `df`/`ls` usage: identify block devices reliably, choose file
    B) A single file inside `/tmp`  
    C) A kernel module name only  
 
+6. After editing **`/etc/fstab`**, a cautious validation step is:  
+   A) `findmnt --verify` (and/or controlled `mount -a` in a window)  
+   B) `rm -rf /lost+found`  
+   C) Disabling journaling without backup  
+
+7. A common mistake after **`lvextend`** is:  
+   A) Forgetting to grow the filesystem (`xfs_growfs` / `resize2fs`) so free space does not appear  
+   B) Always shrinking ext4 online safely without checks  
+   C) Mounting `/boot` twice for fun  
+
+8. **Inode exhaustion** (`df -i` shows 100%) can cause:  
+   A) “No space left” errors even when `df -h` shows free blocks  
+   B) Faster CPU turbo  
+   C) Automatic RAID expansion  
+
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **A** · 4. **A** · 5. **A**
+1. **B** · 2. **B** · 3. **A** · 4. **A** · 5. **A** · 6. **A** · 7. **A** · 8. **A**

@@ -38,6 +38,18 @@ View, search, and summarize text efficiently—essential for logs, configs, and 
 - **`awk`** column-oriented processing and small programs—ideal for structured logs.
 - Prefer **version control + editor** for complex config edits; use `sed` in automation with care.
 
+## Lesson 5: Lab—`grep -E`, context flags, and `tail -F`
+
+- Use **`grep -E 'ERR|WARN'`** on a sample log—then add **`-n`** and **`-C2`** for context around hits.
+- Compare **`tail -f`** vs **`tail -F`** while **`logrotate`** runs (or simulate rename)—see why `-F` follows the same logical file.
+- Pipe **`journalctl -u unit --no-pager | head`** vs reading the journal file directly—know when pagination matters.
+
+## Lesson 6: Anti-patterns in log triage
+
+- **`grep` on multi-GB files** without **time bounds** or **filters**—loads disks and hides signal in noise.
+- **`cat file | grep`** when **`grep pattern file`** suffices—extra process and I/O for no gain.
+- **Regex from the internet** on production logs without testing—ReDoS and accidental broad matches.
+
 ---
 
 ## Key takeaways
@@ -74,8 +86,23 @@ View, search, and summarize text efficiently—essential for logs, configs, and 
    B) Line count  
    C) File size in bytes only  
 
+6. **`grep -n`** adds to each matching line:  
+   A) Binary NUL bytes  
+   B) Line numbers  
+   C) Automatic email alerts  
+
+7. **`tail -F`** differs from **`tail -f`** mainly because **`-F`**:  
+   A) Retries following the file after rename/rotation when it reappears  
+   B) Deletes the file after reading  
+   C) Only works on binary files  
+
+8. Using **`grep pattern file`** instead of **`cat file | grep pattern`** is often preferred because:  
+   A) It avoids an unnecessary `cat` process and redundant I/O  
+   B) It always disables regex  
+   C) It requires root  
+
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B**
+1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B** · 6. **B** · 7. **A** · 8. **A**

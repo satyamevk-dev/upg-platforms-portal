@@ -39,6 +39,18 @@ Inspect running processes, send signals safely, understand job control basics, a
 - **`systemctl start|stop|restart|reload unit`** — lifecycle (needs privileges).
 - **`journalctl -u unit -f`** — follow unit logs; **`--since`** for windows.
 
+## Lesson 5: Lab—`systemctl cat`, drop-ins, and cgroup hints
+
+- Run **`systemctl cat sshd`** (or `nginx`)—see main unit + fragments; practice adding a **`systemctl edit --full`** workflow only in lab.
+- Inspect **`systemctl show -p FragmentPath,DropInPaths`**—know where the effective config came from.
+- Use **`systemd-cgls`** briefly—relate **user.slice** vs **system.slice** vs service scopes on a busy host.
+
+## Lesson 6: Anti-patterns with processes and services
+
+- **`kill -9` first**—skips graceful shutdown; corrupts databases and leaves stale sockets.
+- **Editing vendor unit files in `/usr`**—overwritten on upgrade; use **drop-ins** in `/etc/systemd/system/*.d/`.
+- **Ignoring `systemctl --failed`** after maintenance—silent partial outages.
+
 ---
 
 ## Key takeaways
@@ -75,8 +87,23 @@ Inspect running processes, send signals safely, understand job control basics, a
    B) It cannot be handled by the target process  
    C) It only affects zombie processes  
 
+6. After editing a systemd **unit drop-in**, you typically need:  
+   A) `systemctl daemon-reload` before `restart` picks up changes  
+   B) Only `reboot` always—reload never works  
+   C) `fdisk` on `/var`  
+
+7. A **zombie** (`Z`) process entry remains until:  
+   A) The parent reaps the terminated child via `wait`  
+   B) You rename `/etc/passwd`  
+   C) `ping` succeeds  
+
+8. **`systemctl --failed`** is useful to:  
+   A) List units in a failed state for quick post-change triage  
+   B) Format USB drives  
+   C) Show only kernel threads  
+
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **A** · 5. **B**
+1. **B** · 2. **B** · 3. **B** · 4. **A** · 5. **B** · 6. **A** · 7. **A** · 8. **A**

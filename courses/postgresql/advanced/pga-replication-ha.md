@@ -15,69 +15,69 @@ This module aligns with the training library topic **Replication & high availabi
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: Physical streaming replication architecture
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- **Primary** writes WAL; **standby** replays WAL via streaming (and optionally archive fetch); understand **slot** retention and **`wal_keep_size`** tradeoffs vs. archive completeness.
+- **Replication roles** (`replication` flag) are sensitive—protect with TLS, cert auth, and network ACLs.
+- Prerequisites: base backup tooling (`pg_basebackup`), monitoring of **`pg_stat_replication`**, and PATRONI/orchestrator awareness if used.
 
-## Lesson 2: Core workflows
+## Lesson 2: Synchronous vs. asynchronous replicas
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: async replicas maximize throughput but allow **RPO > 0** on primary loss; sync replicas tighten RPO at latency cost—pick per criticality tier, not globally by accident.
+- **`synchronous_commit = remote_apply`** vs. `on` semantics differ by version—read your exact major’s docs once and pin the decision in ADR.
+- Checkpoints: measured **replay lag** (`write_lag`, `flush_lag`, `replay_lag`) within SLO under peak WAL generation.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: Failover, split-brain, and read replica routing
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Pitfalls: **two primaries** after network partition without fencing; apps **sticky** to dead primary; **read-your-writes** broken when load balancing reads to async replicas immediately after write.
+- Use **connection pools** with health checks; **VIP** or DNS TTL strategies documented with **TTL** low enough for RTO but not flapping.
+- Rollback: rehearse **controlled switchover** quarterly; keep **promote** runbook with exact command order for your stack.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: HA documentation handoff
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when **RPO/RTO** numbers in SLA match actual replication topology; **failover** game day notes archived.
+- Document **bootstrap** of new replica from encrypted base backup; **pitr** references tie to backup module.
+- Handoff: link **backup/recovery** module for WAL continuity expectations.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **Async vs. sync is a business continuity contract**, not a checkbox—document RPO per data class.
+- **Split-brain prevention belongs in automation**—human “who is primary?” bridges at 3 a.m. fail audits.
+- **Read replica lag is user-visible**—route reads with lag awareness or accept stale reads explicitly.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. **Physical streaming replication** sends:  
+   A) Only SQL text between nodes  
+   B) WAL records from primary to standby for replay  
+   C) Only full table dumps hourly  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. **Synchronous replication** compared to asynchronous generally:  
+   A) Always has zero latency cost  
+   B) Tightens durability/RPO bounds on commit at potential latency cost  
+   C) Disables WAL  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. **Replication lag** metrics matter because:  
+   A) They are decorative  
+   B) Async replicas may serve stale reads and affect failover catch-up time  
+   C) They remove the need for backups  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. **Split-brain** risk in HA clusters refers to:  
+   A) Two nodes both believing they are writable primary without safe coordination  
+   B) Normal single-primary operation  
+   C) Only DNS caching  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. **`pg_stat_replication`** on the primary shows:  
+   A) Only table bloat  
+   B) Connected standbys and lag-related fields for monitoring  
+   C) Only autovacuum workers  
 
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B**
+1. **B** · 2. **B** · 3. **B** · 4. **A** · 5. **B**

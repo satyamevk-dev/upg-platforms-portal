@@ -15,69 +15,96 @@ This module aligns with the training library topic **Iterators, comprehensions &
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: List, dict, and set comprehensions
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- Comprehensions `[expr for x in it if cond]` are concise and often faster than repeated `append` in CPython—keep **readable**: nested comprehensions beyond two levels usually want a plain loop.
+- **Dict comprehensions** `{k: v for ...}` and **set comprehensions** `{expr for ...}` follow the same scoping rules—watch for leaking loop variables in older Python (3.12+ improvements aside, still be clear).
+- Prerequisites: control flow and collections modules.
 
-## Lesson 2: Core workflows
+## Lesson 2: Generator expressions and lazy evaluation
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: `(expr for x in it)` builds a **generator object**—iterate once, low memory for pipelines feeding `sum()`, `any()`, `next()`.
+- Chain with **`yield from`** inside generator functions for readable delegation (later patterns).
+- Checkpoints: you can explain why a second iteration over the same generator yields nothing without recreation.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: `yield`, generator functions, and `itertools`
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- **`yield`** pauses function state—implements iterators manually; combine with **`itertools.chain`, `groupby`, `islice`** for common patterns instead of reinventing wheels.
+- Pitfalls: mixing **return** with value in Python 3 generator (`StopIteration` payload) confusion—prefer explicit sentinels; holding huge **internal stacks** in recursive generators without `yield from` optimization awareness.
+- Rollback: when comprehension becomes unreadable, refactor to **helper generator** with a name.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Style limits and handoff
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when team lint rule caps **comprehension complexity** or reviewers enforce “no triple nested.”
+- Document iterator **consumption** contracts in public APIs (one-shot vs. reiterable).
+- Handoff: **stdlib itertools deep usage** optional; next module **environments & packaging** for shipping tools.
+
+## Lesson 5: Lab—`yield from`, tee, and pipeline style
+
+- Chain generators with **`yield from inner_gen()`** to keep call stacks shallow; compare readability vs. manual `for x in inner: yield x`.
+- Use **`itertools.tee`** sparingly on large streams—understand memory tradeoffs; often **`itertools.tee(it, 2)`** duplicates storage.
+- Build a three-stage pipeline: read lines → parse → aggregate counts using **generator functions only**—measure peak RSS qualitatively in lab.
+
+## Lesson 6: Anti-patterns with generators and comprehensions
+
+- Side effects inside comprehensions (`[log(x) or x for x in xs]`)—hard to debug; use explicit loops when I/O happens.
+- Returning a **generator** where callers expect a **reusable list**—document one-shot contracts or materialize intentionally.
+- **Nested comprehensions** beyond two levels without names—future readers cannot parse intent.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **Generators trade memory for single-pass discipline**—know who consumes them and when.
+- **Comprehensions are not a code golf license**—clarity still beats cleverness in reviews.
+- **`itertools` is standard library gold**—read the docs once, reuse forever.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. A **generator expression** `(x * 2 for x in range(3))` returns:  
+   A) A list  
+   B) A generator object that yields values lazily  
+   C) A tuple immediately  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. **List comprehensions** are often preferred over building with repeated **`append`** because:  
+   A) They are always faster in every scenario  
+   B) They are concise and typically implemented efficiently in CPython for simple cases  
+   C) They cannot include `if` filters  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. After exhausting a **generator**, calling **`next()`** again typically:  
+   A) Restarts from the beginning automatically  
+   B) Raises `StopIteration` unless a new generator is created  
+   C) Returns `None` silently always  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. **`yield` in a function** makes that function:  
+   A) A normal function returning `None` only  
+   B) A generator function whose invocation returns a generator iterator  
+   C) A class decorator  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. **`itertools.islice`** is useful to:  
+   A) Mutate lists in place  
+   B) Slice an iterator without converting the whole iterable to a list first  
+   C) Sort arbitrary iterators with O(1) memory always  
+
+6. **`yield from`** in a generator is mainly for:  
+   A) Deleting iterators  
+   B) Delegating iteration to another iterable or generator without manual forward loop  
+   C) Converting bytes to str  
+
+7. **`itertools.groupby`** requires its input to be:  
+   A) Unsorted always  
+   B) Sorted by the same key function you group on—otherwise groups restart unexpectedly  
+   C) Only tuples  
+
+8. A **dict comprehension** `{k: v for k, v in ... if cond}` builds:  
+   A) A list  
+   B) A dict in one expression  
+   C) A set of keys only always  
 
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B**
+1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B** · 6. **B** · 7. **B** · 8. **B**

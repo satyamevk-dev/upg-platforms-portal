@@ -15,69 +15,69 @@ This module aligns with the training library topic **Operations, monitoring & ba
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: Health indicators and the operator’s first five minutes
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- Open the **service health**, **status dashboard**, or equivalent monitoring described for your AOC deployment; know which **degraded** signals warrant a ticket versus an immediate **page**.
+- Map **alert routing**—email, chat channel, or paging—and the **acknowledgment** SLA your operations team uses so noise does not hide real outages.
+- Prerequisites: read-only monitoring credentials, **time-synced** jump hosts or bastions, and the published **maintenance** or status URL customers might check before calling support.
 
-## Lesson 2: Core workflows
+## Lesson 2: Logs, traces, and support bundles
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: reproduce a trivial lab defect → generate a **support bundle** or diagnostic export exactly as Avaya prescribes for your product line → open an internal ticket with **UTC timestamps**, affected **tenant IDs**, and user **correlation** identifiers when available.
+- Practice **redaction**: strip **secrets** and unnecessary **PII** before any upload leaves your boundary; keep enough context that engineering can still reproduce.
+- Checkpoints: bundle completes under vendor **size** limits; log window covers incident start **minus** warm-up margin; you captured **build numbers** for AOC components involved.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: Backup, restore, and DR drills
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Pitfalls: backups that never undergo a **full restore test**; **RPO/RTO** numbers that exist only on slides; upgrades without the **snapshot** or backup checkpoint the vendor recommends.
+- Constraints: **geo-residency** for backup storage, **encryption at rest** keys managed by KMS, and **maintenance mode** behavior that may block sign-in or media during the window.
+- Rollback: documented **point-in-time restore** for configuration or policy stores; rehearse **failback** after a DR invocation so the team does not fear testing.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Patching, upgrades, and post-change sign-off
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when a standard **post-upgrade smoke** passes: admin login, directory **sync probe**, representative **message or call** test, and return of **monitoring** baselines for the agreed soak period.
+- Document **from–to versions**, applied **schema** or migration steps, any **manual** CLI or API steps executed in the window, and deferred follow-ups with owners and dates.
+- Handoff: update the change record with “**known follow-ups**” and schedule a short **retrospective** if the window exposed missing automation or unclear ownership.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **Tune alerts to owners and thresholds** so real degradation pages someone who can act; unfocused paging trains everyone to ignore the channel.
+- **Support bundles win cases** when they include the right time window, build numbers, and redaction discipline—volume without relevance slows every party.
+- **A backup you have never restored is a hope, not a plan**—schedule restore drills and DR exercises on the same calendar as patching, not only at audit time.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. **Health indicators** in operations dashboards are most valuable when they:  
+   A) Replace all structured logging  
+   B) Summarize whether core services are within expected SLO-style thresholds  
+   C) Are decorative and unrelated to alerts  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. A **support bundle** submitted to a vendor should ideally include:  
+   A) Only a single screenshot of the login banner  
+   B) Relevant logs, traces, configuration excerpts, and timestamps scoped to the incident  
+   C) Every full database dump without redaction  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. A **backup/restore drill** primarily validates that:  
+   A) Restores succeed in a controlled test, not merely that backup jobs report “success”  
+   B) Tape labels match a color scheme  
+   C) Passwords are rotated every fifteen minutes  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. **Patching during a maintenance window** should be paired with:  
+   A) Surprise changes during peak traffic to shorten communication  
+   B) A change plan, verification steps, and a known rollback or mitigation path  
+   C) Disabling backups to speed the upgrade  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. To reduce **alert fatigue**, teams should:  
+   A) Page every metric to every engineer continuously  
+   B) Tune thresholds, deduplicate correlated alerts, and route ownership to on-call roles  
+   C) Silence all alerts to reduce email volume  
 
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B**
+1. **B** · 2. **B** · 3. **A** · 4. **B** · 5. **B**

@@ -41,6 +41,18 @@ You will learn what Linux is at the kernel and distribution level, how enterpris
 - `info <command>` — GNU info system (navigation: `n`, `p`, `q`).
 - Vendor **knowledge bases** and **security advisories** are authoritative for production issues.
 
+## Lesson 5: Lab—`man -k`, sections, and `info`
+
+- Run **`man man`** and note section list (1 commands, 5 file formats, 8 admin); use **`man -k resize`** (or `apropos`) to discover related pages when you know a keyword, not the exact name.
+- Open **`info coreutils`** for GNU tools—practice `n` / `p` / `q` navigation on one node you can break.
+- Compare **`man systemd.unit`** vs vendor KB article for the same topic—note what the KB adds (known bugs, EOL dates).
+
+## Lesson 6: Anti-patterns in “getting help”
+
+- Treating **forum copy-paste** as canonical for **regulated** or **supported** distros without checking version and errata.
+- Skipping **`man` first** and jumping to random flags from search snippets—often wrong for BusyBox vs GNU vs BSD userland.
+- Pasting **kernel boot parameters** from blogs without reading your distro’s release notes—can brick boot or void support.
+
 ---
 
 ## Key takeaways
@@ -77,8 +89,23 @@ You will learn what Linux is at the kernel and distribution level, how enterpris
    B) Conditions on distributing modified binaries and corresponding source  
    C) CPU architecture  
 
+6. **`man -k`** (or **`apropos`**) is mainly for:  
+   A) Formatting USB drives  
+   B) Searching one-line descriptions of manual pages when you know a keyword  
+   C) Installing kernel headers only  
+
+7. **`man 5 passwd`** refers to section **5**, which typically covers:  
+   A) User commands only  
+   B) File formats and configuration files  
+   C) Games and screensavers only  
+
+8. For production on a **vendor-supported** distro, the most defensible first stop for a defect is often:  
+   A) Any anonymous forum without version checks  
+   B) Vendor KB, release notes, and security advisories aligned to your exact version  
+   C) Random container images tagged `latest`  
+
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B**
+1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B** · 6. **B** · 7. **B** · 8. **B**

@@ -15,69 +15,96 @@ This module aligns with the training library topic **Functions & modules**. Work
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: `def`, parameters, return values, scope
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- Functions bundle **inputs → outputs** with a name; parameters can be positional-only, positional-or-keyword, and keyword-only (`def f(a, /, b, *, c):` in modern Python).
+- **LEGB** scope rule: **L**ocal, **E**nclosing, **G**lobal, **B**uiltins—`global`/`nonlocal` declarations exist but prefer passing values explicitly when clarity wins.
+- Prerequisites: collections and control flow modules.
 
-## Lesson 2: Core workflows
+## Lesson 2: Defaults, `*args`, `**kwargs`, and mutability trap
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: defaults evaluate **once** at function definition time—never use mutable defaults like `def append_item(x, items=[]):`; use `None` and assign `items = items or []` inside or `items: list | None = None`.
+- `*args` collects extra positional tuple; `**kwargs` collects extra keyword dict—great for wrappers; combine with `functools.wraps` later.
+- Checkpoints: `help(your_function)` shows docstring you wrote; signature readable in IDE hover.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: Imports, packages, and `if __name__ == "__main__"`
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Pitfalls: **circular imports** from side effects at import time; star imports `from m import *` in production packages; running module code twice unexpectedly.
+- Structure packages with **`__init__.py`** (namespace packages possible—know team standard); use **relative imports** carefully inside packages.
+- Rollback: if import graph is tangled, extract **interfaces** to smaller modules before adding features.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Docstrings, `help()`, and handoff
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when public functions have **one-line summary + args/returns** in Google or NumPy style per team pick; `help()` output is acceptable to a new teammate.
+- Document **entrypoint** pattern with `__main__` guard for CLI scripts.
+- Handoff: **files & errors** module next—functions will gain I/O and robustness.
+
+## Lesson 5: Lab—`*`/`**` unpacking and small CLI
+
+- Write a function **`def move(src, dst, *, overwrite=False):`** and call it with keyword-only `overwrite`—attempt a positional call that should fail.
+- Practice **unpacking** at call sites: `coords = (1, 2); plot(*coords)` and dict merges with `{**defaults, **overrides}` on a toy dict.
+- Add **`if __name__ == "__main__":`** with **`argparse`** (or `sys.argv` for tiny scripts) to parse one optional flag—wire to your function.
+
+## Lesson 6: Anti-patterns around imports and wrappers
+
+- **Circular imports** caused by running heavy setup at import time—move side effects under `main()` or lazy functions.
+- Decorators that swallow **exceptions** or strip **stack traces** without `functools.wraps`—debugging hell for callers.
+- **`import module` inside hot loops**—pay import cost once at module level unless profiling proves lazy import wins.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **Mutable default arguments are a foot-gun**—`None` sentinel is the boring correct pattern.
+- **Imports execute code**—keep module import side effects minimal and predictable.
+- **Docstrings are the cheapest API docs**—write them when you name the function, not “later.”
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. A **mutable default argument** like `def add(x, items=[]): items.append(x); return items` is dangerous because:  
+   A) It raises SyntaxError  
+   B) The same list object is reused across calls unless a new list is created inside  
+   C) It always copies the list  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. **`if __name__ == "__main__":`** is commonly used to:  
+   A) Prevent a module from being imported  
+   B) Run CLI or test code only when the file is executed as a script, not when imported  
+   C) Define classes only  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. **`return` without an expression** in a Python function returns:  
+   A) `0`  
+   B) `None`  
+   C) An empty string always  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. **`*args` in a function signature** collects:  
+   A) Keyword arguments only  
+   B) Extra positional arguments as a tuple  
+   C) Global variables  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. **LEGB** scope ordering stands for:  
+   A) Local, Enclosing, Global, Builtins  
+   B) List, Element, Graph, Boolean  
+   C) Loop, Else, Guard, Break  
+
+6. **Keyword-only parameters** after a `*` in the signature force callers to:  
+   A) Pass everything positionally  
+   B) Pass those parameters by name, improving readability for flags  
+   C) Avoid default values  
+
+7. **`**kwargs` in a function signature** collects:  
+   A) Positional-only arguments  
+   B) Extra keyword arguments into a dict  
+   C) Global environment variables  
+
+8. **`nonlocal x`** is used to:  
+   A) Import modules  
+   B) Assign to a name in an enclosing (non-global) scope from a nested function  
+   C) Delete builtins  
 
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B**
+1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **A** · 6. **B** · 7. **B** · 8. **B**

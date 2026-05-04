@@ -15,69 +15,69 @@ This module aligns with the training library topic **CI/CD for platform changes*
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: Pipeline stages from validate to smoke
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- Standardize stages: **lint** → **unit** → **plan** or **diff** → **policy** scan → **apply** (only on protected branch) → **post-deploy smoke** hitting AOC health and one synthetic admin API.
+- Require **human approval** or change ticket ID on production applies; inject **artifact digest** into deployment manifest so what ran is provable.
+- Prerequisites: ephemeral **test** tenant, secrets scoped per environment, and feature flags to disable risky jobs on hotfix branches.
 
-## Lesson 2: Core workflows
+## Lesson 2: Immutable artifacts and version pinning
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- Build **container images** or **OCI bundles** once; promote the same digest through environments—never rebuild “the same” tag at prod time with drifting base layers.
+- Pin **Helm chart**, **Terraform module**, and **vendor CLI** versions in lockfiles committed beside application code.
+- Checkpoints: rollback means redeploying **previous digest** from registry, not guessing a git SHA from memory.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: Blue/green, canary, and automated guardrails
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Pitfalls: **canary** without **metric** gates; skipping **database migration** ordering; pipelines that **SSH** directly instead of using declared deployers.
+- Constraints: maintenance windows for **AOC vendor** upgrades; maximum parallel deploys; compliance scans that must pass before prod.
+- Rollback triggers: error budget burn, synthetic failure, or manual **big red button** job that redeploys last-known-good and opens incident bridge.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Release documentation and ownership
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when release notes list **AOC version**, automation version, schema migrations, and **feature flags** toggled; on-call acknowledges healthy **SLO** after soak period.
+- Document who may **pause** pipeline, who approves **hotfix** merges, and where **postmortem** template lives.
+- Handoff: link pipeline dashboard and **deployment frequency** / **lead time** metrics for platform leadership reviews.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **Immutable artifacts** promoted by digest make rollbacks boringly fast—redeploy last digest, not “rebuild and hope.”
+- **Automated smoke plus metric gates** on canaries turn gut-feel releases into evidence-based go/no-go decisions.
+- **Guardrails in CI** (policy, secrets scan, license check) are cheaper than production firefighting after a bad merge.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. A healthy **CI/CD** sequence for infrastructure or config changes usually includes:  
+   A) Only manual SSH edits on production  
+   B) Validate, plan or diff, policy checks, controlled apply, and post-deploy smoke tests  
+   C) Skipping tests when the change is small  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. **Immutable artifacts** in deployment pipelines mean:  
+   A) The same built image or bundle digest is promoted across environments rather than rebuilding ad hoc per stage  
+   B) Artifacts must never be stored in a registry  
+   C) Every environment builds from different unlabeled sources  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. **Canary** releases are most valuable when paired with:  
+   A) Automated metrics or health checks that can halt or roll back traffic on regression  
+   B) Deploying to 100% of users instantly without observation  
+   C) Disabling monitoring to reduce noise  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. **Rollback triggers** should ideally be:  
+   A) Undefined so operators improvise  
+   B) Documented thresholds (errors, latency, synthetic failures) that automatically or quickly initiate rollback  
+   C) Only usable after a full week of outage  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. **Version pinning** for Helm, Terraform modules, or vendor CLIs helps because:  
+   A) It makes upgrades impossible  
+   B) It makes upgrades deliberate: you choose when to advance versions after testing  
+   C) It removes the need for a lockfile  
 
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B**
+1. **B** · 2. **A** · 3. **A** · 4. **B** · 5. **B**

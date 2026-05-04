@@ -15,66 +15,66 @@ This module aligns with the training library topic **Observability as code**. Wo
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: Observability as code in the repo
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- Store **dashboard JSON**, **alert rules**, and **SLO** definitions beside application or platform code; require PR review for changes that widen burn-rate windows or drop critical panels.
+- Tag metrics with **tenant**, **region**, **build**, and **deployment** labels so AOC incidents can be sliced without ad-hoc PromQL heroics at 3 a.m.
+- Prerequisites: metrics backend (**Prometheus**, cloud vendor, or Avaya-exposed metrics gateway), log aggregation, and trace collector agreed as standard.
 
-## Lesson 2: Core workflows
+## Lesson 2: Synthetics for critical admin journeys
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: synthetic **logs in** to admin portal (headless browser or API token flow) → verifies **directory sync** probe or **health** tile → emits pass/fail to same alerting stack as production SLOs.
+- Keep synthetic **credentials** in vault with rotation; isolate them to a **non-customer** tenant where possible.
+- Checkpoints: failing synthetic opens ticket with **screenshot** or HAR redacted; success correlates with real user reports during incidents.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: Correlating logs, metrics, and traces for AOC services
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Pitfalls: **cardinality explosion** from unbounded labels; missing **trace** context propagation through your automation workers; **log** volume drowning signal.
+- Constraints: retention cost caps; **PII** scrubbing rules; cross-region **clock skew** breaking correlation if NTP ignored.
+- Rollback: feature-flag **new** high-cardinality label off; revert dashboard merge if it doubled query cost.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Runbooks linked from alert annotations
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when every **page-level** alert includes **runbook URL**, **dashboard deep link**, and **primary** on-call rotation name in annotations or incident template.
+- Document which **signals** are **symptom** vs. **cause** (for example saturation vs. error rate) to stop mis-routing bridges.
+- Handoff: quarterly **game day** updates runbook **last verified** timestamps after synthetic or chaos exercises.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **Dashboards and alerts in Git** turn tribal knowledge into reviewable, revertible changes—treat them like production code.
+- **Synthetics** on admin journeys catch “API green but UI broken” classes of failures before executives do.
+- **Correlation IDs** propagated from automation through AOC APIs into logs and traces shrink MTTR more than new dashboards alone.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. Defining **SLOs** alongside dashboards in version control mainly helps:  
+   A) Guarantee zero incidents  
+   B) Make error budgets, alerting thresholds, and reviewer expectations explicit and auditable  
+   C) Remove the need for on-call  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. **Synthetic checks** for admin flows are valuable because they:  
+   A) Replace all unit tests  
+   B) Continuously validate critical user journeys from outside the app, catching auth or UI regressions early  
+   C) Only run once per year  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. **Metric labels** should be chosen to balance:  
+   A) Maximum cardinality on every user ID forever  
+   B) Useful dimensions (region, build, tenant class) without exploding storage and query cost  
+   C) No labels to save bytes  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. Linking **runbooks** directly in alert annotations helps on-call because:  
+   A) It removes the need to think during incidents  
+   B) It provides immediate context, first checks, and escalation paths without searching wiki  
+   C) It disables paging  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. **Distributed tracing** across automation and AOC backends is most useful when:  
+   A) Spans are never propagated  
+   B) Correlation IDs flow through workers, gateways, and vendor APIs so latency splits are visible end to end  
+   C) Traces are sampled to zero in production  
 
 ---
 

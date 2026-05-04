@@ -15,69 +15,69 @@ This module aligns with the training library topic **Troubleshooting & support h
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: Triage—user story versus platform incident
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- Capture **first facts**: client **build**, OS, network path (VPN, office, guest Wi-Fi), exact **error text**, wall-clock time in the user’s timezone, and whether **one** person or **many** are affected.
+- Bucket the symptom early—**AOC policy**, **directory or sync**, **client**, **network or SBC**, or **integration**—using evidence, not guesses, so you do not burn hours in the wrong subsystem.
+- Prerequisites: read-only AOC admin for quick user and space lookup, access to internal **status** or health boards, and a short script help desk can read to users for correlation ID capture.
 
-## Lesson 2: Core workflows
+## Lesson 2: Correlation with telemetry and admin views
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: locate the user in AOC → verify **account state**, **license**, and recent **policy** changes in the incident window → pull matching **server-side** errors → extend to **gateway**, **SBC**, or **middleware** logs only when the symptom crosses that boundary.
+- Use a **pair comparison**: one working and one failing user with similar **group** and **policy** sets to isolate deltas quickly.
+- Checkpoints: timelines align within documented **clock skew** tolerance; you can state a one-sentence **hypothesis** before the next configuration change.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: Vendor engagement, severity, and evidence hygiene
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Pitfalls: incorrect **severity** tier; missing **version** matrix; pasting **passwords** or long-lived **tokens** into tickets; runbooks that reference retired menu paths.
+- Constraints: contractual **response** targets, **data residency** rules for uploads, and internal approval before **remote hands** or vendor screen-share on production.
+- Discipline: if the last change might have caused the issue, **undo that single change** first when safe; otherwise collect evidence only until root cause is proven—avoid thrashing many knobs.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Closure, knowledge base, and runbook refresh
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when root cause has a named **owner**, fix or **workaround** is in production with validation, and affected users receive plain-language **status** (including ETA if fix is still pending).
+- Publish or update a **KB** article: symptoms, first checks, resolution steps, and **escalation** path; link any new **monitoring** alert added to catch recurrence early.
+- Handoff: update the **runbook** with verified steps, “**last tested**” date, and verifier; schedule a **drill** or backlog item if the incident exposed a systemic gap (missing backup test, missing alert, unclear ownership).
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **Triage with evidence**—who, how many, when, and which client path—before you reconfigure identity, AOC policy, or the network; guessing burns the incident clock.
+- **Pair users and correlate IDs** across admin views, server logs, and integrations so the shortest hypothesis wins instead of the loudest voice in the bridge.
+- **Close the loop in the knowledge base:** update runbooks and KB articles with verified steps, last-tested dates, and severity guidance so the next incident costs less.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. On a **user-reported outage**, triage should usually start by:  
+   A) Changing random platform knobs until something moves  
+   B) Confirming scope, time window, geography or app version, and whether the issue is widespread  
+   C) Opening a vendor ticket with no reproduction data  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. **Correlating** a user report with platform telemetry means:  
+   A) Ignoring server-side errors if the client “looks fine”  
+   B) Aligning user identifiers, error codes, regions, and timestamps with backend traces and logs  
+   C) Asking every user to reinstall before checking service health  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. **Severity** when engaging vendor support should reflect:  
+   A) Always choosing the lowest tier to avoid attention  
+   B) Business impact, number of affected users, and whether a workaround exists, per vendor definitions  
+   C) Always choosing the highest severity to get faster initial response regardless of impact  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. Data you should **not** paste into vendor or public chats includes:  
+   A) Redacted correlation IDs and approximate timestamps  
+   B) Plaintext passwords, long-lived secrets, or unredacted PII  
+   C) A concise list of affected tenant IDs when policy allows  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. **Runbook hygiene** after a resolved incident means:  
+   A) Update the runbook with verified steps, owners, and links while details are fresh  
+   B) Delete runbooks so incidents cannot repeat  
+   C) Leave documentation unchanged to preserve “original intent”  
 
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B**
+1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **A**

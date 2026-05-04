@@ -40,6 +40,18 @@ Build fluency with the terminal: how shells work, how commands are structured, a
 - **`PATH`:** ordered list of directories for command lookup; prepend trusted paths intentionally.
 - **`alias`:** shortcut for commands; put persistent aliases in `~/.bashrc` or equivalent—document them for teammates.
 
+## Lesson 5: Lab—`set -x`, `type`, and a clean `PATH`
+
+- Run **`bash -x ./script.sh`** (or `set -x` / `set +x` around a block) on a small script—see expansion order before blaming the remote host.
+- Use **`type -a ls`** vs **`which ls`**—understand builtins, aliases, and functions shadowing real binaries.
+- Audit **`echo "$PATH"`** for **world-writable** early entries or unexpected `.`—trim in a test account before changing prod profiles.
+
+## Lesson 6: Anti-patterns on the CLI
+
+- **Secrets on the command line** (passwords in `ps`, history, audit logs)—prefer env files, secret agents, or SSH keys with passphrases + agent discipline.
+- **`chmod +x` everything in `$HOME/bin`** without reviewing contents—easy supply-chain footgun if dir is writable by others.
+- **Sourcing random `curl | bash`** installers on servers—pin checksums or use packages your org trusts.
+
 ---
 
 ## Key takeaways
@@ -76,8 +88,23 @@ Build fluency with the terminal: how shells work, how commands are structured, a
    B) A shell session started as part of the login process (conceptually)  
    C) A shell with networking disabled  
 
+6. **`set -x` in a Bash session** mainly:  
+   A) Disables all aliases  
+   B) Prints commands and expansions before execution (useful for debugging)  
+   C) Deletes history entries  
+
+7. Putting the **current directory `.`** early in **`PATH`** is risky because:  
+   A) It always improves security  
+   B) A file in cwd can be executed accidentally when typing a common command name  
+   C) It disables `sudo`  
+
+8. **`HISTCONTROL=ignorespace`** (when set) commonly means:  
+   A) Commands prefixed with a space may be omitted from history  
+   B) All commands are logged twice  
+   C) Root cannot use history  
+
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B**
+1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B** · 6. **B** · 7. **B** · 8. **A**

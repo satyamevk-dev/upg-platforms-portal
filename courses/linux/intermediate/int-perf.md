@@ -38,6 +38,18 @@ Apply **tuned** profiles, tune **sysctl**, respect CPU/I/O scheduling, cap workl
 - **sar** historical data; **pidstat** per-task CPU/memory/I/O.
 - **Load average** counts runnable + uninterruptible tasks—high load with idle CPU may mean I/O wait or locks, not “CPU maxed.”
 
+## Lesson 5: Lab—`tuned-adm profile`, `systemd-analyze blame`, `pidstat -d`
+
+- Switch **`tuned-adm profile`** in a lab VM—benchmark one workload before/after with **`fio`** or app harness.
+- Run **`systemd-analyze blame`** on a slow-boot host—identify worst units; cross-check with **`systemd-analyze critical-chain`**.
+- Use **`pidstat -d 1`** while a backup runs—see which PIDs actually issue block I/O.
+
+## Lesson 6: Anti-patterns in tuning
+
+- **sysctl shopping lists** from blogs without measurement—regressions and unsupported combos.
+- **RT scheduler classes** for ordinary web workloads—latency for everyone else tanks.
+- **Ignoring `vmstat` si/so** while chasing CPU flags—memory pressure is the real villain.
+
 ---
 
 ## Key takeaways
@@ -74,8 +86,23 @@ Apply **tuned** profiles, tune **sysctl**, respect CPU/I/O scheduling, cap workl
    B) Configuring VLAN IDs  
    C) Signing RPM packages  
 
+6. **`systemd-analyze blame`** primarily helps identify:  
+   A) Which systemd units contribute most to boot time ordering  
+   B) RAID parity algorithms  
+   C) TLS cipher suites only  
+
+7. Applying many **`sysctl`** changes without baselines is often:  
+   A) Guesswork that can harm stability or throughput  
+   B) Mandatory before installing packages  
+   C) Equivalent to `tuned-adm off` always  
+
+8. **`pidstat`** is especially useful for:  
+   A) Per-process CPU/memory/I/O stats over time  
+   B) Formatting LUKS headers only  
+   C) Replacing `tcpdump` for TLS inspection  
+
 ---
 
 ## Answer key
 
-1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A**
+1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A** · 6. **A** · 7. **A** · 8. **A**

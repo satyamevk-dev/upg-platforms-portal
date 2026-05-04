@@ -15,69 +15,69 @@ This module aligns with the training library topic **Keys & relationships**. Wor
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: Surrogate vs. natural keys
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- **Surrogate keys** (`bigserial`, `uuid`) are stable when business attributes change; **natural keys** (email, country+tax id) encode domain meaning but may change or have exceptions—choose consciously per table.
+- Composite natural keys are valid when the domain guarantees uniqueness and immutability; otherwise add a surrogate while **UNIQUE**-ing the natural columns.
+- Prerequisites: normalized table sketches from design topics or a small ERD for practice.
 
-## Lesson 2: Core workflows
+## Lesson 2: FOREIGN KEY basics and referential actions
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: declare `REFERENCES parent(id)`; pick **`ON DELETE`** / **`ON UPDATE`** behaviors (`RESTRICT`, `CASCADE`, `SET NULL`) matching real business rules—not every child row should vanish when a parent soft-deletes.
+- Index the **referencing column** on large child tables to avoid slow joins and FK checks even though PostgreSQL does not auto-create child-side indexes.
+- Checkpoints: attempting to delete a parent with live children behaves as declared; `EXPLAIN` on joins shows expected index usage when statistics are healthy.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: Integrity in practice and deferred checks
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Pitfalls: **orphan** rows introduced by bulk loads with constraints disabled; **`SET NULL`** without nullable column; **`CASCADE`** deletes wiping history nobody expected.
+- **`DEFERRABLE INITIALLY DEFERRED`** constraints solve rare circular insert patterns—use sparingly and document transaction boundaries for app teams.
+- Rollback: when migrating legacy data, **validate** with `LEFT JOIN ... WHERE child.parent_id IS NULL` before enabling FK enforcement.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Modeling review handoff
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when every relationship has named **ON DELETE** semantics in the ERD or migration comments, not only line arrows.
+- Document **soft-delete** pattern (`deleted_at`) implications for FKs vs. hard delete.
+- Handoff: point to **intermediate joins** and **transactions** modules for deeper concurrency stories.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **Foreign keys are living documentation** of allowed associations—if the database does not know the rule, every app will disagree eventually.
+- **`ON DELETE CASCADE`** is a chainsaw—wield it only when product and legal agree on mass deletes.
+- **Index child FK columns** on big tables; PostgreSQL will not do that for you automatically.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. A **surrogate primary key** is often used when:  
+   A) Natural business identifiers are unstable, composite, or optional  
+   B) You want duplicate rows in the same table  
+   C) Foreign keys are illegal  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. A **`FOREIGN KEY`** constraint primarily guarantees:  
+   A) Column data types always match exactly  
+   B) Referential integrity between child and parent rows per declared rules  
+   C) Automatic indexing on every column  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. **`ON DELETE SET NULL`** requires:  
+   A) The referencing column to be nullable  
+   B) The parent to have no primary key  
+   C) Cascading deletes always  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. **`ON DELETE CASCADE`** means:  
+   A) Child rows are blocked from deleting  
+   B) Deleting a parent row will delete dependent child rows automatically—use with care  
+   C) Updates are forbidden  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. **Deferrable** foreign key checks are mainly for:  
+   A) Avoiding all constraints permanently  
+   B) Special multi-statement transactions where intermediate states are temporarily inconsistent but final state is valid  
+   C) Speeding up every insert unconditionally  
 
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B**
+1. **A** · 2. **B** · 3. **A** · 4. **B** · 5. **B**

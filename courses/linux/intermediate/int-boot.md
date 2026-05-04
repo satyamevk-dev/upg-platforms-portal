@@ -37,6 +37,18 @@ Trace boot from firmware through **GRUB2** and **initramfs**, manage kernel modu
 - Boot **rescue** ISO, **mount** root LV/partition under **`/mnt`**, bind **`dev`/`proc`/`sys`**, **`chroot /mnt`**.
 - Reinstall **GRUB**, fix **`fstab`**, **dracut**, or **SELinux** contexts from within chroot—document steps.
 
+## Lesson 5: Lab—`dracut -f`, `kernel-install`, initramfs inspection
+
+- In a disposable VM, rebuild initramfs with **`dracut -f -v`** after adding a module config—watch include list.
+- Compare **`kernel-install`** paths on systemd-boot vs GRUB hosts—know where UKIs or BLS snippets live.
+- List **`lsinitrd`** contents for one image—find which **network** driver module is actually bundled.
+
+## Lesson 6: Anti-patterns in boot recovery
+
+- **Blind `rd.break` on production** without backout—easy to leave system unbootable.
+- **Editing `grub.cfg` generator output** instead of **`/etc/default/grub`**—changes vanish on `grub-mkconfig`.
+- **Skipping `chroot` bind mounts** (`/dev`, `/proc`, `/sys`)—`grub-install` fails mysteriously.
+
 ---
 
 ## Key takeaways
@@ -73,8 +85,23 @@ Trace boot from firmware through **GRUB2** and **initramfs**, manage kernel modu
    B) Increase Wi-Fi speed only  
    C) Replace physical RAM  
 
+6. **`dracut -f`** is commonly used to:  
+   A) Regenerate the initramfs after driver/module or config changes  
+   B) Resize swap files only  
+   C) List Docker layers  
+
+7. Editing **`/boot/grub2/grub.cfg`** directly (generator output) instead of **`/etc/default/grub`** is risky because:  
+   A) The next `grub2-mkconfig` may overwrite your edits  
+   B) It always improves boot time  
+   C) It disables UEFI  
+
+8. Inside a **rescue chroot**, forgetting to mount **`/dev`** and **`/proc`** often breaks:  
+   A) Tools like `grub-install` that need device nodes and kernel interfaces  
+   B) Only `ping` to localhost  
+   C) Nothing—chroot never needs them  
+
 ---
 
 ## Answer key
 
-1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A**
+1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A** · 6. **A** · 7. **A** · 8. **A**

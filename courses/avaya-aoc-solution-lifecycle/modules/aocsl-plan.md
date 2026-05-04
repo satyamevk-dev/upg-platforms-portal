@@ -15,69 +15,69 @@ This module aligns with the training library topic **Plan & govern**. Work throu
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: Roadmap, milestones, and change windows
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- Build a **roadmap** with vendor lead times, holiday freezes, and **dependency** milestones (IdP cert rotation, circuit delivery); each milestone has a **definition of done** and **rollback** placeholder.
+- Align **CAB** or change governance early: which AOC changes need full board vs. standard path; pre-approve **maintenance** patterns where possible.
+- Prerequisites: design-approved **architecture**, capacity estimates, and finance **PO** timeline for licenses and infra.
 
-## Lesson 2: Core workflows
+## Lesson 2: RACI, communications, and escalation
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: publish **RACI** for discovery through operate—who is **accountable** for cutover go/no-go vs. who merely **informs** executives.
+- Draft **communications**: internal FAQ cadence, executive one-pagers, partner notifications, and **hypercare** channel naming before chaos arrives.
+- Checkpoints: every workstream has a **deputy**; escalation **phone tree** tested once; legal/comms sign-off on customer-facing language if any.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: Training, adoption, and cost model
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Pitfalls: **training** scheduled after go-live; **super-user** program without executive cover; **cost** surprises when API volume or storage exceeds forecast.
+- Build a **cost model**: licenses, infra, support hours, contingency line; tie **savings** hypotheses to measurable baselines from Discover.
+- Constraints: **budget** gate per fiscal year; **union** or works-council rules affecting rollout timing in some regions.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Charter handoff into build
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when a **program charter** merges roadmap, RACI, comms plan, training plan, and budget with **explicit** phase gates into Build.
+- Document **decision log** location and **meeting cadence** (weekly program, daily during cutover window).
+- Handoff: **risk register** refreshed with mitigations owned; **success metrics** wired to reporting dashboard stubs.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **CAB and roadmap alignment** prevent “surprise Friday production” that security and network learn about from pager noise.
+- **RACI without deputies** is a single-point-of-failure chart—staff depth before you promise dates.
+- **Cost and adoption plans** are part of governance, not optional slides; they decide whether the program survives year two.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. A **roadmap** for an AOC program should prominently include:  
+   A) Only marketing launch dates  
+   B) Vendor lead times, dependency milestones, change freezes, and rollback placeholders  
+   C) No milestones to preserve agility  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. **RACI** is used to clarify:  
+   A) Who is accountable vs. responsible vs. consulted vs. informed for each major deliverable  
+   B) Only job titles with no actions  
+   C) Who can skip testing  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. **CAB alignment** early in planning helps:  
+   A) Eliminate all documentation  
+   B) Pre-classify change risk and avoid last-minute rejection of scheduled cutover windows  
+   C) Remove security from the conversation  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. A **communication plan** for rollout should cover:  
+   A) Only internal IT email once  
+   B) Executives, end users, partners, and help desk scripts with cadence and owners  
+   C) Social media only  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. The **cost model** should connect:  
+   A) Random guesses  
+   B) Licenses, infrastructure, support effort, and contingency to measured baselines and forecast usage  
+   C) Only coffee budget for war room  
 
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B**
+1. **B** · 2. **A** · 3. **B** · 4. **B** · 5. **B**

@@ -15,69 +15,69 @@ This module aligns with the training library topic **Build & integrate**. Work t
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: Provisioning automation and configuration baselines
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- Implement **Infrastructure as Code** or vendor-supported **templates** for AOC dependencies so lab, stage, and prod differ by **parameters**, not hand-tuned snowflakes.
+- Define **configuration baselines**: naming, tagging, backup policies, and **minimum** security settings enforced before any tenant is handed to pilots.
+- Prerequisites: CI **service accounts** with least privilege, **secrets** in vault, and design-approved **network** diagrams wired to actual subnets.
 
-## Lesson 2: Core workflows
+## Lesson 2: Directory sync, SSO, and federation
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: connect **non-prod** IdP first → validate **attribute mapping** and **group** claims → enable **SSO** test users → expand to **pilot** cohort with documented sync latency.
+- Stage **federation** or guest patterns only after internal **security** review; capture **rollback** switch to native auth if federation misbehaves during pilot.
+- Checkpoints: **SCIM** or sync job logs show expected deltas; lockout rate monitored; **break-glass** path tested without disabling MFA globally.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: Pilot cohorts, feature flags, and rollback criteria
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Pitfalls: **pilot** chosen only from IT friends; **flags** toggled in prod without owners; **rollback** undefined when client crashes spike.
+- Select pilot users across **regions**, **roles**, and **network** paths; define **success metrics** (login success, call setup, message latency) with thresholds that halt expansion.
+- Constraints: **vendor** feature stability, **client** minimum versions, and **support** staffing for hypercare during pilot.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Validation test plans and sign-off gates
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when **test plan** covers functional, security, performance, and **disaster** spot checks; each gate has named **signatory** (apps, security, ops).
+- Document **defect** triage: **showstopper** vs. **defer** criteria tied to go-live; attach **evidence** (logs, videos, metrics screenshots) per policy.
+- Handoff: **build package** tagged with version matrix (AOC, clients, integrations) ready for Deploy module runbooks.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **Baselines and automation first**—if lab was clicked together manually, production will inherit that debt as incidents.
+- **Pilots are experiments**, not demos: pick representative users, measure, and define **halt** criteria before you invite the whole company.
+- **Sign-off gates** without evidence are theater; attach logs and metrics that prove the system behaved under realistic load.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. **Configuration baselines** before handoff to pilots help:  
+   A) Ensure environments share enforceable standards rather than one-off tweaks  
+   B) Remove the need for any testing  
+   C) Hide security settings from auditors  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. **SSO and directory** work should typically progress:  
+   A) Straight to production for all users on day one  
+   B) From non-production validation through mapped attributes and pilot cohorts before broad rollout  
+   C) Without documenting attribute mapping  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. **Feature flags** during build are most valuable when:  
+   A) They have no owner and are toggled randomly  
+   B) They allow controlled exposure and fast rollback tied to clear metrics  
+   C) They are only used after retirement  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. **Pilot cohorts** should be selected to represent:  
+   A) Only one power user in IT  
+   B) Mix of roles, regions, and network paths to surface real-world failure modes  
+   C) Only executives  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. A **validation test plan** gate is meaningful when:  
+   A) No one signs it  
+   B) Named stakeholders sign with evidence that criteria were met or risks explicitly accepted  
+   C) Testing is skipped for schedule pressure  
 
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B**
+1. **A** · 2. **B** · 3. **B** · 4. **B** · 5. **B**

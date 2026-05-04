@@ -38,6 +38,18 @@ SELinux enforces policy beyond discretionary permissions. Learn modes, contexts,
 - **AppArmor** often path-centric profiles; **SELinux** richer type enforcement and MLS options.
 - RHEL-family centers on **SELinux**; Ubuntu enables **AppArmor** by default—know both when supporting mixed estates.
 
+## Lesson 5: Lab—`audit2allow` awareness, permissive domains, `semodule -l`
+
+- In a lab VM, toggle one **boolean** and **`ausearch -m avc -ts recent`**—confirm expected allow/deny.
+- Inspect **`semodule -l | grep yourvendor`**—third-party policy modules are common support touchpoints.
+- Practice **`sepolicy generate`** output review only—do not blindly install generated modules in prod.
+
+## Lesson 6: Anti-patterns in MAC operations
+
+- **`setenforce 0` permanently** “because app broke”—masks policy debt.
+- **`chcon` everywhere** in runbooks—use **`semanage fcontext`** + **`restorecon`** for persistence.
+- **Disabling SELinux at install** org-wide—loses containment for minimal app convenience.
+
 ---
 
 ## Key takeaways
@@ -74,8 +86,23 @@ SELinux enforces policy beyond discretionary permissions. Learn modes, contexts,
    B) Identical internally to ext4  
    C) A DHCP server  
 
+6. For **persistent** SELinux file context changes, the preferred pattern is usually:  
+   A) `semanage fcontext` + `restorecon`  
+   B) Repeated `chcon` in cron every minute  
+   C) `chmod 777` on `/etc`  
+
+7. Leaving SELinux in **permissive** mode indefinitely for a production service is generally:  
+   A) A strong security default  
+   B) A policy debt that removes enforcement while you postpone real fixes  
+   C) Equivalent to enforcing with MLS  
+
+8. **`audit2why`** is mainly helpful for:  
+   A) Translating AVC denials into hints (booleans, mislabels, etc.)  
+   B) Compiling kernels  
+   C) Managing LVM mirrors only  
+
 ---
 
 ## Answer key
 
-1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A**
+1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A** · 6. **A** · 7. **B** · 8. **A**

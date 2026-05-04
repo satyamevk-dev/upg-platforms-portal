@@ -15,69 +15,69 @@ This module aligns with the training library topic **Console access & navigation
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: Access, session, and browser readiness
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- Use **privileged** administrator accounts only from managed workstations; confirm **supported browsers**, TLS versions, and any smart-card or SSO requirements from Avaya release notes for your AOC train.
+- Understand **session timeout**, idle lock, and how **MFA** or federated sign-in affects re-authentication when you step away mid-task or open multiple admin tabs.
+- Prerequisites: approved **break-glass** procedure, organizational rules for admin credential storage, and a non-production tenant where you can explore menus without customer impact.
 
-## Lesson 2: Core workflows
+## Lesson 2: Dashboards, search, and day-one admin motion
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: sign in → orient on the **dashboard** or landing summary → use **global search** to open a known test user or resource → open a **list** view and apply a simple filter → use a **context menu** action your role allows (prefer read-only first).
+- Practice low-risk actions: column layout, **saved** or bookmarked views if available, and opening detail panes without mutating production data.
+- Checkpoints: you can find a target object without hunting every sidebar; actions you expect are visible—missing actions usually mean **insufficient role scope**, not a product bug.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: Lists, filters, and bulk-change discipline
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Pitfalls: **bulk** edits applied to the wrong rows after a mis-set filter; **pagination** hiding excluded items; copying configuration between tenants without remapping **IDs** or integration endpoints.
+- Constraints: export **size** or **rate** limits, maximum rows per bulk job, and internal audit rules that require a second approver for certain changes.
+- Safe practice: capture “before” **exports** or screenshots for wide edits; pilot on a **small cohort** before org-wide policy applies; use confirmation dialogs deliberately instead of muscle memory.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Audit trails and evidence for operations
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when you can retrieve **who, when, and what** for a controlled test change and, if required by policy, tie it to **session** or source IP metadata shown in your audit UI.
+- Document **deep links** to frequently used admin views, naming conventions for **saved filters**, and whether exports land in browser download, secure mail, or a SIEM feed.
+- Handoff: brief security note listing which human and **automation** accounts touch AOC regularly and how **separation of duties** is enforced in your change process.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **Session and browser discipline** (supported clients, SSO/MFA, timeouts) keeps admin work reproducible and avoids “it worked on my laptop” production surprises.
+- **Search and scoped lists** are the fast safe path; **bulk** power always deserves an extra verification pass on the visible row set, not muscle memory.
+- **Audit trails are operational data:** design changes so who/when/what is captured by default—your future self, security, and support will all need it.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. After policy changes that affect sign-in (for example MFA or password rules), **session behavior** matters because:  
+   A) Browsers never cache credentials  
+   B) Existing sessions may keep prior rules until users re-authenticate or sessions expire per policy  
+   C) HTTPS is disabled automatically  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. **Global search** in the admin console is most appropriate for:  
+   A) Purging audit history in bulk  
+   B) Quickly locating users, resources, or settings without drilling every menu  
+   C) Turning off least-privilege enforcement  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. When using **filters and bulk actions** on a large list, the safest pattern is:  
+   A) Assume the filter is always correct without scanning the result set  
+   B) Confirm the visible rows match intent, then use confirmations or dry-run where offered  
+   C) Apply bulk delete to “all pages” without reviewing  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. **Audit trails** are most useful for operations when they capture:  
+   A) Who changed what, when, and from which administrative context  
+   B) End-user desktop wallpaper choices  
+   C) Unrelated marketing campaign metrics  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. For **supported browsers**, administrators should:  
+   A) Follow vendor documentation for supported versions and hardening guidance  
+   B) Standardize on unsupported nightly builds for all production tasks  
+   C) Disable TLS to improve legacy plugin compatibility  
 
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B**
+1. **B** · 2. **B** · 3. **B** · 4. **A** · 5. **A**

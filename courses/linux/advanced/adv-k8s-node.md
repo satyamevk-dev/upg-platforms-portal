@@ -36,6 +36,18 @@ From the Linux node, relate **kubelet** to **containerd**/**CRI-O**, understand 
 - **`journalctl -u kubelet -f`** surfaces **PLEG**, **certificate**, **cgroup** errors.
 - **Stuck mounts** (`transport endpoint not connected`) may need **lazy unmount** workflows—follow vendor runbooks.
 
+## Lesson 5: Lab—`crictl inspectp`, `ctr -n k8s.io`, kubelet flags file
+
+- **`crictl inspectp <pod>`**—see **cgroupParent**, **linux namespaces**, **logPath** for a failing sandbox.
+- **`ctr -n k8s.io containers ls`** (containerd) when **crictl** is not enough—read-only listing practice.
+- Locate **`KUBELET_EXTRA_ARGS`** or **systemd drop-in** actually used—`systemctl cat kubelet`.
+
+## Lesson 6: Anti-patterns on Kubernetes nodes
+
+- **Filling `/var`** with image layers and logs—kubelet enters distress, pods evicted mysteriously.
+- **Disabling swap** without understanding workload—required by kubelet policy but surprises bare-metal migrants.
+- **Manual `iptables -F`** on nodes—breaks kube-proxy/CNI dataplane.
+
 ---
 
 ## Key takeaways
@@ -72,8 +84,23 @@ From the Linux node, relate **kubelet** to **containerd**/**CRI-O**, understand 
    B) Formatting ext3  
    C) Managing IPMI users only  
 
+6. **`crictl`** talks to the container runtime via:  
+   A) The same CRI endpoint kubelet uses (e.g., containerd/CRI-O socket)  
+   B) Only the Kubernetes API server  
+   C) Only Appletalk  
+
+7. A common node failure mode in Kubernetes is:  
+   A) Disk pressure under `/var` from images/logs causing kubelet and runtime issues  
+   B) Always insufficient `/boot` font files  
+   C) Only missing `cupsd`  
+
+8. Blindly flushing **iptables/nftables** rules on a Kubernetes node can:  
+   A) Break kube-proxy/CNI datapath connectivity for pods  
+   B) Always improve pod scheduling  
+   C) Replace `crictl`  
+
 ---
 
 ## Answer key
 
-1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A**
+1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A** · 6. **A** · 7. **A** · 8. **A**

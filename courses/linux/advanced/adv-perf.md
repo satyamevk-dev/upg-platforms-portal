@@ -39,6 +39,18 @@ Apply **USE**/**RED** methodologies, tune **NUMA** locality and **huge pages**, 
 - **Warmup**, **filesystem state**, **CPU governor**, and **turbo** must be declared in benchmark reports.
 - **Repro** includes **kernel**, **microcode**, **firmware**, and **exact** workload scripts in version control.
 
+## Lesson 5: Lab—`numactl --membind`, `turbostat`, `fio` job file
+
+- Bind a memory-heavy benchmark with **`numactl --membind=0 --cpunodebind=0`** vs cross-node—plot latency difference.
+- **`turbostat --interval 1`** while load runs—watch **PkgWatt** and **Bzy_MHz** for governor surprises.
+- Check in a versioned **`fio`** job file—**`iodepth`**, **`numjobs`**, **`size`**, **`runtime`**, **`ramp_time`**.
+
+## Lesson 6: Anti-patterns in performance engineering
+
+- **Reporting average latency only** for SLO-bound services—hides tail disasters.
+- **Benchmarking on cold caches once**—non-representative hero numbers.
+- **Disabling mitigations** for leaderboard scores—security reopens without exec sign-off.
+
 ---
 
 ## Key takeaways
@@ -75,8 +87,23 @@ Apply **USE**/**RED** methodologies, tune **NUMA** locality and **huge pages**, 
    B) Disabling CPU caches  
    C) Removing the need for backups  
 
+6. **`numactl`** is commonly used to:  
+   A) Control CPU/memory NUMA placement for processes  
+   B) Replace `nftables` entirely  
+   C) Manage Docker Hub authentication  
+
+7. Publishing **only mean latency** for user-facing services often:  
+   A) Hides tail latency that drives SLO violations  
+   B) Guarantees p99 is also excellent  
+   C) Removes the need for histograms  
+
+8. A reproducible benchmark report should normally include:  
+   A) Hardware, OS/kernel, firmware/microcode, workload version, and methodology notes  
+   B) Only a single throughput headline  
+   C) Random screenshots without units  
+
 ---
 
 ## Answer key
 
-1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A**
+1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A** · 6. **A** · 7. **A** · 8. **A**

@@ -37,6 +37,18 @@ Verify addresses, ports, DNS, and simple HTTP reachability from the Linux CLI—
 - **`curl -I URL`** — headers only; **`curl -v`** — verbose TLS/cert path.
 - **`wget`** — simple downloads; **`curl`** more flexible for APIs and methods.
 
+## Lesson 5: Lab—`ip route get`, `ss` filters, and MTU sanity
+
+- Run **`ip route get 8.8.8.8`**—note **src** IP, **dev**, and **table**; correlate with **`ip rule list`** if policy routing exists.
+- Compare **`ss -lnt`** vs **`ss -lnpt`**—when you need PIDs, what privileges are implied?
+- Check **MTU** on involved interfaces—overlay and PPPoE scenarios where **PMTU blackholes** mimic “random hangs.”
+
+## Lesson 6: Anti-patterns in network debugging
+
+- **Assuming `ping` failure means host down**—ICMP may be filtered while TCP services work.
+- **Testing only with `curl` to localhost**—misses firewall, routing, or SNAT issues on real paths.
+- **`tcpdump` without filters** in production—captures sensitive payloads and overloads disks.
+
 ---
 
 ## Key takeaways
@@ -73,8 +85,23 @@ Verify addresses, ports, DNS, and simple HTTP reachability from the Linux CLI—
    B) Full body always  
    C) Kernel modules  
 
+6. **`ip route get <addr>`** is especially helpful to see:  
+   A) Which interface/source IP the kernel would select for that destination  
+   B) GPU temperature  
+   C) inode usage only  
+
+7. Successful **`ping`** to a host proves:  
+   A) Nothing about arbitrary TCP ports being open  
+   B) That all TCP ports are open  
+   C) That TLS certificates are valid  
+
+8. **`curl --resolve example.com:443:127.0.0.1 https://example.com/`** is useful to:  
+   A) Bypass DNS for SNI/Host testing against a specific backend IP  
+   B) Format ext4  
+   C) List loaded eBPF programs  
+
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **A** · 5. **A**
+1. **B** · 2. **B** · 3. **B** · 4. **A** · 5. **A** · 6. **A** · 7. **A** · 8. **A**

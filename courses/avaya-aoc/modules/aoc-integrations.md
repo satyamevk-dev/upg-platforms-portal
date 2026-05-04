@@ -15,69 +15,69 @@ This module aligns with the training library topic **Integrations & APIs**. Work
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: Webhooks, REST surfaces, and integration boundaries
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- Inventory **webhooks**, **event subscriptions**, and **REST** resources your AOC-related services expose; record **base URLs** per environment, **auth** modes (OAuth client credentials, API keys), and which events are **at-least-once** vs. effectively once.
+- Define **idempotency** keys or natural keys for your consumers so duplicate deliveries (retries) do not double-provision users or double-charge internal systems.
+- Prerequisites: sandbox **credentials** with least scope, updated **TLS trust** if you terminate on a private CA, and a dev instance of CRM or ITSM for safe writes.
 
-## Lesson 2: Core workflows
+## Lesson 2: Read-only integration first, then controlled writes
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: register a low-risk **subscription** in sandbox → verify **signature** or token validation in your worker → perform a read-only CRM lookup from an AOC-related identifier (user or ticket correlation field).
+- Add a guarded **write** path (for example create or update ticket) that always forwards a **correlation ID** from the Avaya event payload through to the downstream system logs.
+- Checkpoints: **429** handling with **exponential backoff** under load; **dead-letter** queue for poison messages; no secrets in client-side code or public repos.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: Rate limits, secrets rotation, and API compatibility
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Pitfalls: tight **polling** loops that trip **throttling**; long-lived **shared** secrets in chat; undeclared **JSON schema** drift after an AOC upgrade breaks silent consumers.
+- Constraints: vendor **SLA** on webhook delivery latency, maximum **parallel** connections, static **egress IP** requirements, and IP **allowlists** on either side.
+- Rollback: disable the subscription or feature flag; **rotate** compromised credentials; pin consumers to a supported prior **API version** while you patch forward if the platform offers versioning.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Change windows and integration documentation
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when the integration **runbook** lists all environment URLs, credential **rotation** owner and calendar, **cutover** checklist for the next AOC upgrade, and monitoring links for error rate and lag.
+- Document **field mappings** between Avaya payloads and CRM or ITSM, **webhook endpoint** URLs owned by your team, and on-call for the **middleware** tier—not only the Avaya platform team.
+- Handoff: link from your internal CMDB or wiki to the AOC **integrations** configuration screen and to the repository that owns the consumer service.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **Design for at-least-once delivery:** idempotent handlers, exponential backoff on **429**, and a **dead-letter** path beat “hope the webhook fires once.”
+- **Secrets live in vaults** with rotation owners and calendars—not in repos, screenshots, or long-lived chat threads tied to integration accounts.
+- **Version and document** every consumer against the AOC API and event matrix **before** the next upgrade window so breaking changes are a planned migration, not a fire drill.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. Verifying **webhook signatures** (when offered) helps ensure:  
+   A) Events came from the trusted sender and payloads were not tampered with in transit  
+   B) Only the client’s screen resolution is validated  
+   C) TLS certificates never expire  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. For **REST API authentication**, preferred practice is:  
+   A) Embed long-lived service passwords in public front-end code  
+   B) Use OAuth client credentials, API keys, or tokens with rotation and minimal scopes  
+   C) Reuse one global API key in every repository and chat room  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. **Rate limits** on integration endpoints exist mainly to:  
+   A) Protect the platform and partners from overload, abuse, and noisy retry storms  
+   B) Guarantee unlimited throughput for any single client  
+   C) Replace the need for authentication  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. Maintaining **backward compatibility** when evolving APIs typically requires:  
+   A) Silent breaking changes every release without notice  
+   B) Versioning, deprecation timelines, and clear migration notes per vendor guidance  
+   C) Deleting old versions the same day new ones ship, without clients testing  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. **Event subscriptions** should be scoped to:  
+   A) Only the event types your integration truly needs, to reduce cost and alert noise  
+   B) Every available event at maximum verbosity regardless of use  
+   C) Disable correlation IDs to shrink payloads  
 
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B**
+1. **A** · 2. **B** · 3. **A** · 4. **B** · 5. **A**

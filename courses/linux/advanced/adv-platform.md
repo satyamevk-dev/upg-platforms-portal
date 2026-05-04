@@ -36,6 +36,18 @@ Validate hardware inventory with **dmidecode**/**lspci**/**sensors**, operate **
 - **kexec** loads a crash kernel quickly—**crash** utility inspects **vmcore** with **vmlinux** debuginfo.
 - Size **crashkernel=** for workload RAM—too small loses dumps; too large wastes precious memory.
 
+## Lesson 5: Lab—`ipmitool sol`, `fwupdmgr get-updates`, SMBIOS audit script
+
+- **`ipmitool -I lanplus -H bmc -U user sol activate`** in lab—document escape sequence and session logging policy.
+- **`fwupdmgr get-devices`** / **`get-updates`** on supported laptop or server—note **LVFS** consent prompts.
+- Script **`dmidecode -s system-serial-number`** vs CMDB—catch ghost assets after motherboard swap.
+
+## Lesson 6: Anti-patterns in platform management
+
+- **BMC on flat corporate LAN** without ACLs—lights-out equals attacker-in.
+- **Firmware “latest always” Friday**—NIC/RAID regressions need bake time.
+- **kdump reserved too small**—vmcore truncated, postmortem useless.
+
 ---
 
 ## Key takeaways
@@ -72,8 +84,23 @@ Validate hardware inventory with **dmidecode**/**lspci**/**sensors**, operate **
    B) Format swap  
    C) Replace DNSSEC  
 
+6. **BMC/IPMI** interfaces should be treated as:  
+   A) A high-privilege management plane requiring network segmentation and strong authentication  
+   B) Safe to expose publicly without controls  
+   C) Equivalent to read-only `ping`  
+
+7. **`fwupd` + LVFS** is mainly about:  
+   A) Delivering firmware updates to supported devices through a standard Linux mechanism  
+   B) Managing Kubernetes Ingress TLS only  
+   C) Replacing `systemd-journald`  
+
+8. Undersized **`crashkernel=`** reservations commonly cause:  
+   A) Truncated or failed vmcore captures after a panic  
+   B) Faster normal reboots always  
+   C) Automatic RAID scrubbing  
+
 ---
 
 ## Answer key
 
-1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A**
+1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A** · 6. **A** · 7. **A** · 8. **A**

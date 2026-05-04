@@ -15,66 +15,66 @@ This module aligns with the training library topic **Backup, PITR & disaster rec
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: Logical (`pg_dump`) vs. physical backups
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- **`pg_dump`/`pg_dumpall`** produce SQL or custom-format logical exports—great for portability, smaller subsets, and version upgrades with caveats; **physical base backup + WAL archiving** underpins **PITR** and large-database RTO targets.
+- Logical dumps may **miss** certain globals unless scripted; physical backups require **WAL continuity** from backup start LSN.
+- Prerequisites: encrypted object store or tape policy, **retention** matrix per compliance class, and restore lab hardware.
 
-## Lesson 2: Core workflows
+## Lesson 2: Continuous archiving and PITR concepts
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: enable **`archive_mode`**, ship WAL segments to immutable storage with **checksum** verification; practice **restore** to a point in time on a clone weekly or monthly.
+- Document **`restore_command`** / cloud equivalents; test **promote** after restore in isolated VPC.
+- Checkpoints: RPO measured in minutes of WAL loss acceptable vs. cost; **GPG** or KMS encryption validated end-to-end.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: Restore drills and runbook hygiene
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Pitfalls: backups nobody can decrypt; **orphaned** partial base backups; **PITR** targets forgetting **timezone**; **extensions** missing on restore host.
+- Automate **restore verification** queries (`SELECT count(*)`, checksum spot tests) post-restore job.
+- Rollback: if drill fails, freeze feature work on storage layer until green—treat failed drill as sev-2 incident.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: DR handoff and vendor SLAs
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when **runbook** lists RPO/RTO tested values, owner roster, and **communication** tree; regulators get evidence of drill cadence.
+- Document **off-site** distance and immutability (object lock) for ransomware resilience.
+- Handoff: tie **replication** topology to backup strategy (standby promotion vs. restore from cold).
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **Untested backups are Schrodinger backups**—restore drills are the measurement that collapses the wavefunction.
+- **WAL is the timeline** for PITR—gaps mean unrecoverable minutes.
+- **Logical and physical** solve different problems—know which one your RPO/RTO actually requires.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. **Point-in-time recovery (PITR)** typically requires:  
+   A) Only a single `pg_dump` file from last year  
+   B) A consistent base backup plus continuous WAL archive (or equivalent) to replay to a target time or LSN  
+   C) Disabling WAL  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. **`pg_dump`** is especially well suited for:  
+   A) Zero-downtime multi-terabyte instant failover alone  
+   B) Portable logical exports, subset restores, and many migration workflows  
+   C) Replacing all physical backups always  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. **WAL archiving** is important because:  
+   A) It slows down writes with no benefit  
+   B) It enables replay for replication and PITR when configured with retention and monitoring  
+   C) It removes the need for `VACUUM`  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. A **restore drill** should validate:  
+   A) Only that backup files exist on disk  
+   B) End-to-end restore steps, extension presence, credentials, and application smoke queries on recovered data  
+   C) Only file sizes  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. Encrypting backups at rest/off-site primarily protects against:  
+   A) Faster queries  
+   B) Theft or compromise of backup media exposing sensitive data  
+   C) Index bloat  
 
 ---
 

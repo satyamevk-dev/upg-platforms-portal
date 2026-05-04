@@ -36,6 +36,18 @@ Navigate the Linux tracing stack from **ftrace** and **perf** through **eBPF**, 
 - **strace** syscall tracing overhead can dominate; **bpftrace** one-liners filter by PID/latency thresholds with less intrusion.
 - Still coordinate **PII** and **change windows**—kernel tracing is powerful and auditable.
 
+## Lesson 5: Lab—`perf record`, `perf script` stackcollapse, one bpftrace one-liner
+
+- Capture **`perf record -g -- sleep 10`** on a busy service host—**`perf report`** hottest symbol path.
+- Generate a tiny **flame graph** input with **`perf script`** → stackcollapse steps (tooling varies)—see wide vs. tall plates.
+- Run a **`bpftrace -e 'kprobe:sys_read { @bytes = hist(arg2); }'`** toy—respect rate and privacy; kill quickly.
+
+## Lesson 6: Anti-patterns in tracing
+
+- **High-frequency kprobes on hot syscalls** in prod without canary—tracing becomes the outage.
+- **Shipping raw pcaps** with credentials to ticket systems—data classification violation.
+- **Ignoring lost events** counters in ring buffers—silent incomplete conclusions.
+
 ---
 
 ## Key takeaways
@@ -72,8 +84,23 @@ Navigate the Linux tracing stack from **ftrace** and **perf** through **eBPF**, 
    B) Always requires rebooting  
    C) Cannot filter by PID  
 
+6. **`perf record -g`** is especially useful for building:  
+   A) Call-graph profiles of on-CPU time  
+   B) Disk partition tables only  
+   C) DHCP leases only  
+
+7. High-frequency **kprobes** on very hot kernel paths without careful filtering can:  
+   A) Introduce significant overhead and distort the system you are measuring  
+   B) Always reduce CPU usage  
+   C) Disable eBPF verifier  
+
+8. When exporting **packet captures** from production, you should consider:  
+   A) Privacy/classification policies—payloads may contain secrets or PII  
+   B) That pcaps never include payloads  
+   C) That encryption makes captures useless always  
+
 ---
 
 ## Answer key
 
-1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A**
+1. **A** · 2. **A** · 3. **A** · 4. **A** · 5. **A** · 6. **A** · 7. **A** · 8. **A**

@@ -15,69 +15,96 @@ This module aligns with the training library topic **Advanced typing & static an
 
 ---
 
-## Lesson 1: Foundations and context
+## Lesson 1: Generics, `TypeVar`, and constrained types
 
-- Relate this topic to adjacent modules in the same learning track.
-- Identify the main components, terms, and boundaries you will manipulate or observe.
-- List prerequisites (tools, access, or prior modules) needed for hands-on practice.
+- **`TypeVar`** parameterizes containers (`Stack[T]`, `ResponseT`) so static checkers catch wrong element types before runtime; use **`bound=`** to restrict to protocol or base class.
+- **`Generic[T]`** base from `typing` (or built-in `list[str]` in 3.9+) ties class attributes to type parameters cleanly.
+- Prerequisites: intermediate OOP; CI slot for **`mypy`/`pyright`** on a slice of the codebase.
 
-## Lesson 2: Core workflows
+## Lesson 2: `Protocol` and structural subtyping
 
-- Walk the primary **happy path** for tasks tied to this topic.
-- Note common configuration or code patterns from documentation and examples.
-- Capture **checkpoints** (commands, UI states, or query results) that prove success.
+- **Happy path**: define **`Protocol`** for duck-typed dependencies (`Readable`, `Cacheable`) instead of inheritance from concrete vendor classes—tests pass fake objects without subclassing everything.
+- Combine with **`runtime_checkable`** sparingly for `isinstance` guards—performance and design smell if overused.
+- Checkpoints: pyright strict mode passes on new modules; public APIs typed end-to-end.
 
-## Lesson 3: Pitfalls, constraints, and operations
+## Lesson 3: `Callable`, `overload`, `Literal`, and gradual typing
 
-- Recognize typical failure modes and how to narrow root cause quickly.
-- Understand limits imposed by security, scale, or vendor contracts where relevant.
-- Plan **rollback** or safe retry when changing production-like environments.
+- Use **`@overload`** to describe multi-signature functions to type checkers; implementation body remains untyped broadly—document why.
+- **`Literal["read", "write"]`** models fixed string unions better than `str` alone.
+- Pitfalls: **`Any`** creep; ignoring **`None`** returns (`Optional` discipline); mismatched **`TypedDict`** keys vs. runtime JSON.
 
-## Lesson 4: Verification and handoff
+## Lesson 4: Static analysis in CI and typing strategy
 
-- Define **done**: tests, metrics, or sign-off criteria appropriate to this topic.
-- Document decisions, URLs, IDs, or connection strings your team will need later.
-- Prepare a concise handoff for peers or support (what changed, what to watch).
+- **Done** when **`pyproject`** configures checker strictness per package; **gradual** roadmap lists modules by priority (core domain first).
+- Document **`TYPE_CHECKING`** import pattern to avoid circular imports for type-only symbols.
+- Handoff: **metaprogramming** module types decorators and descriptors precisely.
+
+## Lesson 5: Lab—`TypedDict`, `NotRequired`, and `TypedDict` total
+
+- Model JSON payloads with **`TypedDict`**; mark optional keys with **`NotRequired`** (3.11 typing) or `total=False` patterns—run **`mypy`** on sample dict literals.
+- Write a **`Protocol`** for a cache interface; provide a fake in tests without subclassing Redis client.
+- Experiment with **`reveal_type`** locally (then delete) to see inferred unions narrow after `isinstance` guards.
+
+## Lesson 6: Anti-patterns in typing rollout
+
+- Sprinkling **`Any`** to silence mypy in core domain modules—creates blind spots; prefer **`object`** + narrow casts when truly unknown.
+- **`cast()` without runtime check**—lies to the type checker; pair casts with validation or tests.
+- Over-complex **`Union`** chains without **`TypeAlias`** readability—extract aliases and document lifetimes.
 
 ---
 
 ## Key takeaways
 
-- **Structure first:** clarify goals and constraints before deep implementation.
-- **Automate checks** where possible so regressions surface early.
-- **Operational clarity** beats one-off heroics—prefer repeatable procedures.
+- **Types are checked documentation**—they pay rent in CI, not only in editors.
+- **Protocols beat inheritance for seams**—depend on behavior, not vendor class names.
+- **Gradual typing beats big-bang rewrites**—tighten hotspots with real bug history first.
 
 ---
 
 ## Quiz
 
-1. The best first step when approaching a new task in this module is usually:  
-   A) Change production settings immediately to learn faster  
-   B) Clarify goals, prerequisites, and a safe environment (lab or lower tier)  
-   C) Skip documentation to save time  
+1. A **`Protocol`** in typing is used to describe:  
+   A) Only concrete inheritance trees  
+   B) Structural subtyping: “anything with these methods/attributes”  
+   C) Runtime bytecode layout  
 
-2. A **checkpoint** in a workflow is best described as:  
-   A) An optional narrative in release notes only  
-   B) A verifiable signal that a step completed correctly before continuing  
-   C) Only a calendar reminder  
+2. **`TypeVar("T")`** is primarily for:  
+   A) Runtime randomization  
+   B) Parameterizing generic functions/classes so static checkers relate input/output types  
+   C) Replacing `def`  
 
-3. When something fails, prioritizing **narrow root cause** means:  
-   A) Rebooting everything without evidence  
-   B) Gathering minimal evidence (logs, errors, scope) before large changes  
-   C) Waiting indefinitely without triage  
+3. **`@overload`** is consumed mainly by:  
+   A) The CPython interpreter at runtime  
+   B) Static type checkers to model multiple call signatures  
+   C) `pytest` only  
 
-4. **Least privilege** in admin and API contexts generally means:  
-   A) Grant everyone admin to reduce tickets  
-   B) Grant only the permissions required for the role or automation  
-   C) Share one shared password for convenience  
+4. **`Literal[3, 4]`** means:  
+   A) Any integer  
+   B) Exactly the values `3` or `4` at the type level  
+   C) A string literal only  
 
-5. Documentation at handoff should emphasize:  
-   A) Only personal opinions without facts  
-   B) What changed, why, and what to monitor next  
-   C) Deleting all logs for privacy  
+5. **`from typing import TYPE_CHECKING`** helps avoid:  
+   A) Writing tests  
+   B) Import cycles by allowing type-only imports under a false runtime branch  
+   C) Using `Protocol`  
+
+6. **`typing.cast(T, x)`** should be used:  
+   A) Whenever mypy complains without thought  
+   B) Sparingly, when you have a proof `x` conforms to `T` that the checker cannot see  
+   C) To convert ints to strings automatically  
+
+7. **`Optional[X]`** is equivalent to:  
+   A) `X | list`  
+   B) `X | None` in modern union syntax  
+   C) `Never`  
+
+8. **`@runtime_checkable`** on a **`Protocol`** enables:  
+   A) Faster attribute access always  
+   B) Using `isinstance` checks against structural protocols (with limitations)  
+   C) Disabling mypy  
 
 ---
 
 ## Answer key
 
-1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B**
+1. **B** · 2. **B** · 3. **B** · 4. **B** · 5. **B** · 6. **B** · 7. **B** · 8. **B**
