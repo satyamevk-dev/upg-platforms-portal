@@ -48,15 +48,6 @@ Good fit: one **Web Service** + **PostgreSQL**, no Docker changes. Free tier exi
 npx prisma db seed
 ```
 
-**Copy local DB → Render Postgres (destructive on Render):** from your laptop, install `pg_dump` / `psql` (`brew install libpq`), then:
-
-```bash
-export TARGET_DATABASE_URL='postgresql://…render.com/…?sslmode=require'
-npm run db:sync:push
-```
-
-Uses `DATABASE_URL` from `.env` as the source. Type `YES` to confirm. See `scripts/db-sync-push.sh`.
-
 ---
 
 ## Option 2 — Railway

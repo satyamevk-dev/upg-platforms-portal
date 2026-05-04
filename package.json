@@ -15,7 +15,6 @@
     "db:migrate": "prisma migrate dev",
     "db:push": "prisma db push",
     "db:seed": "prisma db seed",
-    "db:sync:push": "bash scripts/db-sync-push.sh",
     "db:up": "docker compose up -d",
     "db:down": "docker compose down",
     "package:deploy": "bash scripts/package-deployment.sh",
