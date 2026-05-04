@@ -27,3 +27,6 @@ then run with a compose file that uses `image:` instead of `build:` for the `app
 Coolify (self-hosted PaaS on a VPS): see deploy/COOLIFY.md and use coolify-compose.yml (repo root) as the Compose file path in Coolify.
 
 Managed public hosting (Render, Railway, Vercel, etc.): see deploy/PUBLIC_HOSTING.md.
+
+Large deployment .tar.gz files: distribute via GitHub Releases (or object storage), not by committing
+them to the Git repo — see deploy/GITHUB_ARTIFACTS.md.
