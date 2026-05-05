@@ -36,7 +36,7 @@ export function AvayaAocSolutionLifecycleLibraryGroup({
       >
         <div className="min-w-0">
           <h2 className="text-lg font-semibold tracking-wide text-slate-900">
-            Avaya AOC Solution Lifecycle
+            AOC Solution Lifecycle
           </h2>
           <p className="mt-0.5 text-xs text-slate-500">
             End-to-end delivery phases — expand to browse modules.

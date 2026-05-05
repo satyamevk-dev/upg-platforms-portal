@@ -78,7 +78,10 @@ export async function DashboardView({ callbackPath }: Props) {
           <div>
             <p className="text-center text-sm font-semibold leading-snug text-[#00A89E]">
               Welcome to Learning Portal for UPG Group
-              {trainerMappedClientName ? <> {trainerMappedClientName}</> : null}
+              {trainerMappedClientName &&
+              trainerMappedClientName.trim().toLowerCase() !== "avaya" ? (
+                <> {trainerMappedClientName}</>
+              ) : null}
             </p>
             <h1 className="mt-2 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
               Dashboard

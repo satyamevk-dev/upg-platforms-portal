@@ -42,7 +42,7 @@ export async function TrainerTrainingPlansBlock({ trainerUserId, headingId }: Pr
           </h2>
           <p className="mt-1 text-sm text-slate-600">
             Plans for{" "}
-            {clientName ? (
+            {clientName && clientName.trim().toLowerCase() !== "avaya" ? (
               <span className="font-medium text-slate-800">{clientName}</span>
             ) : (
               "your assigned client"

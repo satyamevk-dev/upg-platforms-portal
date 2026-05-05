@@ -256,7 +256,6 @@ export default function LoginPage() {
           <div className="rounded-2xl border border-white/55 bg-white/72 p-8 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-10">
             <div className="text-center text-sm font-semibold leading-snug text-[#00A89E] sm:text-base">
               <p>Welcome to Learning Portal for UPG Group</p>
-              <p className="mt-1 sm:mt-1.5">Avaya</p>
             </div>
 
             <form className="mt-8 space-y-4" onSubmit={handleSubmit}>

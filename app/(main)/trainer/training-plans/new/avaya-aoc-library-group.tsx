@@ -31,7 +31,7 @@ export function AvayaAocLibraryGroup({ avayaAocTopicIdSet, selectedIds, children
         aria-expanded={open}
       >
         <div className="min-w-0">
-          <h2 className="text-lg font-semibold tracking-wide text-slate-900">Avaya AOC</h2>
+          <h2 className="text-lg font-semibold tracking-wide text-slate-900">AOC</h2>
           <p className="mt-0.5 text-xs text-slate-500">
             Operations console and admin workflows — expand to browse modules.
           </p>

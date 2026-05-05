@@ -49,9 +49,9 @@ export default async function WorkoutBuilderPage({
           </h1>
           <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-base">
             Pick a client and build a plan from any mix of modules. Open <span className="font-medium">LINUX</span>,{" "}
-            <span className="font-medium">Networking</span>, <span className="font-medium">Avaya AOC</span>,{" "}
-            <span className="font-medium">Avaya AOC Solution Lifecycle</span>, or{" "}
-            <span className="font-medium">Avaya AOC Platform Tools & Automation</span>. Use section and row checkboxes to
+            <span className="font-medium">Networking</span>, <span className="font-medium">AOC</span>,{" "}
+            <span className="font-medium">AOC Solution Lifecycle</span>, or{" "}
+            <span className="font-medium">AOC Platform Tools & Automation</span>. Use section and row checkboxes to
             add whole topics to the plan. All blocks are optional.
           </p>
         </div>

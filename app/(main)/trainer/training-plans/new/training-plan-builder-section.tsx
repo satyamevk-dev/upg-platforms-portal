@@ -740,7 +740,7 @@ export function TrainingPlanBuilderSection({
           </h2>
           <p className="mt-2 text-xs leading-relaxed text-slate-600">
             <span className="font-medium text-slate-700">Tracks:</span> LINUX, Networking, Python, PostgreSQL (relational
-            DB basics), and Avaya programs.
+            DB basics), and AOC program tracks.
             Expand a tier to select whole modules or open a row for sub-topic checkboxes. Order modules in{" "}
             <span className="font-medium text-slate-700">Plan sequence</span> below.
           </p>

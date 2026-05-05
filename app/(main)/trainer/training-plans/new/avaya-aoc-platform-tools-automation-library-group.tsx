@@ -36,7 +36,7 @@ export function AvayaAocPlatformToolsAutomationLibraryGroup({
       >
         <div className="min-w-0">
           <h2 className="text-lg font-semibold tracking-wide text-slate-900">
-            Avaya AOC Platform Tools &amp; Automation
+            AOC Platform Tools &amp; Automation
           </h2>
           <p className="mt-0.5 text-xs text-slate-500">
             CLIs, APIs, IaC, CI/CD, and ops automation — expand to browse modules.
