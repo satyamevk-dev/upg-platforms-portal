@@ -356,27 +356,29 @@ export default function LoginPage() {
               </button>
             </form>
 
-            <details className="mt-6 rounded-xl border border-slate-200/80 bg-white/50 p-4 text-xs text-slate-600 backdrop-blur-sm">
-              <summary className="cursor-pointer select-none font-semibold text-slate-800">
-                Demo accounts for evaluation
-              </summary>
-              <div className="mt-3 space-y-2 border-t border-slate-200/80 pt-3 font-mono text-[11px] leading-relaxed text-slate-500">
-                <p>
-                  <span className="font-sans font-medium text-slate-700">Platform Owner (database):</span>{" "}
-                  satyamevk@infinite.com — password from{" "}
-                  <span className="font-sans">SUPER_ADMIN_PASSWORD</span> after{" "}
-                  <span className="font-sans">npm run db:seed</span>
-                </p>
-                <p>
-                  <span className="font-sans font-medium text-slate-700">Trainer:</span>{" "}
-                  trainer@example.com / trainer123
-                </p>
-                <p>
-                  <span className="font-sans font-medium text-slate-700">Client:</span>{" "}
-                  client@example.com / client123
-                </p>
-              </div>
-            </details>
+            {process.env.NODE_ENV !== "production" ? (
+              <details className="mt-6 rounded-xl border border-slate-200/80 bg-white/50 p-4 text-xs text-slate-600 backdrop-blur-sm">
+                <summary className="cursor-pointer select-none font-semibold text-slate-800">
+                  Demo accounts for evaluation
+                </summary>
+                <div className="mt-3 space-y-2 border-t border-slate-200/80 pt-3 font-mono text-[11px] leading-relaxed text-slate-500">
+                  <p>
+                    <span className="font-sans font-medium text-slate-700">Platform Owner (database):</span>{" "}
+                    satyamevk@infinite.com — password from{" "}
+                    <span className="font-sans">SUPER_ADMIN_PASSWORD</span> after{" "}
+                    <span className="font-sans">npm run db:seed</span>
+                  </p>
+                  <p>
+                    <span className="font-sans font-medium text-slate-700">Trainer:</span>{" "}
+                    trainer@example.com / trainer123
+                  </p>
+                  <p>
+                    <span className="font-sans font-medium text-slate-700">Client:</span>{" "}
+                    client@example.com / client123
+                  </p>
+                </div>
+              </details>
+            ) : null}
 
             <p className="mt-6 text-center text-xs text-slate-500">
               <Link
