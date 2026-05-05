@@ -42,6 +42,6 @@ echo "Done."
 echo "  Bundle: ${ARCHIVE}"
 echo "  Extract: tar -xzf ${ARCHIVE}"
 echo ""
-echo "Do not commit dist/*.tar.gz to Git (bloats clones). Publish with GitHub Releases, e.g.:"
+echo 'Do not commit dist/*.tar.gz to Git (bloats `git clone`). Publish with GitHub Releases, e.g.:'
 echo "  gh release create \"deploy-${STAMP}\" \"${ARCHIVE}\" --title \"Deployment ${STAMP}\" --notes \"See INSTALL.txt inside the archive.\""
 echo "  (Requires gh auth with repo/releases access.) See deploy/GITHUB_ARTIFACTS.md"
