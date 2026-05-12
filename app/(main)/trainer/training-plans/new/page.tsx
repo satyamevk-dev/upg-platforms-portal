@@ -43,7 +43,7 @@ export default async function WorkoutBuilderPage({
     <>
       <header className={PORTAL_INTRO_SHELL}>
         <div className={PORTAL_INTRO_HERO}>
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#00786f]">Trainer tools</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#b23d1e]">Trainer tools</p>
           <h1 className="mt-3 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
             Training plan builder
           </h1>

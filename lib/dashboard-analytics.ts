@@ -34,8 +34,8 @@ function buildLastNMonthBuckets(n: number): { key: string; label: string }[] {
 
 const roleChartOrder: { role: "super_admin" | "trainer" | "trainee"; name: string; fill: string }[] =
   [
-    { role: "super_admin", name: "Platform Owner", fill: "#5b4b96" },
-    { role: "trainer", name: "Trainer", fill: "#00A89E" },
+    { role: "super_admin", name: "Platform Owner", fill: "#4FCEC0" },
+    { role: "trainer", name: "Trainer", fill: "#F46036" },
     { role: "trainee", name: "Trainee", fill: "#94a3b8" },
   ];
 

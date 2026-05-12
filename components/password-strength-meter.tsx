@@ -11,8 +11,8 @@ const labelClass: Record<PasswordStrengthLevel, string> = {
   invalid: "text-rose-700",
   weak: "text-amber-800",
   fair: "text-amber-800",
-  good: "text-[#00786f]",
-  strong: "text-[#005c56]",
+  good: "text-[#b23d1e]",
+  strong: "text-[#7d2b13]",
 };
 
 const barClass: Record<PasswordStrengthLevel, string> = {
@@ -20,8 +20,8 @@ const barClass: Record<PasswordStrengthLevel, string> = {
   invalid: "bg-rose-500",
   weak: "bg-amber-500",
   fair: "bg-amber-500",
-  good: "bg-[#00A89E]",
-  strong: "bg-[#00786f]",
+  good: "bg-[#F46036]",
+  strong: "bg-[#b23d1e]",
 };
 
 export function PasswordStrengthMeter({ password, id, className }: Props) {

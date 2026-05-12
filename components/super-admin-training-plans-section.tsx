@@ -51,7 +51,7 @@ export async function SuperAdminTrainingPlansSection({ headingId }: Props) {
                 <th className="px-4 py-3 font-semibold text-slate-800">Updated</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#d8d0c4]">
+            <tbody className="divide-y divide-[#D0D3E7]">
               {plans.map((p) => {
                 const updated = new Date(p.updatedAt);
                 return (
@@ -63,11 +63,11 @@ export async function SuperAdminTrainingPlansSection({ headingId }: Props) {
                     </td>
                     <td className="px-4 py-3">
                       {p.isDraft ? (
-                        <span className="rounded-full bg-violet-100 px-2 py-0.5 text-xs font-semibold text-violet-900">
+                        <span className="rounded-full bg-[#ECFBFA] px-2 py-0.5 text-xs font-semibold text-[#177F78]">
                           Draft
                         </span>
                       ) : (
-                        <span className="rounded-full bg-[#e6f7f5] px-2 py-0.5 text-xs font-semibold text-[#00786f]">
+                        <span className="rounded-full bg-[#ECFBFA] px-2 py-0.5 text-xs font-semibold text-[#b23d1e]">
                           Published
                         </span>
                       )}

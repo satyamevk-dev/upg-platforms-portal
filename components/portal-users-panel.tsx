@@ -32,7 +32,7 @@ export type PortalUserSerializable = {
 type MasterClientRow = { id: string; name: string };
 
 const inputClass =
-  "w-full rounded-xl border border-[#d6cfc4] bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#00A89E] focus:outline-none focus:ring-2 focus:ring-[#00A89E]/25";
+  "w-full rounded-xl border border-[#D0D3E7] bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#F46036] focus:outline-none focus:ring-2 focus:ring-[#F46036]/25";
 
 const ROLES: PortalUserSerializable["role"][] = ["super_admin", "trainer", "trainee"];
 
@@ -41,7 +41,7 @@ function roleBadgeClass(role: PortalUserSerializable["role"]) {
     return "inline-flex rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-950";
   }
   if (role === "trainer") {
-    return "inline-flex rounded-full bg-[#e6f7f5] px-2.5 py-0.5 text-xs font-semibold text-[#00786f]";
+    return "inline-flex rounded-full bg-[#ECFBFA] px-2.5 py-0.5 text-xs font-semibold text-[#b23d1e]";
   }
   return "inline-flex rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-800";
 }
@@ -379,7 +379,7 @@ export function PortalUsersPanel({ initialUsers, platformOwnerEmail }: Props) {
         <summary className="cursor-pointer select-none list-none px-4 py-3 text-sm font-semibold text-slate-900 sm:px-5 sm:py-4 [&::-webkit-details-marker]:hidden">
           Add user
         </summary>
-        <div className="space-y-4 border-t border-[#d8d0c4]/40 px-4 pb-4 pt-3 sm:px-5 sm:pb-5">
+        <div className="space-y-4 border-t border-[#D0D3E7]/40 px-4 pb-4 pt-3 sm:px-5 sm:pb-5">
         <p className="text-xs text-slate-600">
           Creates a database account with a password this person will use at login.{" "}
           <span className="font-medium text-slate-700">{PORTAL_EMAIL_UNIQUENESS_HINT}</span>
@@ -415,7 +415,7 @@ export function PortalUsersPanel({ initialUsers, platformOwnerEmail }: Props) {
                 aria-pressed={showAddPassword}
                 aria-controls="add-user-password-input"
                 aria-label={showAddPassword ? "Hide password" : "Show password"}
-                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg px-2 py-1 text-xs font-semibold text-[#00786f] underline decoration-[#00786f]/40 underline-offset-2 hover:bg-[#00A89E]/10 hover:text-[#005c56] focus:outline-none focus:ring-2 focus:ring-[#00A89E]/40"
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg px-2 py-1 text-xs font-semibold text-[#b23d1e] underline decoration-[#b23d1e]/40 underline-offset-2 hover:bg-[#F46036]/10 hover:text-[#7d2b13] focus:outline-none focus:ring-2 focus:ring-[#F46036]/40"
               >
                 {showAddPassword ? "Hide" : "Show"}
               </button>
@@ -496,7 +496,7 @@ export function PortalUsersPanel({ initialUsers, platformOwnerEmail }: Props) {
           type="button"
           onClick={() => void submitAdd()}
           disabled={addSaving}
-          className="rounded-xl bg-[#00A89E] px-4 py-2 text-sm font-semibold text-white shadow-md shadow-[#00A89E]/15 hover:bg-[#008f86] disabled:cursor-not-allowed disabled:opacity-50"
+          className="rounded-xl bg-[#F46036] px-4 py-2 text-sm font-semibold text-white shadow-md shadow-[#F46036]/15 hover:bg-[#d44a20] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {addSaving ? "Creating…" : "Create user"}
         </button>
@@ -509,7 +509,7 @@ export function PortalUsersPanel({ initialUsers, platformOwnerEmail }: Props) {
         <div className="space-y-3">
           {platformOwnerUser ? (
             <div className={PORTAL_DISCLOSURE}>
-              <p className="border-b border-[#d8d0c4]/40 px-4 py-3 text-sm font-semibold text-[#00786f] sm:px-5 sm:py-3.5">
+              <p className="border-b border-[#D0D3E7]/40 px-4 py-3 text-sm font-semibold text-[#b23d1e] sm:px-5 sm:py-3.5">
                 Platform owner
               </p>
               <div className="overflow-x-auto bg-white/80">
@@ -526,7 +526,7 @@ export function PortalUsersPanel({ initialUsers, platformOwnerEmail }: Props) {
                         {platformOwnerUser.name?.trim() || "—"}
                       </td>
                       <td className="px-4 py-3">
-                        <code className="rounded bg-[#f5f3f0] px-1.5 py-0.5 text-xs text-slate-800">
+                        <code className="rounded bg-[#F7F7FF] px-1.5 py-0.5 text-xs text-slate-800">
                           {platformOwnerUser.email}
                         </code>
                       </td>
@@ -549,7 +549,7 @@ export function PortalUsersPanel({ initialUsers, platformOwnerEmail }: Props) {
                 setRoleSectionOpen((prev) => ({ ...prev, [group.role]: el.open }));
               }}
             >
-              <summary className="cursor-pointer select-none list-none px-4 py-3 text-sm font-semibold text-[#00786f] sm:px-5 sm:py-3.5">
+              <summary className="cursor-pointer select-none list-none px-4 py-3 text-sm font-semibold text-[#b23d1e] sm:px-5 sm:py-3.5">
                 <span className="text-xs font-bold uppercase tracking-[0.14em]">
                   {portalRoleLabel(group.role)}
                 </span>
@@ -557,7 +557,7 @@ export function PortalUsersPanel({ initialUsers, platformOwnerEmail }: Props) {
                   ({group.users.length})
                 </span>
               </summary>
-              <div className="overflow-x-auto border-t border-[#d8d0c4]/40 bg-white/80">
+              <div className="overflow-x-auto border-t border-[#D0D3E7]/40 bg-white/80">
                 <table className="w-full min-w-[52rem] border-collapse text-left text-sm">
                   <thead>
                     <tr className={PORTAL_TABLE_HEAD_ROW}>
@@ -576,7 +576,7 @@ export function PortalUsersPanel({ initialUsers, platformOwnerEmail }: Props) {
                       <th className="px-4 py-3 font-semibold text-slate-800">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#d8d0c4]">
+                  <tbody className="divide-y divide-[#D0D3E7]">
                     {group.users.map((u) => (
                       <Fragment key={u.id}>
                         <tr className="text-slate-700">
@@ -584,7 +584,7 @@ export function PortalUsersPanel({ initialUsers, platformOwnerEmail }: Props) {
                             {u.name?.trim() || "—"}
                           </td>
                           <td className="px-4 py-3">
-                            <code className="rounded bg-[#f5f3f0] px-1.5 py-0.5 text-xs text-slate-800">
+                            <code className="rounded bg-[#F7F7FF] px-1.5 py-0.5 text-xs text-slate-800">
                               {u.email}
                             </code>
                           </td>
@@ -644,7 +644,7 @@ export function PortalUsersPanel({ initialUsers, platformOwnerEmail }: Props) {
                                 <button
                                   type="button"
                                   onClick={() => startEdit(u)}
-                                  className="rounded-lg border border-[#d6cfc4] px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-[#faf9f7]"
+                                  className="rounded-lg border border-[#D0D3E7] px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-[#F7F7FF]"
                                 >
                                   Edit
                                 </button>
@@ -663,7 +663,7 @@ export function PortalUsersPanel({ initialUsers, platformOwnerEmail }: Props) {
                           </td>
                         </tr>
                         {editingId === u.id && !emailsMatch(u.email, platformOwnerEmail) ? (
-                          <tr className="bg-[#f5f3f0]/50">
+                          <tr className="bg-[#F7F7FF]/50">
                             <td colSpan={editRowColSpan} className="px-4 py-4">
                               <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">
                                 Edit user
@@ -753,7 +753,7 @@ export function PortalUsersPanel({ initialUsers, platformOwnerEmail }: Props) {
                                       aria-pressed={showEditPassword}
                                       aria-controls={`edit-user-password-input-${editingId}`}
                                       aria-label={showEditPassword ? "Hide new password" : "Show new password"}
-                                      className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg px-2 py-1 text-xs font-semibold text-[#00786f] underline decoration-[#00786f]/40 underline-offset-2 hover:bg-[#00A89E]/10 hover:text-[#005c56] focus:outline-none focus:ring-2 focus:ring-[#00A89E]/40"
+                                      className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg px-2 py-1 text-xs font-semibold text-[#b23d1e] underline decoration-[#b23d1e]/40 underline-offset-2 hover:bg-[#F46036]/10 hover:text-[#7d2b13] focus:outline-none focus:ring-2 focus:ring-[#F46036]/40"
                                     >
                                       {showEditPassword ? "Hide" : "Show"}
                                     </button>
@@ -779,7 +779,7 @@ export function PortalUsersPanel({ initialUsers, platformOwnerEmail }: Props) {
                                   type="button"
                                   onClick={() => void saveEdit()}
                                   disabled={editSaving}
-                                  className="rounded-xl bg-[#00A89E] px-4 py-2 text-sm font-semibold text-white hover:bg-[#008f86] disabled:cursor-not-allowed disabled:opacity-50"
+                                  className="rounded-xl bg-[#F46036] px-4 py-2 text-sm font-semibold text-white hover:bg-[#d44a20] disabled:cursor-not-allowed disabled:opacity-50"
                                 >
                                   {editSaving ? "Saving…" : "Save changes"}
                                 </button>
@@ -787,7 +787,7 @@ export function PortalUsersPanel({ initialUsers, platformOwnerEmail }: Props) {
                                   type="button"
                                   onClick={cancelEdit}
                                   disabled={editSaving}
-                                  className="rounded-xl border border-[#d6cfc4] px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-white disabled:opacity-50"
+                                  className="rounded-xl border border-[#D0D3E7] px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-white disabled:opacity-50"
                                 >
                                   Cancel
                                 </button>
@@ -861,7 +861,7 @@ export function PortalUsersPanel({ initialUsers, platformOwnerEmail }: Props) {
                       type="button"
                       onClick={closeDeleteDialog}
                       disabled={!!deleteSavingId}
-                      className="rounded-xl border border-[#d6cfc4] bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-[#f5f3f0] disabled:cursor-not-allowed disabled:opacity-50"
+                      className="rounded-xl border border-[#D0D3E7] bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-[#F7F7FF] disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       Cancel
                     </button>
@@ -869,7 +869,7 @@ export function PortalUsersPanel({ initialUsers, platformOwnerEmail }: Props) {
                       type="button"
                       onClick={advanceDeleteDialogStep}
                       disabled={!!deleteSavingId}
-                      className="rounded-xl bg-[#00A89E] px-4 py-2 text-sm font-semibold text-white hover:bg-[#008f86] disabled:cursor-not-allowed disabled:opacity-50"
+                      className="rounded-xl bg-[#F46036] px-4 py-2 text-sm font-semibold text-white hover:bg-[#d44a20] disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       Continue to confirm
                     </button>
@@ -887,7 +887,7 @@ export function PortalUsersPanel({ initialUsers, platformOwnerEmail }: Props) {
                       type="button"
                       onClick={backDeleteDialogStep}
                       disabled={!!deleteSavingId}
-                      className="rounded-xl border border-[#d6cfc4] bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-[#f5f3f0] disabled:cursor-not-allowed disabled:opacity-50"
+                      className="rounded-xl border border-[#D0D3E7] bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-[#F7F7FF] disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       Back
                     </button>

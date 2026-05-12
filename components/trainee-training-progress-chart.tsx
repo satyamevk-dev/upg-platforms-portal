@@ -12,7 +12,7 @@ import {
   YAxis,
 } from "recharts";
 
-const teal = "#00A89E";
+const infiniteOrange = "#F46036";
 
 type TooltipPayload = {
   payload?: TraineePlanProgressChartRow;
@@ -38,7 +38,7 @@ function TraineeProgressTooltipContent({
   const n = typeof raw === "number" ? raw : Number(raw);
   return (
     <div
-      className="rounded-xl border border-[#d8d0c4] bg-white px-3 py-2 text-sm shadow-sm ring-1 ring-black/[0.03]"
+      className="rounded-xl border border-[#D0D3E7] bg-white px-3 py-2 text-sm shadow-sm ring-1 ring-black/[0.03]"
       style={{ boxShadow: "0 4px 12px rgba(0,0,0,0.06)" }}
     >
       <p className="font-medium text-slate-900">{row.title}</p>
@@ -69,7 +69,7 @@ export function TraineeTrainingProgressChart({ rows, headingId = "dashboard-trai
       </h2>
       <p className="mt-1 text-sm text-slate-600">
         Progress across plans assigned to you (any module order counts toward completion). Open a plan from the{" "}
-        <Link href="/client" className="font-medium text-[#00786f] underline underline-offset-2">
+        <Link href="/client" className="font-medium text-[#b23d1e] underline underline-offset-2">
           Trainee
         </Link>{" "}
         area to continue.
@@ -92,7 +92,7 @@ export function TraineeTrainingProgressChart({ rows, headingId = "dashboard-trai
               margin={{ top: 8, right: 24, left: 4, bottom: 8 }}
               barCategoryGap="18%"
             >
-              <CartesianGrid strokeDasharray="3 3" stroke="#d8d0c4" horizontal={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#D0D3E7" horizontal={false} />
               <XAxis
                 type="number"
                 domain={[0, 100]}
@@ -107,7 +107,7 @@ export function TraineeTrainingProgressChart({ rows, headingId = "dashboard-trai
                 interval={0}
               />
               <Tooltip content={<TraineeProgressTooltipContent />} />
-              <Bar dataKey="percentComplete" fill={teal} radius={[0, 8, 8, 0]} maxBarSize={36} />
+              <Bar dataKey="percentComplete" fill={infiniteOrange} radius={[0, 8, 8, 0]} maxBarSize={36} />
             </BarChart>
           </ResponsiveContainer>
         </div>

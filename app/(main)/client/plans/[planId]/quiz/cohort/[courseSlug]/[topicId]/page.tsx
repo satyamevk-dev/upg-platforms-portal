@@ -39,7 +39,7 @@ export default async function TraineeSyllabusCohortTopicQuizPage({ params }: Pro
         <nav className="-mt-2 mb-6" aria-label="Breadcrumb">
           <Link
             href={back}
-            className="inline-flex items-center gap-2 rounded-xl border border-[#d8d0c4]/90 bg-white/90 px-3 py-2 text-sm font-semibold text-[#00786f] shadow-sm ring-1 ring-black/[0.03] transition hover:border-[#00A89E]/30 hover:bg-[#f0faf8]"
+            className="inline-flex items-center gap-2 rounded-xl border border-[#D0D3E7]/90 bg-white/90 px-3 py-2 text-sm font-semibold text-[#b23d1e] shadow-sm ring-1 ring-black/[0.03] transition hover:border-[#F46036]/30 hover:bg-[#ECFBFA]"
           >
             <span aria-hidden className="text-base leading-none">
               ←
@@ -50,7 +50,7 @@ export default async function TraineeSyllabusCohortTopicQuizPage({ params }: Pro
         <div className={PORTAL_CARD}>
           <h1 className="text-xl font-bold text-slate-900">Topic quiz</h1>
           <p className="mt-3 text-sm text-slate-600">Start your plan from the overview before taking a quiz.</p>
-          <Link href={back} className="mt-6 inline-flex rounded-xl bg-[#00A89E] px-4 py-2.5 text-sm font-semibold text-white shadow-md hover:bg-[#008f86]">
+          <Link href={back} className="mt-6 inline-flex rounded-xl bg-[#F46036] px-4 py-2.5 text-sm font-semibold text-white shadow-md hover:bg-[#d44a20]">
             Go to plan overview
           </Link>
         </div>
@@ -64,7 +64,7 @@ export default async function TraineeSyllabusCohortTopicQuizPage({ params }: Pro
         <nav className="-mt-2 mb-6" aria-label="Breadcrumb">
           <Link
             href={back}
-            className="inline-flex items-center gap-2 rounded-xl border border-[#d8d0c4]/90 bg-white/90 px-3 py-2 text-sm font-semibold text-[#00786f] shadow-sm ring-1 ring-black/[0.03] transition hover:border-[#00A89E]/30 hover:bg-[#f0faf8]"
+            className="inline-flex items-center gap-2 rounded-xl border border-[#D0D3E7]/90 bg-white/90 px-3 py-2 text-sm font-semibold text-[#b23d1e] shadow-sm ring-1 ring-black/[0.03] transition hover:border-[#F46036]/30 hover:bg-[#ECFBFA]"
           >
             <span aria-hidden className="text-base leading-none">
               ←
@@ -78,7 +78,7 @@ export default async function TraineeSyllabusCohortTopicQuizPage({ params }: Pro
             Mark study complete on <strong className="text-slate-800">every</strong> plan step that shares this syllabus
             topic. The quiz unlocks after all of them.
           </p>
-          <Link href={back} className="mt-6 inline-flex rounded-xl bg-[#00A89E] px-4 py-2.5 text-sm font-semibold text-white shadow-md hover:bg-[#008f86]">
+          <Link href={back} className="mt-6 inline-flex rounded-xl bg-[#F46036] px-4 py-2.5 text-sm font-semibold text-white shadow-md hover:bg-[#d44a20]">
             Back to plan
           </Link>
         </div>
@@ -92,7 +92,7 @@ export default async function TraineeSyllabusCohortTopicQuizPage({ params }: Pro
         <nav className="-mt-2 mb-6" aria-label="Breadcrumb">
           <Link
             href={back}
-            className="inline-flex items-center gap-2 rounded-xl border border-[#d8d0c4]/90 bg-white/90 px-3 py-2 text-sm font-semibold text-[#00786f] shadow-sm ring-1 ring-black/[0.03] transition hover:border-[#00A89E]/30 hover:bg-[#f0faf8]"
+            className="inline-flex items-center gap-2 rounded-xl border border-[#D0D3E7]/90 bg-white/90 px-3 py-2 text-sm font-semibold text-[#b23d1e] shadow-sm ring-1 ring-black/[0.03] transition hover:border-[#F46036]/30 hover:bg-[#ECFBFA]"
           >
             <span aria-hidden className="text-base leading-none">
               ←
@@ -103,7 +103,7 @@ export default async function TraineeSyllabusCohortTopicQuizPage({ params }: Pro
         <div className={PORTAL_CARD}>
           <h1 className="text-xl font-bold text-slate-900">{data.headline}</h1>
           <p className="mt-3 text-sm text-slate-600">You have already passed this topic quiz.</p>
-          <Link href={back} className="mt-6 inline-flex rounded-xl border border-[#d6cfc4] bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 shadow-sm hover:bg-[#faf9f7]">
+          <Link href={back} className="mt-6 inline-flex rounded-xl border border-[#D0D3E7] bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 shadow-sm hover:bg-[#F7F7FF]">
             Back to plan
           </Link>
         </div>
@@ -116,7 +116,7 @@ export default async function TraineeSyllabusCohortTopicQuizPage({ params }: Pro
       <nav className="-mt-2 mb-6" aria-label="Breadcrumb">
         <Link
           href={back}
-          className="inline-flex items-center gap-2 rounded-xl border border-[#d8d0c4]/90 bg-white/90 px-3 py-2 text-sm font-semibold text-[#00786f] shadow-sm ring-1 ring-black/[0.03] transition hover:border-[#00A89E]/30 hover:bg-[#f0faf8]"
+          className="inline-flex items-center gap-2 rounded-xl border border-[#D0D3E7]/90 bg-white/90 px-3 py-2 text-sm font-semibold text-[#b23d1e] shadow-sm ring-1 ring-black/[0.03] transition hover:border-[#F46036]/30 hover:bg-[#ECFBFA]"
         >
           <span aria-hidden className="text-base leading-none">
             ←

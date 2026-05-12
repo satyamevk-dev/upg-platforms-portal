@@ -34,7 +34,7 @@ export function DatabaseUsersDirectory({ users }: Props) {
             </th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-[#d8d0c4]">
+        <tbody className="divide-y divide-[#D0D3E7]">
           {users.length === 0 ? (
             <tr>
               <td colSpan={6} className="px-4 py-6 text-sm text-slate-600">
@@ -48,7 +48,7 @@ export function DatabaseUsersDirectory({ users }: Props) {
                   {u.name?.trim() || "—"}
                 </td>
                 <td className="px-4 py-3">
-                  <code className="rounded bg-[#f5f3f0] px-1.5 py-0.5 text-xs text-slate-800">
+                  <code className="rounded bg-[#F7F7FF] px-1.5 py-0.5 text-xs text-slate-800">
                     {u.email}
                   </code>
                 </td>

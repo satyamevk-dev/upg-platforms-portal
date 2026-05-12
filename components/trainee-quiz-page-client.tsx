@@ -16,6 +16,19 @@ type Props = {
 };
 
 export function TraineeQuizPageClient({ planId, headline, quizQuestions, submitPath, moduleOrder }: Props) {
+  return (
+    <TraineeQuizPageForm
+      key={`${planId}:${moduleOrder}:${quizQuestions.length}`}
+      planId={planId}
+      headline={headline}
+      quizQuestions={quizQuestions}
+      submitPath={submitPath}
+      moduleOrder={moduleOrder}
+    />
+  );
+}
+
+function TraineeQuizPageForm({ planId, headline, quizQuestions, submitPath, moduleOrder }: Props) {
   const router = useRouter();
   const [answers, setAnswers] = useState<number[]>(() =>
     Array.from({ length: quizQuestions.length }, () => -1),
@@ -26,10 +39,6 @@ export function TraineeQuizPageClient({ planId, headline, quizQuestions, submitP
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [planId, moduleOrder, quizQuestions.length]);
-
-  useEffect(() => {
-    setAnswers(Array.from({ length: quizQuestions.length }, () => -1));
-  }, [quizQuestions.length, planId, moduleOrder]);
 
   async function submitQuiz() {
     setError(null);
@@ -65,7 +74,7 @@ export function TraineeQuizPageClient({ planId, headline, quizQuestions, submitP
   return (
     <div className="space-y-8">
       <header className={PORTAL_CARD}>
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#00A89E]">Knowledge check</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#F46036]">Knowledge check</p>
         <h1 className="mt-2 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">{headline}</h1>
         <p className="mt-3 text-sm leading-relaxed text-slate-600">
           {quizQuestions.length} question{quizQuestions.length === 1 ? "" : "s"}. Choose one answer each; you get
@@ -79,7 +88,7 @@ export function TraineeQuizPageClient({ planId, headline, quizQuestions, submitP
             {quizQuestions.map((q, qi) => (
               <li key={qi} className={`${PORTAL_INSET} p-5 sm:p-6`}>
                 <div className="flex gap-3">
-                  <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#00A89E]/15 text-sm font-bold text-[#00786f]">
+                  <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#F46036]/15 text-sm font-bold text-[#b23d1e]">
                     {qi + 1}
                   </span>
                   <p className="min-w-0 flex-1 font-semibold leading-snug text-slate-900">{q.question}</p>
@@ -96,14 +105,14 @@ export function TraineeQuizPageClient({ planId, headline, quizQuestions, submitP
                       "flex gap-3 rounded-xl border p-3 text-sm leading-relaxed transition-colors sm:p-4 ";
                     if (!answered) {
                       rowClass += selected
-                        ? "cursor-pointer border-[#00A89E] bg-[#f0faf8] shadow-sm"
-                        : "cursor-pointer border-[#d8d0c4] bg-white hover:border-[#b8b0a4]";
+                        ? "cursor-pointer border-[#F46036] bg-[#ECFBFA] shadow-sm"
+                        : "cursor-pointer border-[#D0D3E7] bg-white hover:border-[#AAB3CE]";
                     } else if (isCorrectOption) {
                       rowClass += "border-emerald-400 bg-emerald-50/90 shadow-sm";
                     } else if (selected) {
                       rowClass += "border-rose-400 bg-rose-50/90";
                     } else {
-                      rowClass += "border-[#d8d0c4]/80 bg-white/60 opacity-80";
+                      rowClass += "border-[#D0D3E7]/80 bg-white/60 opacity-80";
                     }
 
                     return (
@@ -121,7 +130,7 @@ export function TraineeQuizPageClient({ planId, headline, quizQuestions, submitP
                                 return next;
                               });
                             }}
-                            className="mt-0.5 size-4 shrink-0 accent-[#00A89E] disabled:cursor-not-allowed"
+                            className="mt-0.5 size-4 shrink-0 accent-[#F46036] disabled:cursor-not-allowed"
                             disabled={pending}
                           />
                           <span className="text-slate-800">
@@ -161,18 +170,18 @@ export function TraineeQuizPageClient({ planId, headline, quizQuestions, submitP
             </p>
           ) : null}
         </div>
-        <div className="flex flex-col gap-3 border-t border-[#d8d0c4] bg-[#faf9f7]/60 px-6 py-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:px-8">
+        <div className="flex flex-col gap-3 border-t border-[#D0D3E7] bg-[#F7F7FF]/60 px-6 py-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:px-8">
           <button
             type="button"
             disabled={pending}
             onClick={() => void submitQuiz()}
-            className="inline-flex justify-center rounded-xl bg-[#00A89E] px-5 py-3 text-sm font-semibold text-white shadow-md transition-colors hover:bg-[#008f86] disabled:opacity-60 sm:min-w-[140px]"
+            className="inline-flex justify-center rounded-xl bg-[#F46036] px-5 py-3 text-sm font-semibold text-white shadow-md transition-colors hover:bg-[#d44a20] disabled:opacity-60 sm:min-w-[140px]"
           >
             {pending ? "Submitting…" : "Submit quiz"}
           </button>
           <Link
             href={`/client/plans/${encodeURIComponent(planId)}`}
-            className="inline-flex justify-center rounded-xl border border-[#d6cfc4] bg-white px-5 py-3 text-sm font-semibold text-slate-800 shadow-sm hover:bg-[#faf9f7]"
+            className="inline-flex justify-center rounded-xl border border-[#D0D3E7] bg-white px-5 py-3 text-sm font-semibold text-slate-800 shadow-sm hover:bg-[#F7F7FF]"
           >
             Back to plan
           </Link>

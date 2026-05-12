@@ -18,7 +18,7 @@ export type ClientMasterRow = {
 };
 
 const inputClass =
-  "w-full rounded-xl border border-[#d6cfc4] bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#00A89E] focus:outline-none focus:ring-2 focus:ring-[#00A89E]/25";
+  "w-full rounded-xl border border-[#D0D3E7] bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#F46036] focus:outline-none focus:ring-2 focus:ring-[#F46036]/25";
 
 type Props = {
   initialMasters: ClientMasterRow[];
@@ -166,7 +166,7 @@ export function ClientMastersPanel({ initialMasters }: Props) {
         <summary className="cursor-pointer select-none list-none px-4 py-3 text-sm font-semibold text-slate-900 sm:px-5 sm:py-4 [&::-webkit-details-marker]:hidden">
           Add client
         </summary>
-        <div className="space-y-3 border-t border-[#d8d0c4]/40 px-4 pb-4 pt-3 sm:px-5 sm:pb-5">
+        <div className="space-y-3 border-t border-[#D0D3E7]/40 px-4 pb-4 pt-3 sm:px-5 sm:pb-5">
           <label className="flex max-w-md flex-col gap-1 text-xs font-medium text-slate-700">
             Client name
             <input
@@ -187,7 +187,7 @@ export function ClientMastersPanel({ initialMasters }: Props) {
             type="button"
             onClick={() => void submitAdd()}
             disabled={addSaving}
-            className="rounded-xl bg-[#00A89E] px-4 py-2 text-sm font-semibold text-white shadow-md shadow-[#00A89E]/15 hover:bg-[#008f86] disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-xl bg-[#F46036] px-4 py-2 text-sm font-semibold text-white shadow-md shadow-[#F46036]/15 hover:bg-[#d44a20] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {addSaving ? "Saving…" : "Add client"}
           </button>
@@ -205,7 +205,7 @@ export function ClientMastersPanel({ initialMasters }: Props) {
                 <th className="px-4 py-3 font-semibold text-slate-800">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#d8d0c4]">
+            <tbody className="divide-y divide-[#D0D3E7]">
               {initialMasters.map((m) => (
                 <tr key={m.id} className="text-slate-700">
                   <td className="px-4 py-3 font-medium text-slate-900">
@@ -237,7 +237,7 @@ export function ClientMastersPanel({ initialMasters }: Props) {
                           type="button"
                           onClick={() => void submitEdit()}
                           disabled={editSaving}
-                          className="rounded-lg border border-[#00A89E]/40 bg-[#e6f7f5] px-2.5 py-1 text-xs font-semibold text-[#00786f] hover:bg-[#d4f0ed] disabled:opacity-50"
+                          className="rounded-lg border border-[#F46036]/40 bg-[#ECFBFA] px-2.5 py-1 text-xs font-semibold text-[#b23d1e] hover:bg-[#d4f0ed] disabled:opacity-50"
                         >
                           {editSaving ? "Saving…" : "Save"}
                         </button>
@@ -245,7 +245,7 @@ export function ClientMastersPanel({ initialMasters }: Props) {
                           type="button"
                           onClick={cancelEdit}
                           disabled={editSaving}
-                          className="rounded-lg border border-[#d6cfc4] px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-[#faf9f7] disabled:opacity-50"
+                          className="rounded-lg border border-[#D0D3E7] px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-[#F7F7FF] disabled:opacity-50"
                         >
                           Cancel
                         </button>
@@ -261,7 +261,7 @@ export function ClientMastersPanel({ initialMasters }: Props) {
                               ? "Map every trainer and trainee to another client in Manage portal users before renaming."
                               : undefined
                           }
-                          className="rounded-lg border border-[#d6cfc4] px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-[#faf9f7] disabled:cursor-not-allowed disabled:opacity-50"
+                          className="rounded-lg border border-[#D0D3E7] px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-[#F7F7FF] disabled:cursor-not-allowed disabled:opacity-50"
                         >
                           Edit
                         </button>
@@ -331,7 +331,7 @@ export function ClientMastersPanel({ initialMasters }: Props) {
                         type="button"
                         onClick={closeDeleteDialog}
                         disabled={deleteSaving}
-                        className="rounded-xl border border-[#d6cfc4] bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-[#f5f3f0] disabled:cursor-not-allowed disabled:opacity-50"
+                        className="rounded-xl border border-[#D0D3E7] bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-[#F7F7FF] disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         Cancel
                       </button>
@@ -339,7 +339,7 @@ export function ClientMastersPanel({ initialMasters }: Props) {
                         type="button"
                         onClick={advanceDeleteStep}
                         disabled={deleteSaving}
-                        className="rounded-xl bg-[#00A89E] px-4 py-2 text-sm font-semibold text-white hover:bg-[#008f86] disabled:cursor-not-allowed disabled:opacity-50"
+                        className="rounded-xl bg-[#F46036] px-4 py-2 text-sm font-semibold text-white hover:bg-[#d44a20] disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         Continue to confirm
                       </button>
@@ -362,7 +362,7 @@ export function ClientMastersPanel({ initialMasters }: Props) {
                         type="button"
                         onClick={backDeleteStep}
                         disabled={deleteSaving}
-                        className="rounded-xl border border-[#d6cfc4] bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-[#f5f3f0] disabled:cursor-not-allowed disabled:opacity-50"
+                        className="rounded-xl border border-[#D0D3E7] bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-[#F7F7FF] disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         Back
                       </button>

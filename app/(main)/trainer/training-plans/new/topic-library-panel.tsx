@@ -47,20 +47,20 @@ function TopicRow({
     <li
       className={`overflow-hidden rounded-xl border text-sm shadow-sm transition-colors ${
         majorChecked || hasAnySubtopic
-          ? "border-[#00A89E] bg-[#e8f7f5] ring-2 ring-[#00A89E]/35 ring-offset-1 ring-offset-[#f5f3f0]"
-          : "border-[#d8d0c4] bg-[#faf9f7]"
+          ? "border-[#F46036] bg-[#e8f7f5] ring-2 ring-[#F46036]/35 ring-offset-1 ring-offset-[#F7F7FF]"
+          : "border-[#D0D3E7] bg-[#F7F7FF]"
       }`}
     >
       <div className="flex items-stretch">
         <label
-          className="flex shrink-0 cursor-pointer items-center border-r border-[#d8d0c4] px-2.5 py-3 sm:px-3.5"
+          className="flex shrink-0 cursor-pointer items-center border-r border-[#D0D3E7] px-2.5 py-3 sm:px-3.5"
           onClick={(e) => e.stopPropagation()}
           onKeyDown={(e) => e.stopPropagation()}
         >
           <input
             ref={majorInputRef}
             type="checkbox"
-            className="h-4 w-4 rounded border-[#d6cfc4] text-[#00A89E] focus:ring-[#00A89E]"
+            className="h-4 w-4 rounded border-[#D0D3E7] text-[#F46036] focus:ring-[#F46036]"
             checked={majorChecked}
             onChange={() => onToggleTopic(topic.id)}
             aria-label={`Include ${topic.major} in plan`}
@@ -69,14 +69,14 @@ function TopicRow({
         <details className="group min-w-0 flex-1">
           <summary className="flex cursor-pointer list-none items-center gap-2.5 px-3 py-3 pr-2 marker:content-none [&::-webkit-details-marker]:hidden">
             <span
-              className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md border border-[#d8d0c4] bg-white text-[10px] font-bold leading-none text-[#00A89E] transition-transform duration-200 group-open:rotate-90"
+              className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md border border-[#D0D3E7] bg-white text-[10px] font-bold leading-none text-[#F46036] transition-transform duration-200 group-open:rotate-90"
               aria-hidden
             >
               ▸
             </span>
             <span className="font-semibold leading-snug text-slate-900">{topic.major}</span>
           </summary>
-          <ul className="space-y-1.5 border-t border-[#d8d0c4] bg-white/60 px-3 py-2.5 pl-4 text-xs leading-relaxed text-slate-600">
+          <ul className="space-y-1.5 border-t border-[#D0D3E7] bg-white/60 px-3 py-2.5 pl-4 text-xs leading-relaxed text-slate-600">
             {topic.minors.map((minor, minorIndex) => {
               const subId = subtopicPlanId(topic.id, minorIndex);
               const subChecked = selectedIds.has(subId);
@@ -84,14 +84,14 @@ function TopicRow({
                 <li
                   key={`${topic.id}-${minorIndex}`}
                   className={`relative flex items-start gap-2 border-l-2 pl-3 ${
-                    subChecked ? "border-[#00A89E] bg-[#f0faf8]/90" : "border-[#00A89E]/35"
+                    subChecked ? "border-[#F46036] bg-[#ECFBFA]/90" : "border-[#F46036]/35"
                   }`}
                 >
                   {allowSubtopicCheckboxes ? (
                     <label className="flex cursor-pointer items-start gap-2 pt-0.5">
                       <input
                         type="checkbox"
-                        className="mt-0.5 h-3.5 w-3.5 shrink-0 rounded border-[#d6cfc4] text-[#00A89E] focus:ring-[#00A89E]"
+                        className="mt-0.5 h-3.5 w-3.5 shrink-0 rounded border-[#D0D3E7] text-[#F46036] focus:ring-[#F46036]"
                         checked={subChecked}
                         onChange={() => onToggleTopic(subId)}
                         aria-label={`Include sub-topic: ${minor}`}
@@ -160,7 +160,7 @@ export function TopicLibraryPanel({
 
   const isListVisible = libraryOpen;
 
-  const sectionActiveClass = someSelected ? "border-[#00A89E] ring-2 ring-[#00A89E]/25" : "";
+  const sectionActiveClass = someSelected ? "border-[#F46036] ring-2 ring-[#F46036]/25" : "";
 
   return (
     <div
@@ -177,7 +177,7 @@ export function TopicLibraryPanel({
           <input
             ref={sectionCheckboxRef}
             type="checkbox"
-            className="h-4 w-4 rounded border-[#d6cfc4] text-[#00A89E] focus:ring-[#00A89E]"
+            className="h-4 w-4 rounded border-[#D0D3E7] text-[#F46036] focus:ring-[#F46036]"
             checked={allSelected && topics.length > 0}
             disabled={topics.length === 0}
             onChange={(e) => onSectionBulkSelect(e.target.checked)}
@@ -186,7 +186,7 @@ export function TopicLibraryPanel({
         </label>
         <button
           type="button"
-          className="flex min-w-0 flex-1 items-start justify-between gap-3 rounded-xl text-left outline-none ring-[#00A89E] focus-visible:ring-2 focus-visible:ring-offset-2"
+          className="flex min-w-0 flex-1 items-start justify-between gap-3 rounded-xl text-left outline-none ring-[#F46036] focus-visible:ring-2 focus-visible:ring-offset-2"
           onClick={() => setLibraryOpen((open) => !open)}
           aria-expanded={isListVisible}
           aria-controls={listId}
@@ -208,7 +208,7 @@ export function TopicLibraryPanel({
             </p>
           </div>
           <span
-            className={`mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#d8d0c4] bg-[#faf9f7] text-sm font-bold text-[#00A89E] transition-transform duration-200 ${
+            className={`mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#D0D3E7] bg-[#F7F7FF] text-sm font-bold text-[#F46036] transition-transform duration-200 ${
               isListVisible ? "rotate-90" : ""
             }`}
             aria-hidden

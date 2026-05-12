@@ -22,7 +22,7 @@ export function SavedPlanCollapsible({ summary, children }: Props) {
       <summary className="cursor-pointer select-none list-none px-4 py-3 sm:px-5 sm:py-4">
         {summary}
       </summary>
-      <div className="border-t border-[#d8d0c4]/50 bg-white/70 px-4 pb-4 pt-3 sm:px-5 sm:pb-5">{children}</div>
+      <div className="border-t border-[#D0D3E7]/50 bg-white/70 px-4 pb-4 pt-3 sm:px-5 sm:pb-5">{children}</div>
     </details>
   );
 }

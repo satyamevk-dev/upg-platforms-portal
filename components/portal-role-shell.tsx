@@ -17,7 +17,7 @@ export function PortalRoleShell({
 }: Props) {
   return (
     <div
-      className={`relative flex min-h-0 flex-1 flex-col bg-gradient-to-b from-[#f5f2ec] via-[#faf8f4] to-[#f0ebe3] px-4 py-8 sm:px-8 sm:py-12 ${className}`}
+      className={`relative flex min-h-0 flex-1 flex-col bg-gradient-to-b from-[#f5f2ec] via-[#F7F7FF] to-[#f0ebe3] px-4 py-8 sm:px-8 sm:py-12 ${className}`}
     >
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.35]"

@@ -100,9 +100,9 @@ export default async function Home() {
           >
             <h1
               id="home-welcome-heading"
-              className="text-center text-2xl font-bold tracking-tight text-[#00A89E] sm:text-3xl"
+              className="text-center text-2xl font-bold tracking-tight text-[#F46036] sm:text-3xl"
             >
-              Welcome to UPG Learning Portal
+              Welcome to Knowledge Platform - Unified Platform Group
             </h1>
             <h2 id="manage-users-heading" className="mt-6 text-lg font-semibold text-slate-900">
               Manage portal users
@@ -161,7 +161,7 @@ export default async function Home() {
           {!isSignedIn ? (
             <p className="mt-4 text-sm text-slate-600">
               Saved plans are available after you sign in.{" "}
-              <Link href="/login" className="font-medium text-[#00786f] underline underline-offset-2">
+              <Link href="/login" className="font-medium text-[#b23d1e] underline underline-offset-2">
                 Go to login
               </Link>
               .
@@ -195,11 +195,11 @@ export default async function Home() {
                           </div>
                           <div className="flex shrink-0 flex-wrap items-center gap-2">
                             {plan.isDraft ? (
-                              <span className="rounded-full bg-violet-100 px-2.5 py-0.5 text-xs font-semibold text-violet-900">
+                              <span className="rounded-full bg-[#ECFBFA] px-2.5 py-0.5 text-xs font-semibold text-[#177F78]">
                                 Draft
                               </span>
                             ) : (
-                              <span className="rounded-full bg-[#e6f7f5] px-2.5 py-0.5 text-xs font-semibold text-[#00786f]">
+                              <span className="rounded-full bg-[#ECFBFA] px-2.5 py-0.5 text-xs font-semibold text-[#b23d1e]">
                                 Published
                               </span>
                             )}
@@ -225,10 +225,10 @@ export default async function Home() {
                           {plan.modules.slice(0, 8).map((m) => (
                             <li
                               key={`${plan.id}-${m.order}`}
-                              className="rounded-lg border border-[#d8d0c4] bg-white px-3 py-2"
+                              className="rounded-lg border border-[#D0D3E7] bg-white px-3 py-2"
                             >
                               {m.sectionHeader ? (
-                                <p className="mb-0.5 text-[11px] font-semibold leading-snug text-[#00786f]">
+                                <p className="mb-0.5 text-[11px] font-semibold leading-snug text-[#b23d1e]">
                                   {m.sectionHeader}
                                 </p>
                               ) : null}

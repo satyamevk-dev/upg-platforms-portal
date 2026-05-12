@@ -34,7 +34,7 @@ export default async function TraineeModulePage({ params }: Props) {
       <nav className="-mt-2 mb-6" aria-label="Breadcrumb">
         <Link
           href={`/client/plans/${encodeURIComponent(planId)}`}
-          className="inline-flex items-center gap-2 rounded-xl border border-[#d8d0c4]/90 bg-white/90 px-3 py-2 text-sm font-semibold text-[#00786f] shadow-sm ring-1 ring-black/[0.03] transition hover:border-[#00A89E]/30 hover:bg-[#f0faf8]"
+          className="inline-flex items-center gap-2 rounded-xl border border-[#D0D3E7]/90 bg-white/90 px-3 py-2 text-sm font-semibold text-[#b23d1e] shadow-sm ring-1 ring-black/[0.03] transition hover:border-[#F46036]/30 hover:bg-[#ECFBFA]"
         >
           <span aria-hidden className="text-base leading-none">
             ←

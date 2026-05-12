@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ModuleLearningMarkdown } from "@/components/module-learning-markdown";
 import type { TraineeModuleAccess } from "@/lib/trainee-module-page-data";
 import { parseJsonResponse } from "@/lib/parse-json-response";
@@ -35,9 +35,6 @@ export function TraineeModuleStudy({
 }: Props) {
   const router = useRouter();
   const [marked, setMarked] = useState(studyMarked);
-  useEffect(() => {
-    setMarked(studyMarked);
-  }, [studyMarked]);
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
   const [confirmStudyOpen, setConfirmStudyOpen] = useState(false);
@@ -81,7 +78,7 @@ export function TraineeModuleStudy({
         <p className="mt-3 text-sm text-slate-600">
           Start this plan from the overview before opening module study.
         </p>
-        <Link href={planOverviewHref(planId)} className="mt-6 inline-flex rounded-xl bg-[#00A89E] px-4 py-2.5 text-sm font-semibold text-white shadow-md hover:bg-[#008f86]">
+        <Link href={planOverviewHref(planId)} className="mt-6 inline-flex rounded-xl bg-[#F46036] px-4 py-2.5 text-sm font-semibold text-white shadow-md hover:bg-[#d44a20]">
           Go to plan overview
         </Link>
       </div>
@@ -94,27 +91,27 @@ export function TraineeModuleStudy({
         <header className={PORTAL_CARD}>
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#00A89E]">Module review</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#F46036]">Module review</p>
               <h1 className="mt-2 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">{moduleTitle}</h1>
             </div>
-            <span className="inline-flex shrink-0 items-center rounded-full border border-[#d6ebe8] bg-[#f0faf8] px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[#00786f]">
+            <span className="inline-flex shrink-0 items-center rounded-full border border-[#BFEFED] bg-[#ECFBFA] px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[#b23d1e]">
               Module {moduleOrder}
             </span>
           </div>
         </header>
-        <div className="rounded-xl border border-[#c5ebe6] bg-[#f0faf8] px-4 py-3 text-sm leading-relaxed text-slate-800">
+        <div className="rounded-xl border border-[#BFEFED] bg-[#ECFBFA] px-4 py-3 text-sm leading-relaxed text-slate-800">
           You have passed the quiz for this module{syllabusCohortTopicId ? " (or topic group)" : ""}. Review the material below
           anytime.
         </div>
         <section className={`overflow-hidden ${PORTAL_SURFACE}`}>
-          <div className="border-b border-[#d8d0c4] bg-[#faf9f7]/80 px-6 py-4 sm:px-8">
+          <div className="border-b border-[#D0D3E7] bg-[#F7F7FF]/80 px-6 py-4 sm:px-8">
             <h2 className="text-sm font-semibold text-slate-800">Study material</h2>
           </div>
           <div className="px-6 py-6 sm:px-8 sm:py-8">
             <ModuleLearningMarkdown markdown={learningMarkdown} />
           </div>
         </section>
-        <Link href={planOverviewHref(planId)} className="inline-flex rounded-xl border border-[#d6cfc4] bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 shadow-sm hover:bg-[#faf9f7]">
+        <Link href={planOverviewHref(planId)} className="inline-flex rounded-xl border border-[#D0D3E7] bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 shadow-sm hover:bg-[#F7F7FF]">
           Back to plan
         </Link>
       </div>
@@ -126,17 +123,17 @@ export function TraineeModuleStudy({
       <header className={PORTAL_CARD}>
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="min-w-0 flex-1">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#00A89E]">Module study</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#F46036]">Module study</p>
             <h1 className="mt-2 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">{moduleTitle}</h1>
           </div>
-          <span className="inline-flex shrink-0 items-center rounded-full border border-[#d6ebe8] bg-[#f0faf8] px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[#00786f]">
+          <span className="inline-flex shrink-0 items-center rounded-full border border-[#BFEFED] bg-[#ECFBFA] px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[#b23d1e]">
             Module {moduleOrder}
           </span>
         </div>
       </header>
 
       {!quizDone && syllabusCohortTopicId ? (
-        <div className="rounded-xl border border-[#d8d0c4] bg-[#faf9f7] px-4 py-3 text-sm leading-relaxed text-slate-700">
+        <div className="rounded-xl border border-[#D0D3E7] bg-[#F7F7FF] px-4 py-3 text-sm leading-relaxed text-slate-700">
           This topic shares one syllabus file with other steps on your plan. Mark study complete on{" "}
           <strong className="text-slate-900">each</strong> of those steps, then take the{" "}
           <strong className="text-slate-900">single topic quiz</strong> from the plan overview (or the link below when
@@ -145,7 +142,7 @@ export function TraineeModuleStudy({
       ) : null}
 
       <section className={`overflow-hidden ${PORTAL_SURFACE}`}>
-        <div className="border-b border-[#d8d0c4] bg-[#faf9f7]/80 px-6 py-5 sm:px-8">
+        <div className="border-b border-[#D0D3E7] bg-[#F7F7FF]/80 px-6 py-5 sm:px-8">
           <h2 className="text-base font-semibold text-slate-900">Read &amp; review</h2>
           <p className="mt-1 text-sm leading-relaxed text-slate-600">
             Work through the sections below. When you are done with this step, mark study complete. The quiz is on a
@@ -155,10 +152,10 @@ export function TraineeModuleStudy({
         <div className="px-6 py-6 sm:px-8 sm:py-10">
           <ModuleLearningMarkdown markdown={learningMarkdown} />
         </div>
-        <div className="flex flex-col gap-4 border-t border-[#d8d0c4] bg-[#faf9f7]/60 px-6 py-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:px-8">
+        <div className="flex flex-col gap-4 border-t border-[#D0D3E7] bg-[#F7F7FF]/60 px-6 py-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:px-8">
           <div className="min-w-0 space-y-2">
             {marked ? (
-              <p className="text-sm font-medium text-[#006b64]">Study marked complete for this step.</p>
+              <p className="text-sm font-medium text-[#177F78]">Study marked complete for this step.</p>
             ) : (
               <p className="text-sm text-slate-600">Finished reading? Confirm below.</p>
             )}
@@ -177,7 +174,7 @@ export function TraineeModuleStudy({
                   setError(null);
                   setConfirmStudyOpen(true);
                 }}
-                className="inline-flex shrink-0 justify-center rounded-xl bg-[#00A89E] px-5 py-3 text-sm font-semibold text-white shadow-md transition-colors hover:bg-[#008f86] disabled:opacity-60"
+                className="inline-flex shrink-0 justify-center rounded-xl bg-[#F46036] px-5 py-3 text-sm font-semibold text-white shadow-md transition-colors hover:bg-[#d44a20] disabled:opacity-60"
               >
                 Mark study complete
               </button>
@@ -185,7 +182,7 @@ export function TraineeModuleStudy({
             {quizHref ? (
               <Link
                 href={quizHref}
-                className="inline-flex shrink-0 justify-center rounded-xl border border-[#00A89E]/40 bg-[#f0faf8] px-5 py-3 text-sm font-semibold text-[#006b64] shadow-sm transition-colors hover:bg-[#e2f5f2]"
+                className="inline-flex shrink-0 justify-center rounded-xl border border-[#F46036]/40 bg-[#ECFBFA] px-5 py-3 text-sm font-semibold text-[#177F78] shadow-sm transition-colors hover:bg-[#D8F6F3]"
               >
                 {syllabusCohortTopicId ? "Open topic quiz" : "Open module quiz"}
               </Link>
@@ -194,7 +191,7 @@ export function TraineeModuleStudy({
         </div>
       </section>
 
-      <Link href={planOverviewHref(planId)} className="inline-flex rounded-xl border border-[#d6cfc4] bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 shadow-sm hover:bg-[#faf9f7]">
+      <Link href={planOverviewHref(planId)} className="inline-flex rounded-xl border border-[#D0D3E7] bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 shadow-sm hover:bg-[#F7F7FF]">
         Back to plan
       </Link>
 
@@ -215,7 +212,7 @@ export function TraineeModuleStudy({
             className={`max-w-md overflow-hidden ${PORTAL_SURFACE} shadow-2xl shadow-slate-900/20`}
             onMouseDown={(e) => e.stopPropagation()}
           >
-            <div className="border-b border-[#d8d0c4] bg-gradient-to-r from-[#f0faf8]/90 to-white px-6 py-4">
+            <div className="border-b border-[#D0D3E7] bg-gradient-to-r from-[#ECFBFA]/90 to-white px-6 py-4">
               <h2 id="confirm-study-title" className="text-lg font-bold text-slate-900">
                 Mark study complete?
               </h2>
@@ -224,11 +221,11 @@ export function TraineeModuleStudy({
               This records that you have finished reviewing <span className="font-medium text-slate-800">{moduleTitle}</span>.
               You can return to this material anytime from your plan. Continue to the plan overview?
             </p>
-            <div className="flex flex-wrap justify-end gap-2 border-t border-[#d8d0c4] bg-[#fafaf8]/80 px-6 py-4">
+            <div className="flex flex-wrap justify-end gap-2 border-t border-[#D0D3E7] bg-[#F7F7FF]/80 px-6 py-4">
               <button
                 type="button"
                 disabled={pending}
-                className="rounded-xl border border-[#d6cfc4] bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 hover:bg-[#faf9f7] disabled:opacity-60"
+                className="rounded-xl border border-[#D0D3E7] bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 hover:bg-[#F7F7FF] disabled:opacity-60"
                 onClick={() => setConfirmStudyOpen(false)}
               >
                 No, stay here
@@ -236,7 +233,7 @@ export function TraineeModuleStudy({
               <button
                 type="button"
                 disabled={pending}
-                className="rounded-xl bg-[#00A89E] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#008f86] disabled:opacity-60"
+                className="rounded-xl bg-[#F46036] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#d44a20] disabled:opacity-60"
                 onClick={() => void confirmMarkStudyComplete()}
               >
                 {pending ? "Saving…" : "Yes, go to plan"}

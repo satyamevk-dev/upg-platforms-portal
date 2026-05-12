@@ -64,16 +64,16 @@ export async function TraineeAssignedPlansSection({ traineeUserId, headingId }: 
                       <div className="flex shrink-0 flex-wrap items-center gap-2">
                         <Link
                           href={`/client/plans/${encodeURIComponent(plan.id)}`}
-                          className="rounded-lg bg-[#00A89E] px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-[#008f86]"
+                          className="rounded-lg bg-[#F46036] px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-[#d44a20]"
                         >
                           Open plan
                         </Link>
                         {plan.isDraft ? (
-                          <span className="rounded-full bg-violet-100 px-2.5 py-0.5 text-xs font-semibold text-violet-900">
+                          <span className="rounded-full bg-[#ECFBFA] px-2.5 py-0.5 text-xs font-semibold text-[#177F78]">
                             Draft
                           </span>
                         ) : (
-                          <span className="rounded-full bg-[#e6f7f5] px-2.5 py-0.5 text-xs font-semibold text-[#00786f]">
+                          <span className="rounded-full bg-[#ECFBFA] px-2.5 py-0.5 text-xs font-semibold text-[#b23d1e]">
                             Published
                           </span>
                         )}
@@ -99,10 +99,10 @@ export async function TraineeAssignedPlansSection({ traineeUserId, headingId }: 
                       {plan.modules.slice(0, 12).map((m) => (
                         <li
                           key={`${plan.id}-${m.order}`}
-                          className="rounded-lg border border-[#d8d0c4] bg-white px-3 py-2"
+                          className="rounded-lg border border-[#D0D3E7] bg-white px-3 py-2"
                         >
                           {m.sectionHeader ? (
-                            <p className="mb-0.5 text-[11px] font-semibold leading-snug text-[#00786f]">
+                            <p className="mb-0.5 text-[11px] font-semibold leading-snug text-[#b23d1e]">
                               {m.sectionHeader}
                             </p>
                           ) : null}

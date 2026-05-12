@@ -242,20 +242,53 @@ export default function LoginPage() {
   }
 
   const fieldClassName =
-    "rounded-xl border border-slate-200/90 bg-white/90 px-3 py-2.5 text-slate-900 shadow-inner shadow-slate-900/5 transition placeholder:text-slate-400 focus:border-[#00A89E] focus:outline-none focus:ring-2 focus:ring-[#00A89E]/30";
+    "rounded-xl border border-[#D0D3E7] bg-white/95 px-3 py-2.5 text-slate-900 shadow-inner shadow-slate-900/5 transition placeholder:text-[#7683A4] focus:border-[#F46036] focus:outline-none focus:ring-2 focus:ring-[#F46036]/30";
 
   return (
-    <div className="relative min-h-dvh overflow-hidden bg-slate-900 bg-[url('/login-background.png')] bg-cover bg-[58%_center] bg-no-repeat">
+    <div className="relative min-h-dvh overflow-hidden bg-slate-950 bg-[url('/login-background.png')] bg-cover bg-[58%_center] bg-no-repeat">
       <div
-        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-slate-900/55 via-slate-800/35 to-[#0d3d3a]/45"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-slate-950/70 via-slate-900/45 to-[#3a1408]/55"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute -top-32 -right-32 h-96 w-96 rounded-full bg-[#F46036]/25 blur-[120px]"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute -bottom-32 -left-32 h-96 w-96 rounded-full bg-[#4FCEC0]/20 blur-[120px]"
         aria-hidden
       />
 
+      <Link
+        href="/"
+        aria-label="Infinite home"
+        className="absolute left-3 top-3 z-20 inline-flex items-center rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F46036]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 sm:left-4 sm:top-4"
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/infinite-logo-dark.png"
+          alt="Infinite"
+          width={164}
+          height={110}
+          className="h-14 w-auto select-none rounded-md sm:h-16"
+          draggable={false}
+        />
+      </Link>
+
       <div className="relative z-10 flex min-h-dvh flex-col items-center justify-center px-4 py-12 sm:px-6">
         <div className="w-full max-w-md">
-          <div className="rounded-2xl border border-white/55 bg-white/72 p-8 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-10">
-            <div className="text-center text-sm font-semibold leading-snug text-[#00A89E] sm:text-base">
-              <p>Welcome to Learning Portal for UPG Group</p>
+          <div className="rounded-2xl border border-[#D0D3E7]/80 bg-[#F7F7FF]/90 p-8 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:p-10">
+            <div className="text-center">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#F46036]">
+                Welcome to
+              </p>
+              <h1 className="mt-2 text-xl font-semibold leading-snug text-slate-900 sm:text-2xl">
+                Knowledge Platform - Unified Platform Group
+              </h1>
+              <div
+                className="mx-auto mt-3 h-[3px] w-12 rounded-full bg-gradient-to-r from-[#F46036] to-[#4FCEC0]"
+                aria-hidden
+              />
             </div>
 
             <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
@@ -290,7 +323,7 @@ export default function LoginPage() {
                   id="login-email"
                 />
                 {emailHistory.length > 0 ? (
-                  <span className="text-xs font-normal text-slate-500">
+                  <span className="text-xs font-normal text-[#7683A4]">
                     Focus this field or start typing to choose a recent address ({emailHistory.length} saved on
                     this device).
                   </span>
@@ -321,23 +354,23 @@ export default function LoginPage() {
                     aria-pressed={showPassword}
                     aria-controls="login-password"
                     aria-label={showPassword ? "Hide password" : "Show password"}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg px-2 py-1 text-xs font-semibold text-[#00786f] underline decoration-[#00786f]/40 underline-offset-2 hover:bg-[#00A89E]/10 hover:text-[#005c56] focus:outline-none focus:ring-2 focus:ring-[#00A89E]/40"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg px-2 py-1 text-xs font-semibold text-[#b23d1e] underline decoration-[#b23d1e]/40 underline-offset-2 hover:bg-[#F46036]/10 hover:text-[#7d2b13] focus:outline-none focus:ring-2 focus:ring-[#F46036]/40"
                   >
                     {showPassword ? "Hide" : "Show"}
                   </button>
                 </div>
               </div>
 
-              <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200/80 bg-white/40 px-3 py-3 text-sm text-slate-800 backdrop-blur-sm">
+              <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-[#D0D3E7]/80 bg-white/60 px-3 py-3 text-sm text-slate-800 backdrop-blur-sm">
                 <input
                   type="checkbox"
                   checked={rememberOnDevice}
                   onChange={(event) => setRememberOnDevice(event.target.checked)}
-                  className="mt-0.5 h-4 w-4 shrink-0 rounded border-slate-300 text-[#00A89E] focus:ring-[#00A89E]"
+                  className="mt-0.5 h-4 w-4 shrink-0 rounded border-[#D0D3E7] text-[#F46036] focus:ring-[#F46036]"
                 />
                 <span>
                   <span className="font-medium">Remember email and password on this device</span>
-                  <span className="mt-1 block text-xs font-normal leading-snug text-slate-600">
+                  <span className="mt-1 block text-xs font-normal leading-snug text-[#7683A4]">
                     If you choose yes, your browser will fill these fields next time. Only use on a private
                     computer you trust; anyone with access to this browser could sign in.
                   </span>
@@ -349,18 +382,18 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full rounded-xl bg-[#00A89E] px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/15 transition hover:bg-[#008f86] focus:outline-none focus:ring-2 focus:ring-[#00A89E] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-65"
+                className="w-full rounded-xl bg-[#F46036] px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-[#F46036]/30 transition hover:bg-[#d44a20] focus:outline-none focus:ring-2 focus:ring-[#F46036] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-65"
               >
                 {isSubmitting ? "Signing in..." : "Continue"}
               </button>
             </form>
 
             {process.env.NODE_ENV !== "production" ? (
-              <details className="mt-6 rounded-xl border border-slate-200/80 bg-white/50 p-4 text-xs text-slate-600 backdrop-blur-sm">
+              <details className="mt-6 rounded-xl border border-[#D0D3E7]/80 bg-white/60 p-4 text-xs text-[#7683A4] backdrop-blur-sm">
                 <summary className="cursor-pointer select-none font-semibold text-slate-800">
                   Demo accounts for evaluation
                 </summary>
-                <div className="mt-3 space-y-2 border-t border-slate-200/80 pt-3 font-mono text-[11px] leading-relaxed text-slate-500">
+                <div className="mt-3 space-y-2 border-t border-[#D0D3E7]/80 pt-3 font-mono text-[11px] leading-relaxed text-[#7683A4]">
                   <p>
                     <span className="font-sans font-medium text-slate-700">Platform Owner (database):</span>{" "}
                     satyamevk@infinite.com — password from{" "}
@@ -379,10 +412,10 @@ export default function LoginPage() {
               </details>
             ) : null}
 
-            <p className="mt-6 text-center text-xs text-slate-500">
+            <p className="mt-6 text-center text-xs text-[#7683A4]">
               <Link
                 href="/"
-                className="font-medium underline decoration-slate-300 underline-offset-2 transition hover:text-[#00A89E]"
+                className="font-medium underline decoration-[#D0D3E7] underline-offset-2 transition hover:text-[#F46036]"
               >
                 Back to home
               </Link>

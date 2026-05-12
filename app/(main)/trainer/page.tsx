@@ -33,7 +33,7 @@ export default async function TrainerHomePage() {
     <>
       <div className={PORTAL_INTRO_SHELL}>
         <div className={PORTAL_INTRO_HERO}>
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#00786f]">Trainer area</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#b23d1e]">Trainer area</p>
           <h1 className="mt-3 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Trainer workspace</h1>
           {isTrainer ? (
             <>
@@ -42,7 +42,7 @@ export default async function TrainerHomePage() {
               </p>
               <Link
                 href="/trainer/training-plans/new"
-                className="mt-6 inline-flex items-center gap-2 rounded-xl bg-[#00A89E] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#00A89E]/25 transition hover:bg-[#008f86]"
+                className="mt-6 inline-flex items-center gap-2 rounded-xl bg-[#F46036] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#F46036]/25 transition hover:bg-[#d44a20]"
               >
                 Open plan builder
                 <span aria-hidden className="text-base leading-none">

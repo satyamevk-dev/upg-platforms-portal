@@ -3,7 +3,7 @@
 import { signOut } from "next-auth/react";
 
 const navLinkClass =
-  "rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-[#00A89E]";
+  "rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-[#F46036]";
 
 export function SignOutNavLink() {
   return (

@@ -91,10 +91,10 @@ export function TrainersByClientSection({ data, error, headingId }: Props) {
                   <th className="px-4 py-3 font-semibold text-slate-800">Email</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#d8d0c4]">
+              <tbody className="divide-y divide-[#D0D3E7]">
                 {rows.map((row) => (
                   <tr key={row.key} className="text-slate-700">
-                    <td className="px-4 py-3 font-medium text-[#00786f]">{row.clientName}</td>
+                    <td className="px-4 py-3 font-medium text-[#b23d1e]">{row.clientName}</td>
                     <td
                       className={`px-4 py-3 font-medium text-slate-900 ${row.isPlaceholder ? "text-slate-500 italic" : ""}`}
                     >
@@ -104,7 +104,7 @@ export function TrainersByClientSection({ data, error, headingId }: Props) {
                       {row.isPlaceholder ? (
                         <span className="text-slate-400">{row.email}</span>
                       ) : (
-                        <code className="rounded bg-[#f5f3f0] px-1.5 py-0.5 text-xs text-slate-800">
+                        <code className="rounded bg-[#F7F7FF] px-1.5 py-0.5 text-xs text-slate-800">
                           {row.email}
                         </code>
                       )}

@@ -13,8 +13,8 @@ import {
 } from "recharts";
 import { PORTAL_CARD } from "@/lib/portal-ui-classes";
 
-const teal = "#00A89E";
-const violet = "#5b4b96";
+const infiniteOrange = "#F46036";
+const infiniteTeal = "#4FCEC0";
 const muted = "#94a3b8";
 
 type Props = {
@@ -26,7 +26,7 @@ export function DashboardAnalyticsCharts({ data }: Props) {
     {
       name: "Assigned to a plan",
       value: data.traineesAssignedToPlans,
-      fill: teal,
+      fill: infiniteOrange,
     },
     {
       name: "Not assigned yet",
@@ -35,15 +35,15 @@ export function DashboardAnalyticsCharts({ data }: Props) {
     },
   ];
 
-  const courseSummaryRow = [{ name: "Training plans (courses)", value: data.totalCourses, fill: violet }];
+  const courseSummaryRow = [{ name: "Training plans (courses)", value: data.totalCourses, fill: infiniteTeal }];
 
   const exerciseSummaryRow = [
-    { name: "Exercises (all plans)", value: data.totalExercises, fill: teal },
+    { name: "Exercises (all plans)", value: data.totalExercises, fill: infiniteOrange },
   ];
 
   const tooltipStyle = {
     borderRadius: "12px",
-    border: "1px solid #d8d0c4",
+    border: "1px solid #D0D3E7",
     boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
   };
 
@@ -57,7 +57,7 @@ export function DashboardAnalyticsCharts({ data }: Props) {
         <div className="mt-4 h-72 w-full min-h-[18rem] min-w-0">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={traineeAssignmentRows} margin={{ top: 8, right: 8, left: 0, bottom: 8 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#d8d0c4" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#D0D3E7" />
               <XAxis dataKey="name" tick={{ fill: "#475569", fontSize: 11 }} interval={0} />
               <YAxis allowDecimals={false} tick={{ fill: "#475569", fontSize: 12 }} />
               <Tooltip contentStyle={tooltipStyle} />
@@ -79,12 +79,12 @@ export function DashboardAnalyticsCharts({ data }: Props) {
         <div className="mt-4 h-72 w-full min-h-[18rem] min-w-0">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={courseSummaryRow} margin={{ top: 8, right: 8, left: 0, bottom: 8 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#d8d0c4" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#D0D3E7" />
               <XAxis dataKey="name" tick={{ fill: "#475569", fontSize: 11 }} interval={0} />
               <YAxis allowDecimals={false} tick={{ fill: "#475569", fontSize: 12 }} />
               <Tooltip contentStyle={tooltipStyle} />
               <Bar dataKey="value" radius={[8, 8, 0, 0]} maxBarSize={72}>
-                <Cell fill={violet} />
+                <Cell fill={infiniteTeal} />
               </Bar>
             </BarChart>
           </ResponsiveContainer>
@@ -97,7 +97,7 @@ export function DashboardAnalyticsCharts({ data }: Props) {
         <div className="mt-4 h-72 w-full min-h-[18rem] min-w-0">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data.usersByRole} margin={{ top: 8, right: 8, left: 0, bottom: 8 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#d8d0c4" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#D0D3E7" />
               <XAxis dataKey="name" tick={{ fill: "#475569", fontSize: 11 }} interval={0} />
               <YAxis allowDecimals={false} tick={{ fill: "#475569", fontSize: 12 }} />
               <Tooltip contentStyle={tooltipStyle} />
@@ -119,12 +119,12 @@ export function DashboardAnalyticsCharts({ data }: Props) {
         <div className="mt-4 h-72 w-full min-h-[18rem] min-w-0">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={exerciseSummaryRow} margin={{ top: 8, right: 8, left: 0, bottom: 8 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#d8d0c4" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#D0D3E7" />
               <XAxis dataKey="name" tick={{ fill: "#475569", fontSize: 11 }} interval={0} />
               <YAxis allowDecimals={false} tick={{ fill: "#475569", fontSize: 12 }} />
               <Tooltip contentStyle={tooltipStyle} />
               <Bar dataKey="value" radius={[8, 8, 0, 0]} maxBarSize={72}>
-                <Cell fill={teal} />
+                <Cell fill={infiniteOrange} />
               </Bar>
             </BarChart>
           </ResponsiveContainer>
@@ -137,11 +137,11 @@ export function DashboardAnalyticsCharts({ data }: Props) {
         <div className="mt-4 h-72 w-full min-h-[18rem] min-w-0">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data.courseCountsByMonth} margin={{ top: 8, right: 8, left: 0, bottom: 8 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#d8d0c4" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#D0D3E7" />
               <XAxis dataKey="label" tick={{ fill: "#475569", fontSize: 12 }} />
               <YAxis allowDecimals={false} tick={{ fill: "#475569", fontSize: 12 }} />
               <Tooltip contentStyle={tooltipStyle} />
-              <Bar dataKey="count" name="New plans" fill={teal} radius={[8, 8, 0, 0]} maxBarSize={48} />
+              <Bar dataKey="count" name="New plans" fill={infiniteOrange} radius={[8, 8, 0, 0]} maxBarSize={48} />
             </BarChart>
           </ResponsiveContainer>
         </div>

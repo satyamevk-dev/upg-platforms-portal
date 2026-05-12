@@ -1,14 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f4f2ef;
+  --background: #F7F7FF;
   --foreground: #1e293b;
-  --brand-teal: #00a89e;
-  --brand-teal-hover: #008f86;
-  --brand-purple: #5b4b96;
-  --brand-purple-muted: #7c6bae;
-  --brand-wood: #c9a87c;
-  --card-border: #d8d0c4;
+  --brand-teal: #f46036;
+  --brand-teal-hover: #d44a20;
+  --brand-purple: #4FCEC0;
+  --brand-purple-muted: #7683A4;
+  --brand-wood: #4FCEC0;
+  --card-border: #D0D3E7;
 }
 
 @theme inline {

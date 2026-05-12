@@ -76,8 +76,8 @@ export async function DashboardView({ callbackPath }: Props) {
     <>
       <header className={`flex flex-col gap-4 ${cardClass}`}>
           <div>
-            <p className="text-center text-sm font-semibold leading-snug text-[#00A89E]">
-              Welcome to Learning Portal for UPG Group
+            <p className="text-center text-sm font-semibold leading-snug text-[#F46036]">
+              Welcome to Knowledge Platform - Unified Platform Group
               {trainerMappedClientName &&
               trainerMappedClientName.trim().toLowerCase() !== "avaya" ? (
                 <> {trainerMappedClientName}</>
@@ -91,7 +91,7 @@ export async function DashboardView({ callbackPath }: Props) {
               <span className="font-medium text-slate-900">{user.name ?? user.email}</span>
             </p>
             <p className="mt-1 text-sm text-slate-500">{user.email}</p>
-            <span className="mt-3 inline-flex rounded-full bg-violet-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-violet-900">
+            <span className="mt-3 inline-flex rounded-full bg-[#ECFBFA] px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[#177F78]">
               {roleLabel(role)}
             </span>
           </div>
@@ -127,14 +127,14 @@ export async function DashboardView({ callbackPath }: Props) {
                       <th className="px-4 py-3 font-semibold text-slate-800">Email</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#d8d0c4]">
+                  <tbody className="divide-y divide-[#D0D3E7]">
                     {trainerTrainees.map((t) => (
                       <tr key={t.id} className="text-slate-700">
                         <td className="px-4 py-3 font-medium text-slate-900">
                           {t.name?.trim() || "—"}
                         </td>
                         <td className="px-4 py-3">
-                          <code className="rounded bg-[#f5f3f0] px-1.5 py-0.5 text-xs text-slate-800">
+                          <code className="rounded bg-[#F7F7FF] px-1.5 py-0.5 text-xs text-slate-800">
                             {t.email}
                           </code>
                         </td>

@@ -35,7 +35,7 @@ import { PORTAL_CARD, PORTAL_SURFACE } from "@/lib/portal-ui-classes";
 const cardClass = PORTAL_CARD;
 
 const inputFocus =
-  "focus:border-[#00A89E] focus:outline-none focus:ring-2 focus:ring-[#00A89E]/25";
+  "focus:border-[#F46036] focus:outline-none focus:ring-2 focus:ring-[#F46036]/25";
 
 /** Legacy trainer-defined entries; stripped from plans on load. */
 const LEGACY_CUSTOM_ENTRY_PREFIX = "__custom__:";
@@ -530,7 +530,7 @@ export function TrainingPlanBuilderSection({
             type="button"
             onClick={() => void fetchSavedPlans()}
             disabled={savedPlansLoading}
-            className="rounded-xl border border-[#d6cfc4] px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-[#faf9f7] disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-xl border border-[#D0D3E7] px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-[#F7F7FF] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {savedPlansLoading ? "Refreshing…" : "Refresh"}
           </button>
@@ -580,18 +580,18 @@ export function TrainingPlanBuilderSection({
                         </div>
                         <div className="flex shrink-0 flex-wrap items-center gap-2">
                           {plan.isDraft ? (
-                            <span className="rounded-full bg-violet-100 px-2.5 py-0.5 text-xs font-semibold text-violet-900">
+                            <span className="rounded-full bg-[#ECFBFA] px-2.5 py-0.5 text-xs font-semibold text-[#177F78]">
                               Draft
                             </span>
                           ) : (
-                            <span className="rounded-full bg-[#e6f7f5] px-2.5 py-0.5 text-xs font-semibold text-[#00786f]">
+                            <span className="rounded-full bg-[#ECFBFA] px-2.5 py-0.5 text-xs font-semibold text-[#b23d1e]">
                               Published
                             </span>
                           )}
                           {savedPlansScope === "trainer-client" ? (
                             <Link
                               href={`/trainer/training-plans/${encodeURIComponent(plan.id)}/edit`}
-                              className="rounded-lg border border-[#d6cfc4] px-2.5 py-1 text-xs font-semibold text-[#00786f] hover:bg-[#faf9f7]"
+                              className="rounded-lg border border-[#D0D3E7] px-2.5 py-1 text-xs font-semibold text-[#b23d1e] hover:bg-[#F7F7FF]"
                               onClick={(e) => e.stopPropagation()}
                             >
                               Edit
@@ -615,10 +615,10 @@ export function TrainingPlanBuilderSection({
                         {plan.modules.map((m) => (
                           <li
                             key={`${plan.id}-${m.order}`}
-                            className="rounded-lg border border-[#d8d0c4] bg-white px-3 py-2"
+                            className="rounded-lg border border-[#D0D3E7] bg-white px-3 py-2"
                           >
                             {m.sectionHeader ? (
-                              <p className="mb-0.5 text-[11px] font-semibold leading-snug text-[#00786f]">
+                              <p className="mb-0.5 text-[11px] font-semibold leading-snug text-[#b23d1e]">
                                 {m.sectionHeader}
                               </p>
                             ) : null}
@@ -641,7 +641,7 @@ export function TrainingPlanBuilderSection({
       </section>
 
       <section className="grid gap-6 lg:grid-cols-3">
-        <div className={`${cardClass} lg:col-span-2`}>
+        <div className={`${cardClass} lg:col-span-2 lg:col-start-2 lg:row-start-1`}>
           <h2 className="text-lg font-semibold text-slate-900">Plan details</h2>
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             <label className="flex flex-col gap-2 text-sm font-medium text-slate-700">
@@ -650,7 +650,7 @@ export function TrainingPlanBuilderSection({
                 value={clientId}
                 onChange={(e) => setClientId(e.target.value)}
                 disabled={clientsLoading || Boolean(editingPlan)}
-                className={`rounded-xl border border-[#d6cfc4] bg-white px-3 py-2 text-slate-900 disabled:cursor-not-allowed disabled:opacity-60 ${inputFocus}`}
+                className={`rounded-xl border border-[#D0D3E7] bg-white px-3 py-2 text-slate-900 disabled:cursor-not-allowed disabled:opacity-60 ${inputFocus}`}
               >
                 {clientsLoading ? (
                   <option value="">Loading clients…</option>
@@ -682,7 +682,7 @@ export function TrainingPlanBuilderSection({
                 value={planTitle}
                 onChange={(e) => setPlanTitle(e.target.value)}
                 placeholder="e.g., Linux Basics — Onboarding batch"
-                className={`rounded-xl border border-[#d6cfc4] px-3 py-2 text-slate-900 placeholder:text-slate-400 ${inputFocus}`}
+                className={`rounded-xl border border-[#D0D3E7] px-3 py-2 text-slate-900 placeholder:text-slate-400 ${inputFocus}`}
               />
             </label>
           </div>
@@ -694,7 +694,7 @@ export function TrainingPlanBuilderSection({
               value={traineeUserId}
               onChange={(e) => setTraineeUserId(e.target.value)}
               disabled={traineesLoading}
-              className={`rounded-xl border border-[#d6cfc4] bg-white px-3 py-2 text-slate-900 disabled:cursor-not-allowed disabled:opacity-60 ${inputFocus}`}
+              className={`rounded-xl border border-[#D0D3E7] bg-white px-3 py-2 text-slate-900 disabled:cursor-not-allowed disabled:opacity-60 ${inputFocus}`}
             >
               <option value="">Select trainee…</option>
               {traineeOptions.map((t) => (
@@ -726,13 +726,13 @@ export function TrainingPlanBuilderSection({
               value={planNotes}
               onChange={(e) => setPlanNotes(e.target.value)}
               placeholder="Add learning objectives, lab prerequisites, and trainer notes..."
-              className={`rounded-xl border border-[#d6cfc4] px-3 py-2 text-slate-900 placeholder:text-slate-400 ${inputFocus}`}
+              className={`rounded-xl border border-[#D0D3E7] px-3 py-2 text-slate-900 placeholder:text-slate-400 ${inputFocus}`}
             />
           </label>
         </div>
 
         <section
-          className={`${cardClass} flex min-h-0 flex-col`}
+          className={`${cardClass} flex min-h-0 flex-col lg:col-start-1 lg:row-start-1`}
           aria-labelledby="plan-topics-heading"
         >
           <h2 id="plan-topics-heading" className="text-lg font-semibold text-slate-900">
@@ -801,7 +801,7 @@ export function TrainingPlanBuilderSection({
                 >
                   <div className="min-w-0 pr-2">
                     {sectionHeader ? (
-                      <p className="mb-1 text-xs font-semibold leading-snug text-[#00786f]">
+                      <p className="mb-1 text-xs font-semibold leading-snug text-[#b23d1e]">
                         {sectionHeader}
                       </p>
                     ) : null}
@@ -815,7 +815,7 @@ export function TrainingPlanBuilderSection({
                       type="button"
                       onClick={() => moveUp(index)}
                       disabled={index === 0}
-                      className="rounded-lg border border-[#d6cfc4] px-2 py-1 text-xs text-slate-600 hover:bg-[#faf9f7] disabled:cursor-not-allowed disabled:opacity-40"
+                      className="rounded-lg border border-[#D0D3E7] px-2 py-1 text-xs text-slate-600 hover:bg-[#F7F7FF] disabled:cursor-not-allowed disabled:opacity-40"
                     >
                       Up
                     </button>
@@ -823,7 +823,7 @@ export function TrainingPlanBuilderSection({
                       type="button"
                       onClick={() => moveDown(index)}
                       disabled={index === planSlots.length - 1}
-                      className="rounded-lg border border-[#d6cfc4] px-2 py-1 text-xs text-slate-600 hover:bg-[#faf9f7] disabled:cursor-not-allowed disabled:opacity-40"
+                      className="rounded-lg border border-[#D0D3E7] px-2 py-1 text-xs text-slate-600 hover:bg-[#F7F7FF] disabled:cursor-not-allowed disabled:opacity-40"
                     >
                       Down
                     </button>
@@ -847,14 +847,14 @@ export function TrainingPlanBuilderSection({
               type="button"
               disabled={!canPersistPlan}
               onClick={() => void persistPlan()}
-              className="rounded-xl bg-[#00A89E] px-4 py-2 text-sm font-semibold text-white shadow-md shadow-[#00A89E]/20 hover:bg-[#008f86] disabled:cursor-not-allowed disabled:opacity-45 disabled:shadow-none disabled:hover:bg-[#00A89E]"
+              className="rounded-xl bg-[#F46036] px-4 py-2 text-sm font-semibold text-white shadow-md shadow-[#F46036]/20 hover:bg-[#d44a20] disabled:cursor-not-allowed disabled:opacity-45 disabled:shadow-none disabled:hover:bg-[#F46036]"
             >
               {isSaving ? "Saving…" : editingPlan ? "Update plan" : "Save plan"}
             </button>
           </div>
           {saveMessage ? (
             <p
-              className={`text-sm ${saveMessage.type === "ok" ? "text-[#00786f]" : "text-rose-800"}`}
+              className={`text-sm ${saveMessage.type === "ok" ? "text-[#b23d1e]" : "text-rose-800"}`}
               role="status"
             >
               {saveMessage.text}

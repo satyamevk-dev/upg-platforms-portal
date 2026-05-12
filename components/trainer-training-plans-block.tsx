@@ -53,7 +53,7 @@ export async function TrainerTrainingPlansBlock({ trainerUserId, headingId }: Pr
         {clientMasterId ? (
           <Link
             href={`/trainer/training-plans/new?client=${encodeURIComponent(clientMasterId)}`}
-            className="rounded-xl bg-[#00A89E] px-4 py-2 text-sm font-semibold text-white shadow-md shadow-[#00A89E]/20 hover:bg-[#008f86]"
+            className="rounded-xl bg-[#F46036] px-4 py-2 text-sm font-semibold text-white shadow-md shadow-[#F46036]/20 hover:bg-[#d44a20]"
           >
             Create plan
           </Link>
@@ -82,7 +82,7 @@ export async function TrainerTrainingPlansBlock({ trainerUserId, headingId }: Pr
                 <th className="px-4 py-3 font-semibold text-slate-800">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#d8d0c4]">
+            <tbody className="divide-y divide-[#D0D3E7]">
               {plans.map((p) => {
                 const updated = new Date(p.updatedAt);
                 return (
@@ -101,7 +101,7 @@ export async function TrainerTrainingPlansBlock({ trainerUserId, headingId }: Pr
                     <td className="px-4 py-3">
                       <Link
                         href={`/trainer/training-plans/${encodeURIComponent(p.id)}/edit`}
-                        className="font-medium text-[#00786f] underline-offset-2 hover:underline"
+                        className="font-medium text-[#b23d1e] underline-offset-2 hover:underline"
                       >
                         Edit
                       </Link>

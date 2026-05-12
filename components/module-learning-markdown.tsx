@@ -37,18 +37,18 @@ const mdComponents: Components = {
     </blockquote>
   ),
   ul: ({ children, ...props }) => (
-    <ul className="my-4 list-disc space-y-2 pl-5 marker:text-[#00A89E]" {...props}>
+    <ul className="my-4 list-disc space-y-2 pl-5 marker:text-[#F46036]" {...props}>
       {children}
     </ul>
   ),
   ol: ({ children, ...props }) => (
-    <ol className="my-4 list-decimal space-y-2 pl-5 marker:font-medium marker:text-[#00786f]" {...props}>
+    <ol className="my-4 list-decimal space-y-2 pl-5 marker:font-medium marker:text-[#b23d1e]" {...props}>
       {children}
     </ol>
   ),
   li: ({ children, className, ...props }) => (
     <li
-      className={`leading-relaxed pl-0.5 [&_input[type='checkbox']]:mr-2 [&_input[type='checkbox']]:accent-[#00A89E] ${className ?? ""}`}
+      className={`leading-relaxed pl-0.5 [&_input[type='checkbox']]:mr-2 [&_input[type='checkbox']]:accent-[#F46036] ${className ?? ""}`}
       {...props}
     >
       {children}
@@ -84,7 +84,7 @@ const mdComponents: Components = {
   },
   pre: ({ children, ...props }) => (
     <pre
-      className="my-4 overflow-x-auto rounded-xl border border-[var(--card-border)] bg-[#faf9f7] p-4 font-mono text-sm text-slate-800"
+      className="my-4 overflow-x-auto rounded-xl border border-[var(--card-border)] bg-[#F7F7FF] p-4 font-mono text-sm text-slate-800"
       {...props}
     >
       {children}

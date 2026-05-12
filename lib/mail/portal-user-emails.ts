@@ -19,10 +19,10 @@ export async function sendNewPortalUserEmail(params: {
   const display = params.name?.trim() || params.email;
   const roleLabel = portalRoleLabel(params.role);
   const loginUrl = appLoginUrl();
-  const subject = "Your learning portal account was created";
+  const subject = "Your Knowledge Platform account was created";
   const text = `Hello ${display},
 
-An account was created for you on the Learning Portal (UPG Group / Avaya).
+An account was created for you on the Knowledge Platform - Unified Platform Group (Avaya).
 
 Sign-in email: ${params.email}
 Role: ${roleLabel}
@@ -31,7 +31,7 @@ Sign in: ${loginUrl}
 
 Use the password your administrator set for you. If you do not have a password yet, contact your administrator.
 
-— Learning Portal`;
+— Knowledge Platform`;
 
   await sendTransactionalEmail({
     to: params.email,
@@ -57,7 +57,7 @@ export async function sendPortalUserUpdatedEmail(params: {
   const lines: string[] = [
     `Hello ${display},`,
     "",
-    "Your Learning Portal account was updated by an administrator.",
+    "Your Knowledge Platform account was updated by an administrator.",
     "",
     `Current sign-in email: ${params.email}`,
   ];
@@ -75,9 +75,9 @@ export async function sendPortalUserUpdatedEmail(params: {
     lines.push("Your password was reset. Use the new password from your administrator.");
   }
 
-  lines.push("", `Sign in: ${loginUrl}`, "", "If you did not expect this change, contact your administrator.", "", "— Learning Portal");
+  lines.push("", `Sign in: ${loginUrl}`, "", "If you did not expect this change, contact your administrator.", "", "— Knowledge Platform");
 
-  const subject = "Your learning portal account was updated";
+  const subject = "Your Knowledge Platform account was updated";
   const text = lines.join("\n");
 
   const primary = await sendTransactionalEmail({
@@ -98,10 +98,10 @@ export async function sendPortalUserUpdatedEmail(params: {
     prev &&
     prev.toLowerCase() !== params.email.trim().toLowerCase()
   ) {
-    const prevSubject = "Your learning portal sign-in email was changed";
+    const prevSubject = "Your Knowledge Platform sign-in email was changed";
     const prevText = `Hello,
 
-An administrator changed the sign-in email for your Learning Portal account.
+An administrator changed the sign-in email for your Knowledge Platform account.
 
 Previous sign-in email: ${prev}
 New sign-in email: ${params.email}
@@ -112,7 +112,7 @@ Sign in: ${loginUrl}
 
 If you did not expect this change, contact your administrator immediately.
 
-— Learning Portal`;
+— Knowledge Platform`;
 
     const secondary = await sendTransactionalEmail({
       to: prev,

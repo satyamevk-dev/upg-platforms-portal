@@ -42,7 +42,7 @@ export default async function EditTrainingPlanPage({ params }: Props) {
     <>
       <header className={PORTAL_INTRO_SHELL}>
         <div className={PORTAL_INTRO_HERO}>
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#00786f]">Trainer tools</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#b23d1e]">Trainer tools</p>
           <h1 className="mt-3 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Edit training plan</h1>
           <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-base">
             Update the title, notes, or module order for this plan. The client cannot be changed here.

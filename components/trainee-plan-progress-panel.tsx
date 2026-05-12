@@ -39,7 +39,7 @@ type Props = {
 function StatusPill({ status }: { status: TraineeProgressPayload["status"] }) {
   const map = {
     not_started: "bg-slate-100 text-slate-700 ring-slate-200",
-    in_progress: "bg-[#e6f7f5] text-[#006b64] ring-[#00A89E]/25",
+    in_progress: "bg-[#ECFBFA] text-[#177F78] ring-[#F46036]/25",
     paused: "bg-amber-50 text-amber-900 ring-amber-200/80",
     completed: "bg-emerald-50 text-emerald-900 ring-emerald-200/80",
   } as const;
@@ -96,7 +96,7 @@ function ModuleStatusBadge({
     );
   }
   return (
-    <span className="rounded-full bg-[#00A89E]/10 px-2.5 py-1 text-xs font-semibold text-[#006b64] ring-1 ring-[#00A89E]/20">
+    <span className="rounded-full bg-[#F46036]/10 px-2.5 py-1 text-xs font-semibold text-[#177F78] ring-1 ring-[#F46036]/20">
       Open
     </span>
   );
@@ -210,9 +210,9 @@ export function TraineePlanProgressPanel({ planId, initialPlan, initialProgress 
   const clientLabel = plan.client.name?.trim() || plan.client.email;
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-[#d8d0c4] bg-white shadow-[0_20px_50px_-12px_rgba(15,23,42,0.12)] ring-1 ring-black/[0.03]">
+    <div className="overflow-hidden rounded-3xl border border-[#D0D3E7] bg-white shadow-[0_20px_50px_-12px_rgba(15,23,42,0.12)] ring-1 ring-black/[0.03]">
       {/* Hero */}
-      <div className="relative bg-gradient-to-br from-[#00A89E]/[0.09] via-white to-[#faf8f4] px-6 pb-8 pt-8 sm:px-10 sm:pb-10 sm:pt-10">
+      <div className="relative bg-gradient-to-br from-[#F46036]/[0.09] via-white to-[#F7F7FF] px-6 pb-8 pt-8 sm:px-10 sm:pb-10 sm:pt-10">
         <div
           className="pointer-events-none absolute right-0 top-0 h-40 w-40 opacity-[0.45] sm:h-52 sm:w-52"
           aria-hidden
@@ -223,13 +223,13 @@ export function TraineePlanProgressPanel({ planId, initialPlan, initialProgress 
         <div className="relative flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-3">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#00786f]">Your training plan</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#b23d1e]">Your training plan</p>
               <StatusPill status={progress.status} />
             </div>
             <h1 className="mt-3 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">{plan.title}</h1>
             <p className="mt-2 flex flex-wrap items-center gap-x-2 text-sm text-slate-600">
-              <span className="inline-flex items-center gap-1.5 rounded-lg bg-white/80 px-2 py-1 text-slate-700 ring-1 ring-[#d8d0c4]/80">
-                <svg className="size-4 text-[#00A89E]" viewBox="0 0 20 20" fill="currentColor" aria-hidden>
+              <span className="inline-flex items-center gap-1.5 rounded-lg bg-white/80 px-2 py-1 text-slate-700 ring-1 ring-[#D0D3E7]/80">
+                <svg className="size-4 text-[#F46036]" viewBox="0 0 20 20" fill="currentColor" aria-hidden>
                   <path
                     fillRule="evenodd"
                     d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-11.25a.75.75 0 0 0-1.5 0v4.59L7.3 9.23a.75.75 0 0 0-1.1 1.02l3.25 3.5a.75.75 0 0 0 1.1 0l3.25-3.5a.75.75 0 1 0-1.1-1.02l-1.45 1.56V6.75Z"
@@ -248,7 +248,7 @@ export function TraineePlanProgressPanel({ planId, initialPlan, initialProgress 
           <div className="flex w-full flex-col gap-3 sm:w-auto sm:min-w-[200px] sm:items-end">
             <Link
               href="/client"
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#d8d0c4] bg-white/90 px-4 py-2.5 text-sm font-semibold text-[#00786f] shadow-sm transition-colors hover:bg-[#f0faf8] sm:justify-end"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#D0D3E7] bg-white/90 px-4 py-2.5 text-sm font-semibold text-[#b23d1e] shadow-sm transition-colors hover:bg-[#ECFBFA] sm:justify-end"
             >
               <svg className="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden>
                 <path
@@ -270,16 +270,16 @@ export function TraineePlanProgressPanel({ planId, initialPlan, initialProgress 
                 <p className="mt-1 text-2xl font-bold tabular-nums text-slate-900">
                   {completedCount}
                   <span className="text-lg font-semibold text-slate-400"> / {totalModules}</span>
-                  <span className="ml-2 text-base font-semibold text-[#00786f]">{progressPercent}%</span>
+                  <span className="ml-2 text-base font-semibold text-[#b23d1e]">{progressPercent}%</span>
                 </p>
               </div>
               <p className="max-w-xs text-right text-xs leading-relaxed text-slate-500">
                 Complete modules in any order. Your plan finishes when every quiz is passed.
               </p>
             </div>
-            <div className="mt-4 h-2.5 overflow-hidden rounded-full bg-[#e8e4dc]">
+            <div className="mt-4 h-2.5 overflow-hidden rounded-full bg-[#D0D3E7]">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-[#00A89E] to-[#00c9b7] transition-[width] duration-500 ease-out"
+                className="h-full rounded-full bg-gradient-to-r from-[#F46036] to-[#4FCEC0] transition-[width] duration-500 ease-out"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
@@ -292,7 +292,7 @@ export function TraineePlanProgressPanel({ planId, initialPlan, initialProgress 
               type="button"
               disabled={pending || modulesDisplay.length === 0}
               onClick={() => void startPlan()}
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#00A89E] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#00A89E]/25 transition hover:bg-[#008f86] disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#F46036] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#F46036]/25 transition hover:bg-[#d44a20] disabled:cursor-not-allowed disabled:opacity-60"
             >
               <svg className="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden>
                 <path d="M6.3 2.84A1.5 1.5 0 0 0 4 4.11v11.78a1.5 1.5 0 0 0 2.3 1.27l9.344-5.89a1.5 1.5 0 0 0 0-2.54L6.3 2.841Z" />
@@ -306,7 +306,7 @@ export function TraineePlanProgressPanel({ planId, initialPlan, initialProgress 
               type="button"
               disabled={pending}
               onClick={() => void runAction("pause")}
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#d6cfc4] bg-white px-5 py-3 text-sm font-semibold text-slate-800 shadow-sm transition hover:bg-[#faf9f7] disabled:opacity-60"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#D0D3E7] bg-white px-5 py-3 text-sm font-semibold text-slate-800 shadow-sm transition hover:bg-[#F7F7FF] disabled:opacity-60"
             >
               <svg className="size-4 text-slate-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden>
                 <path d="M5.75 3a.75.75 0 0 0-.75.75v12.5c0 .414.336.75.75.75h1.5a.75.75 0 0 0 .75-.75V3.75A.75.75 0 0 0 7.25 3h-1.5Zm6.5 0a.75.75 0 0 0-.75.75v12.5c0 .414.336.75.75.75h1.5a.75.75 0 0 0 .75-.75V3.75a.75.75 0 0 0-.75-.75h-1.5Z" />
@@ -321,7 +321,7 @@ export function TraineePlanProgressPanel({ planId, initialPlan, initialProgress 
                 type="button"
                 disabled={pending}
                 onClick={() => void runAction("resume")}
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#00A89E] px-5 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-[#008f86] disabled:opacity-60"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#F46036] px-5 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-[#d44a20] disabled:opacity-60"
               >
                 Resume
               </button>
@@ -358,7 +358,7 @@ export function TraineePlanProgressPanel({ planId, initialPlan, initialProgress 
       </div>
 
       {/* Modules */}
-      <div className="border-t border-[#d8d0c4] bg-[#fcfaf7]/90 px-6 py-8 sm:px-10 sm:py-10">
+      <div className="border-t border-[#D0D3E7] bg-[#F7F7FF]/90 px-6 py-8 sm:px-10 sm:py-10">
         <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
           <h2 className="text-lg font-bold text-slate-900 sm:text-xl">Modules</h2>
           <p className="text-sm text-slate-600">
@@ -387,8 +387,8 @@ export function TraineePlanProgressPanel({ planId, initialPlan, initialProgress 
                     done
                       ? "border-emerald-200/80 bg-gradient-to-br from-emerald-50/90 to-white shadow-sm shadow-emerald-900/[0.03]"
                       : canOpenModules
-                        ? "border-[#c5ebe6]/90 bg-white shadow-sm ring-1 ring-black/[0.03] hover:border-[#00A89E]/35 hover:shadow-md"
-                        : "border-[#d8d0c4] bg-slate-50/50 ring-1 ring-black/[0.02]"
+                        ? "border-[#BFEFED]/90 bg-white shadow-sm ring-1 ring-black/[0.03] hover:border-[#F46036]/35 hover:shadow-md"
+                        : "border-[#D0D3E7] bg-slate-50/50 ring-1 ring-black/[0.02]"
                   }`}
                 >
                   <div className="flex min-w-0 flex-1 gap-4">
@@ -397,7 +397,7 @@ export function TraineePlanProgressPanel({ planId, initialPlan, initialProgress 
                         done
                           ? "bg-emerald-100 text-emerald-800"
                           : canOpenModules
-                            ? "bg-[#00A89E]/12 text-[#006b64]"
+                            ? "bg-[#F46036]/12 text-[#177F78]"
                             : "bg-slate-200/80 text-slate-600"
                       }`}
                     >
@@ -417,7 +417,7 @@ export function TraineePlanProgressPanel({ planId, initialPlan, initialProgress 
                     </div>
                     <div className="min-w-0">
                       {m.sectionHeader ? (
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#00786f]">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#b23d1e]">
                           {m.sectionHeader}
                         </p>
                       ) : null}
@@ -443,7 +443,7 @@ export function TraineePlanProgressPanel({ planId, initialPlan, initialProgress 
                           <div className="flex flex-wrap justify-end gap-2">
                             <Link
                               href={moduleHref}
-                              className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#c5ebe6] bg-white px-4 py-2 text-xs font-semibold text-[#006b64] shadow-sm transition hover:bg-[#f0faf8]"
+                              className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#BFEFED] bg-white px-4 py-2 text-xs font-semibold text-[#177F78] shadow-sm transition hover:bg-[#ECFBFA]"
                             >
                               Study
                               <svg className="size-3.5 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden>
@@ -457,7 +457,7 @@ export function TraineePlanProgressPanel({ planId, initialPlan, initialProgress 
                             {showTopicQuiz ? (
                               <Link
                                 href={topicQuizHref!}
-                                className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#00A89E] px-4 py-2 text-xs font-semibold text-white shadow-md shadow-[#00A89E]/20 transition hover:bg-[#008f86]"
+                                className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#F46036] px-4 py-2 text-xs font-semibold text-white shadow-md shadow-[#F46036]/20 transition hover:bg-[#d44a20]"
                               >
                                 Topic quiz
                                 <svg className="size-3.5 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden>
@@ -472,7 +472,7 @@ export function TraineePlanProgressPanel({ planId, initialPlan, initialProgress 
                             {showModuleQuiz ? (
                               <Link
                                 href={moduleQuizHref}
-                                className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#00A89E] px-4 py-2 text-xs font-semibold text-white shadow-md shadow-[#00A89E]/20 transition hover:bg-[#008f86]"
+                                className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#F46036] px-4 py-2 text-xs font-semibold text-white shadow-md shadow-[#F46036]/20 transition hover:bg-[#d44a20]"
                               >
                                 Module quiz
                                 <svg className="size-3.5 opacity-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden>
@@ -533,7 +533,7 @@ export function TraineePlanProgressPanel({ planId, initialPlan, initialProgress 
             className={`max-w-md overflow-hidden ${PORTAL_SURFACE} shadow-2xl shadow-slate-900/20`}
             onMouseDown={(e) => e.stopPropagation()}
           >
-            <div className="border-b border-[#d8d0c4] bg-gradient-to-r from-rose-50/80 to-white px-6 py-4">
+            <div className="border-b border-[#D0D3E7] bg-gradient-to-r from-rose-50/80 to-white px-6 py-4">
               <h3 id="cancel-pause-title" className="text-lg font-bold text-slate-900">
                 {cancelPauseStep === 1 ? "Cancel pause?" : "Confirm cancel pause"}
               </h3>
@@ -565,10 +565,10 @@ export function TraineePlanProgressPanel({ planId, initialPlan, initialProgress 
                 </>
               )}
             </p>
-            <div className="flex flex-wrap justify-end gap-2 border-t border-[#d8d0c4] bg-[#fafaf8]/80 px-6 py-4">
+            <div className="flex flex-wrap justify-end gap-2 border-t border-[#D0D3E7] bg-[#F7F7FF]/80 px-6 py-4">
               <button
                 type="button"
-                className="rounded-xl border border-[#d6cfc4] bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 hover:bg-[#faf9f7]"
+                className="rounded-xl border border-[#D0D3E7] bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 hover:bg-[#F7F7FF]"
                 onClick={() => {
                   if (cancelPauseStep === 2) {
                     setCancelPauseStep(1);
@@ -583,7 +583,7 @@ export function TraineePlanProgressPanel({ planId, initialPlan, initialProgress 
               {cancelPauseStep === 1 ? (
                 <button
                   type="button"
-                  className="rounded-xl bg-[#00A89E] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#008f86]"
+                  className="rounded-xl bg-[#F46036] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#d44a20]"
                   onClick={() => setCancelPauseStep(2)}
                 >
                   Continue

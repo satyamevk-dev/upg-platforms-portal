@@ -14,7 +14,7 @@ export function TraineeAvayaAocSolutionLifecycleSyllabusSection({ sections }: Pr
         <>
           . Each syllabus topic has one module guide and one end-of-topic quiz on a separate page. Mark study complete on
           every plan step mapped to that topic before the quiz unlocks; passing it completes every related row together.
-          Rows marked <span className="font-medium text-[#006b64]">In your plan</span> match your assigned topics; others
+          Rows marked <span className="font-medium text-[#177F78]">In your plan</span> match your assigned topics; others
           show where those modules sit in the full curriculum.
         </>
       }

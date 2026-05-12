@@ -26,7 +26,7 @@ export function PythonLibraryGroup({ pythonTopicIdSet, selectedIds, children }: 
     <div className={`${shellClass} flex min-h-0 flex-col`}>
       <button
         type="button"
-        className="flex w-full items-start justify-between gap-3 px-4 py-3.5 text-left outline-none ring-[#00A89E] transition hover:bg-black/[0.02] focus-visible:ring-2 focus-visible:ring-offset-2 sm:px-5 sm:py-4"
+        className="flex w-full items-start justify-between gap-3 px-4 py-3.5 text-left outline-none ring-[#F46036] transition hover:bg-black/[0.02] focus-visible:ring-2 focus-visible:ring-offset-2 sm:px-5 sm:py-4"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
       >
@@ -37,7 +37,7 @@ export function PythonLibraryGroup({ pythonTopicIdSet, selectedIds, children }: 
           </p>
         </div>
         <span
-          className={`mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#d8d0c4] bg-white text-sm font-bold text-[#00A89E] transition-transform duration-200 ${
+          className={`mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#D0D3E7] bg-white text-sm font-bold text-[#F46036] transition-transform duration-200 ${
             open ? "rotate-90" : ""
           }`}
           aria-hidden
@@ -46,7 +46,7 @@ export function PythonLibraryGroup({ pythonTopicIdSet, selectedIds, children }: 
         </span>
       </button>
       {open ? (
-        <div className="flex min-h-0 flex-col gap-6 border-t border-[#d8d0c4] px-3 py-4 sm:px-4 sm:py-5">
+        <div className="flex min-h-0 flex-col gap-6 border-t border-[#D0D3E7] px-3 py-4 sm:px-4 sm:py-5">
           {children}
         </div>
       ) : null}
