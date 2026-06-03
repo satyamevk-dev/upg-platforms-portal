@@ -1,6 +1,7 @@
 import { compare } from "bcryptjs";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { getNextAuthSecret } from "@/lib/nextauth-secret";
 import { prisma } from "@/lib/prisma";
 
 export type UserRole = "super_admin" | "trainer" | "trainee";
@@ -31,6 +32,7 @@ const demoUsers: DemoUser[] = [
 ];
 
 export const authOptions: NextAuthOptions = {
+  secret: getNextAuthSecret(),
   session: { strategy: "jwt" },
   providers: [
     CredentialsProvider({

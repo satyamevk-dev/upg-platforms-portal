@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { withAuth } from "next-auth/middleware";
+import { getNextAuthSecret } from "@/lib/nextauth-secret";
 
 const trainerPath = "/trainer";
 const clientPath = "/client";
@@ -59,6 +60,7 @@ export default withAuth((request) => {
 
   return NextResponse.next();
 }, {
+  secret: getNextAuthSecret(),
   callbacks: {
     authorized: ({ token, req }) => {
       const pathname = req.nextUrl.pathname;

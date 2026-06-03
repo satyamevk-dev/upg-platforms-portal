@@ -3,13 +3,14 @@ import { getServerSession } from "next-auth/next";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { authOptions } from "@/auth";
+import { getNextAuthSecret } from "@/lib/nextauth-secret";
 
 /**
  * @param req Optional `Request` / `NextRequest` from a Route Handler — used only if
  * `getServerSession()` does not see a session (fallback via `getToken`).
  */
 export async function requireSuperAdmin(req?: NextRequest | Request) {
-  const secret = process.env.NEXTAUTH_SECRET ?? process.env.AUTH_SECRET;
+  const secret = getNextAuthSecret();
   if (!secret) {
     console.error("[requireSuperAdmin] NEXTAUTH_SECRET / AUTH_SECRET is not set");
     return {
