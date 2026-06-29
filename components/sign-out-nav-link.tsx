@@ -9,7 +9,10 @@ export function SignOutNavLink() {
   return (
     <button
       type="button"
-      onClick={() => signOut({ callbackUrl: "/login" })}
+      onClick={async () => {
+        await signOut({ redirect: false });
+        window.location.href = "/login";
+      }}
       className={navLinkClass}
     >
       Sign out

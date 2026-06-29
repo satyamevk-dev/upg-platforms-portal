@@ -102,7 +102,7 @@ export default async function Home() {
               id="home-welcome-heading"
               className="text-center text-2xl font-bold tracking-tight text-[#F46036] sm:text-3xl"
             >
-              Welcome to Knowledge Platform - Unified Platform Group
+              Welcome to Unified Platform Group - Portal
             </h1>
             <h2 id="manage-users-heading" className="mt-6 text-lg font-semibold text-slate-900">
               Manage portal users

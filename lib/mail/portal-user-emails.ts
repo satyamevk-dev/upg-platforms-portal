@@ -22,7 +22,7 @@ export async function sendNewPortalUserEmail(params: {
   const subject = "Your Knowledge Platform account was created";
   const text = `Hello ${display},
 
-An account was created for you on the Knowledge Platform - Unified Platform Group (Avaya).
+An account was created for you on the Unified Platform Group - Portal (Avaya).
 
 Sign-in email: ${params.email}
 Role: ${roleLabel}

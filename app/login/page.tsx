@@ -283,7 +283,7 @@ export default function LoginPage() {
                 Welcome to
               </p>
               <h1 className="mt-2 text-xl font-semibold leading-snug text-slate-900 sm:text-2xl">
-                Knowledge Platform - Unified Platform Group
+                Unified Platform Group - Portal
               </h1>
               <div
                 className="mx-auto mt-3 h-[3px] w-12 rounded-full bg-gradient-to-r from-[#F46036] to-[#4FCEC0]"

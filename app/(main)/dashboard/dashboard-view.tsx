@@ -77,7 +77,7 @@ export async function DashboardView({ callbackPath }: Props) {
       <header className={`flex flex-col gap-4 ${cardClass}`}>
           <div>
             <p className="text-center text-sm font-semibold leading-snug text-[#F46036]">
-              Welcome to Knowledge Platform - Unified Platform Group
+              Welcome to Unified Platform Group - Portal
               {trainerMappedClientName &&
               trainerMappedClientName.trim().toLowerCase() !== "avaya" ? (
                 <> {trainerMappedClientName}</>
